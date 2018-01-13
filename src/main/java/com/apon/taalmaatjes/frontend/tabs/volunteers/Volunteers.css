@@ -1,0 +1,51 @@
+.root {
+    -fx-font-size: 15px !important;
+    /* Some variables */
+    -gray: rgb(221, 221, 221);
+    -dark: rgb(47.0, 52.0, 57.0);
+}
+
+#btnSearch {
+    -fx-background-image: url("../../../../../../images/Search.jpg");
+    -fx-background-size: 43px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 90%;
+
+    -fx-pref-width: 43;
+    -fx-pref-height: 43;
+}
+
+.button {
+    -fx-background-color: rgb(0, 184, 222);
+}
+
+/* Why cant I just use .flow-pane ?? */
+#flowPaneAdvancedSearch {
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+    -fx-padding: 5px 0px 0px 0px;
+}
+
+/* Apparently this does not work???? */
+.hbox {
+    -fx-pref-width: 310px;
+    -fx-pref-heigh: 43px;
+    -fx-background-color: green;
+}
+
+/* Mooier?*/
+.table-view {
+    -fx-background-color: transparent;
+}
+
+/* Disable selection view*/
+.table-row-cell:filled:selected {
+    -fx-background: -fx-control-inner-background ;
+    -fx-background-color: -fx-table-cell-border-color, -fx-background ;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-table-cell-border-color: derive(-fx-color, 5%);
+}
+/* Disable selection view*/
+.table-row-cell:odd:filled:selected {
+    -fx-background: -fx-control-inner-background-alt ;
+}

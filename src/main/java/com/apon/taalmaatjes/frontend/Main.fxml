@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane fx:id="tabPaneMain"
+         maxHeight="-Infinity"
+         maxWidth="-Infinity"
+         minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" side="LEFT"
+         stylesheets="@Main.css" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141"
+         fx:controller="com.apon.taalmaatjes.frontend.Main">
+    <tabs>
+        <Tab text="Home" fx:id="tabHome">
+            <content>
+                <!-- Just for testing!! So I don't have to click Vrijwilliger every time. -->
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+        <Tab text="Vrijwilligers" fx:id="tabVolunteer">
+            <content>
+                <fx:include source="tabs/volunteers/Volunteers.fxml"/>
+            </content>
+        </Tab>
+        <Tab text="Cursisten" fx:id="tabStudent">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+        <Tab text="Rapportage" fx:id="tabReport">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+
+    </tabs>
+</TabPane>

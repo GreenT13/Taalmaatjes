@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.apon</groupId>
+    <artifactId>Taalmaatjes</artifactId>
+    <version>0.1</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <jooq.version>3.10.2</jooq.version>
+        <url.database>jdbc:h2:file:C:\Users\Gebruiker\IdeaProjects\Taalmaatjes\DbTaalmaatjes</url.database>
+    </properties>
+
+    <dependencies>
+        <!-- Use jOOQ as ORM. -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <!-- H2 database -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
+        </dependency>
+        <!-- Using CSS theme from GUI Garage -->
+        <dependency>
+            <groupId>com.guigarage</groupId>
+            <artifactId>flatter</artifactId>
+            <version>0.7</version>
+        </dependency>
+        <!-- Jar for @Nullable and @Nonnull notation -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <!-- Test dependency -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Add .fxml and .css files to the classes directory -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>**/*.css</include>
+                </includes>
+            </resource>
+        </resources>
+
+
+        <plugins>
+            <!-- Plugin for generating jOOQ classes. -->
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>${jooq.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>jooq-codegen</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <jdbc>
+                        <driver>org.h2.Driver</driver>
+                        <url>${url.database}</url>
+                        <user></user>
+                        <password></password>
+                    </jdbc>
+                    <generator>
+                        <!-- Use my own GeneratorStrategy to make naming easier. -->
+                        <strategy>
+                            <name>com.apon.taalmaatjes.backend.database.jooq.GeneratorStrategy</name>
+                        </strategy>
+                        <database>
+                            <name>org.jooq.util.h2.H2Database</name>
+                            <includes>.*</includes>
+                            <excludes></excludes>
+                            <inputSchema>PUBLIC</inputSchema>
+                        </database>
+                        <target>
+                            <packageName>com.apon.taalmaatjes.backend.database.generated</packageName>
+                            <directory>src/main/java</directory>
+                        </target>
+
+                        <generate>
+                            <pojos>true</pojos>
+                            <daos>true</daos>
+                            <interfaces>false</interfaces>
+                        </generate>
+                    </generator>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-executable</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/archive-tmp</outputDirectory>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.apon.taalmaatjes.Taalmaatjes</mainClass>
+                        </manifest>
+                    </archive>
+                     <!--Set filename -->
+                    <finalName>Taalmaatjes-v${version}-test</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,1 @@
+insert into Volunteer (VOLUNTEERID, FIRSTNAME, LASTNAME) values (1, 'Rico', 'Apon');

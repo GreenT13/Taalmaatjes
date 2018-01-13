@@ -1,0 +1,46 @@
+.root {
+    -fx-font-size: 15px !important;
+    /* Some variables */
+    -gray: rgb(221, 221, 221);
+    -dark: rgb(47.0, 52.0, 57.0);
+}
+
+.tab-pane {
+    /* Pad the pane so that no spaces are left. */
+    -fx-padding: 0px 0px 0px -8px;
+}
+
+.tab-pane .tab {
+    /* Make the tab panes larger so the text fits. */
+    -fx-padding: 60px 0px 40px 0px;
+    /* Remove all space around the tabs */
+    -fx-background-insets: 0.0;
+    /* Use the same background color for everything */
+    -fx-background-color: -gray;
+}
+
+/* Styling of the selected tab. */
+.tab-pane .tab:selected {
+    -fx-background-color: rgb(183, 183, 183);
+}
+
+.tab-pane .tab .tab-label {
+    /* Rotate the label 90 degrees */
+    -fx-rotate: 90;
+
+    /* Style the label of the tab correctly. */
+    -fx-text-fill: -dark;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 150px;
+    -fx-padding: 0px 0px 0px -18px ;
+}
+
+.tab-pane .tab-header-area {
+    /* Pad the header area so that no spaces are left. */
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+/* Border is not correctly aligned with the other css, so we just 'remove' it. */
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: transparent;
+}
