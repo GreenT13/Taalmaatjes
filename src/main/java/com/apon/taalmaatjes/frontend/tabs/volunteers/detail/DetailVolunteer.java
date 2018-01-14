@@ -1,15 +1,14 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
-import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 
 public class DetailVolunteer {
-    VolunteerMyDao volunteerMyDao;
+    VolunteerFacade volunteerFacade;
     int volunteerId;
 
     @FXML
@@ -17,7 +16,7 @@ public class DetailVolunteer {
 
     public void setVolunteerId(int volunteerId) {
         this.volunteerId = volunteerId;
-        volunteerMyDao = new VolunteerMyDao(FrontendContext.getInstance().getConfiguration());
+        volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
         initializeValues();
     }
 
@@ -26,7 +25,7 @@ public class DetailVolunteer {
      *
      */
     public void initializeValues() {
-        VolunteerPojo volunteerPojo = volunteerMyDao.fetchOneByVolunteerid(volunteerId);
+        VolunteerPojo volunteerPojo = volunteerFacade.getVolunteer(volunteerId);
 
         // Set the name.
         String name = "";
