@@ -1,5 +1,6 @@
 package com.apon.taalmaatjes.backend.database.jooq;
 
+import com.apon.taalmaatjes.backend.log.Log;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -19,7 +20,7 @@ public class Context {
         createNewConnection();
     }
 
-    public void createNewConnection() {
+    private void createNewConnection() {
         // Create a new connection to the database.
         String userName = "";
         String password = "";
@@ -32,7 +33,7 @@ public class Context {
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error("Could not create connection.", e);
             return;
         }
 
@@ -45,7 +46,7 @@ public class Context {
             connection.commit();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error("Could not commit connection.", e);
             return false;
         }
     }
@@ -55,7 +56,7 @@ public class Context {
             connection.rollback();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error("Could not rollback connection.", e);
             return false;
         }
     }
@@ -65,7 +66,7 @@ public class Context {
             connection.close();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error("Could not close connection.", e);
             return false;
         }
     }

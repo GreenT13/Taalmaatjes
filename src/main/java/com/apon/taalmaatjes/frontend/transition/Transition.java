@@ -1,11 +1,13 @@
 package com.apon.taalmaatjes.frontend.transition;
 
+import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class Transition {
@@ -15,11 +17,19 @@ public class Transition {
         return ourInstance;
     }
 
-    private Transition() {
+    private Transition() { }
+
+    private Parent load(@Nonnull String path) {
+        try {
+            return FXMLLoader.load(getClass().getClassLoader().getResource(path));
+        } catch (IOException e) {
+            Log.error("Could not find fxml with path: " + path, e);
+            return null;
+        }
     }
 
-    Tab tabHome, tabVolunteer, tabStudent, tabReport;
-    Node previousVolunteer;
+    private Tab tabHome, tabVolunteer, tabStudent, tabReport;
+    private Node previousVolunteer;
 
     public void volunteerDetail(int volunteerId) {
         Parent root;
@@ -39,11 +49,7 @@ public class Transition {
     }
 
     public void volunteerAdd() {
-        try {
-            tabVolunteer.setContent(FXMLLoader.load(getClass().getClassLoader().getResource(FxmlLocation.ADD_VOLUNTEERS + ".fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        tabVolunteer.setContent(load(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
     }
 
     public void volunteerOverview() {

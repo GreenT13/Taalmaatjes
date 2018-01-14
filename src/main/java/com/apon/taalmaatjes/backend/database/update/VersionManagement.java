@@ -54,7 +54,7 @@ public class VersionManagement {
         // Huge try-finally block to make sure the connection is rollbacked and closed.
         try {
             // If the table Scriptlog does not exist, we have to run the create tables script.
-            List<ScriptlogPojo> runScripts = new ArrayList<ScriptlogPojo>();
+            List<ScriptlogPojo> runScripts = new ArrayList<>();
 
             // Retrieve all scripts that have been run.
             try {
@@ -66,7 +66,7 @@ public class VersionManagement {
                 }
             }
 
-            ArrayList<String> scriptsToRun = new ArrayList<String>();
+            ArrayList<String> scriptsToRun = new ArrayList<>();
 
             // Use ints to make sure that the array is looped through in order.
             for (String scriptName : ALL_SCRIPT_NAMES) {
@@ -163,8 +163,7 @@ public class VersionManagement {
 
             context.getCreate().execute(readFile(getLocation(scriptName)));
         } catch (IOException e) {
-            e.printStackTrace();
-            Log.logError("Could not find script " + scriptName);
+            Log.error("Could not find script " + scriptName, e);
             return false;
         }
 
@@ -182,6 +181,10 @@ public class VersionManagement {
     private String readFile(String path) throws IOException {
         InputStream in = getClass().getResourceAsStream(path);
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+        if (in == null || reader == null) {
+            throw new IOException("Path is probably incorrect.");
+        }
 
         // Add "\n" because otherwise jOOQ will not recognize it as several queries.
         return reader.lines().collect(Collectors.joining("\n"));

@@ -21,7 +21,7 @@ public class Taalmaatjes extends Application {
         try {
             VersionManagement.getInstance().runUpdates(FrontendContext.getInstance().getContext());
         } catch (Exception e) {
-            Log.logError(e.getMessage());
+            Log.error("Could not update the database.", e);
             return;
         }
 
