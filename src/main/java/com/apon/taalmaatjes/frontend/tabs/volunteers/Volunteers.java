@@ -2,6 +2,7 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
+import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.presentation.Person;
 import com.apon.taalmaatjes.frontend.transition.Transition;
@@ -43,7 +44,7 @@ public class Volunteers {
 
         // Fill the table.
         volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
-        fillTable(volunteerFacade.get50MostRecent());
+        search();
 
         // Add listener to when an item is clicked.
         tableViewResult.getSelectionModel().selectedItemProperty().addListener(
@@ -76,6 +77,12 @@ public class Volunteers {
         }
 
         tableViewResult.setItems(data);
+    }
+
+    @FXML
+    public void search() {
+        Log.logDebug("Look at me.");
+        fillTable(volunteerFacade.get50MostRecent());
     }
 
     /**

@@ -19,8 +19,4 @@ public class FrontendContext {
     public Context getContext() {
         return context;
     }
-
-    public Configuration getConfiguration() {
-        return context.getConfiguration();
-    }
 }

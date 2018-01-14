@@ -39,7 +39,7 @@
                      </children>
                   </StackPane>
                   <TextField />
-                  <Button id="btnSearch" mnemonicParsing="false" />
+                  <Button id="btnSearch" mnemonicParsing="false" onAction="#search" />
                   <Button id="btnAdvanced" mnemonicParsing="false" onAction="#toggleAdvancedSearch" text="▼" />
                </children>
             </HBox>

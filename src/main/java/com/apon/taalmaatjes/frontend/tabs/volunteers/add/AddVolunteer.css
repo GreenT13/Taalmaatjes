@@ -1,0 +1,11 @@
+.hboxAlign {
+    /* Fix height of each element to 43 + padding */
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
+
+    -fx-alignment: center-left;
+
+    /* Little bit of space between the elements. */
+    -fx-padding: 5px;
+}

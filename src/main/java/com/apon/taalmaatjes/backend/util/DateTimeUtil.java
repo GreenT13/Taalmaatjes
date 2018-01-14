@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class DateTimeUtil {
 
@@ -23,6 +24,13 @@ public class DateTimeUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Date convertLocalDateToSqlDate(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return Date.valueOf(date);
     }
 
     public static Timestamp getCurrentTimestamp() {
