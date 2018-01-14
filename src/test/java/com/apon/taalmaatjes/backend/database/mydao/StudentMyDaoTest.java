@@ -10,11 +10,11 @@ import java.sql.Date;
 import static org.junit.Assert.*;
 
 public class StudentMyDaoTest extends BaseTest {
-    StudentMyDao studentMyDao;
+    private StudentMyDao studentMyDao;
 
     @Before
     public void initializeMyDao() {
-        studentMyDao = new StudentMyDao(configuration);
+        studentMyDao = new StudentMyDao(context.getConfiguration());
     }
 
     @Test
