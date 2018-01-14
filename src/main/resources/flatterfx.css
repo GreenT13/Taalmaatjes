@@ -7,6 +7,10 @@
 
 
 .root {
+    /* My own:*/
+    -fx-font-size: 15px !important;
+
+
     -fx-text-base-color: rgb(252.0, 240.0, 237.0);
     -fx-text-fill: -fx-text-base-color;
      

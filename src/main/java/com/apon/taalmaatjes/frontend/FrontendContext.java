@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.frontend;
 
 import com.apon.taalmaatjes.backend.database.jooq.Context;
+import org.jooq.Configuration;
 
 public class FrontendContext {
     private static FrontendContext ourInstance = new FrontendContext();
@@ -17,5 +18,9 @@ public class FrontendContext {
 
     public Context getContext() {
         return context;
+    }
+
+    public Configuration getConfiguration() {
+        return context.getConfiguration();
     }
 }

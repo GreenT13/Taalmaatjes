@@ -5,11 +5,12 @@ import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.presentation.Person;
 import com.apon.taalmaatjes.frontend.transition.Transition;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.SortEvent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,14 +19,14 @@ import javafx.scene.layout.FlowPane;
 import java.util.List;
 
 public class Volunteers {
-    VolunteerFacade volunteerFacade;
-    boolean isVisible = true;
+    private VolunteerFacade volunteerFacade;
+    private boolean isVisible = false;
 
     @FXML
-    FlowPane flowPaneAdvancedSearch;
+    private FlowPane flowPaneAdvancedSearch;
 
     @FXML
-    TableView<Person> tableViewResult;
+    private TableView<Person> tableViewResult;
 
     @FXML
     public void initialize() {
@@ -43,23 +44,38 @@ public class Volunteers {
         // Fill the table.
         volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
         fillTable(volunteerFacade.get50MostRecent());
+
+        // Add listener to when an item is clicked.
+        tableViewResult.getSelectionModel().selectedItemProperty().addListener(
+            (ChangeListener) (observableValue, oldValue, newValue) -> {
+                //Check whether item is selected and set value of selected item to Label
+                if(tableViewResult.getSelectionModel().getSelectedItem() != null) {
+                    // Handle actions in different function.
+                    clickedOnRow((Person) newValue);
+                }
+            });
     }
 
-    public void fillTable(List<VolunteerPojo> list) {
+    private void clickedOnRow(Person person) {
+        // Clear selection model when out of the ChangeListener (so add runLater).
+        // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
+        Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
+
+        // Transition to detail screen.
+        Transition.getInstance().volunteerDetail(person.getId());
+    }
+
+    private void fillTable(List<VolunteerPojo> list) {
         ObservableList<Person> data = FXCollections.observableArrayList();
 
         for (VolunteerPojo volunteerPojo : list) {
-            data.add(new Person(volunteerPojo.getFirstname(),
+            data.add(new Person(volunteerPojo.getVolunteerid(),
+                    volunteerPojo.getFirstname(),
                     volunteerPojo.getLastname(),
                     volunteerPojo.getEmail()));
         }
 
         tableViewResult.setItems(data);
-    }
-
-    @FXML
-    public void clickedOnTable(SortEvent<Person> sortEvent) {
-        System.out.println("Actioned");
     }
 
     /**
