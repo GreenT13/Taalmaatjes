@@ -73,10 +73,10 @@ public class StudentDao extends DAOImpl<StudentRecord, StudentPojo, Integer> {
     }
 
     /**
-     * Fetch records that have <code>INITIALS IN (values)</code>
+     * Fetch records that have <code>INSERTION IN (values)</code>
      */
-    public List<StudentPojo> fetchByInitials(String... values) {
-        return fetch(Student.STUDENT.INITIALS, values);
+    public List<StudentPojo> fetchByInsertion(String... values) {
+        return fetch(Student.STUDENT.INSERTION, values);
     }
 
     /**

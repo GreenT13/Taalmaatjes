@@ -7,33 +7,114 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox prefHeight="470.0" prefWidth="582.0" stylesheets="@DetailVolunteer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer">
+<HBox stylesheets="@DetailVolunteer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer">
    <children>
-      <VBox prefHeight="450.0" prefWidth="423.0">
+      <VBox>
          <children>
-            <HBox>
+            <VBox>
                <children>
-                  <Button mnemonicParsing="false" onAction="#back" text="Terug" />
-                  <Region prefHeight="1.0" prefWidth="50.0" />
-                  <Label id="labelName" fx:id="labelName" text="Firstname Lastname (id)" />
+                  <HBox>
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#back" text="Terug" />
+                        <Region prefHeight="1.0" prefWidth="50.0" />
+                        <Label fx:id="labelName" styleClass="largeLabel" text="Firstname Lastname (id)" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="176.0">
+                           <children>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Geboortedatum" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Telefoon nummer" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Mobiele telefoonnr" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Email" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Straat" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Postcode" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Stad" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelDateOfBirth" text="01-01-1970" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelPhoneNr" text="0612345678" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelMobPhoneNr" text="0612345678" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelEmail" text="verylongemailteststststststst" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelStreetNameAndHouseNr" text="Straat 14A" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelPostalCode" text="1234AB" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label fx:id="labelCity" text="Utrecht" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <VBox prefHeight="42.0" prefWidth="176.0">
-                     <children>
-                        <Label text="Telefoonnummer: " />
-                        <Label text="Geboortedatum: " />
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="42.0" prefWidth="126.0">
-                     <children>
-                        <Label fx:id="labelPhoneNumber" text="0612345678" />
-                        <Label fx:id="labelDateOfBirth" text="01-01-1970" />
-                     </children>
+                  <Label styleClass="largeLabel" text="Actief" />
+                  <VBox  fx:id="vboxActive">
+                     <children />
                   </VBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
          </children>
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" />

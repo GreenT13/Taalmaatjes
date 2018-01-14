@@ -74,10 +74,10 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
     }
 
     /**
-     * Fetch records that have <code>INITIALS IN (values)</code>
+     * Fetch records that have <code>INSERTION IN (values)</code>
      */
-    public List<VolunteerPojo> fetchByInitials(String... values) {
-        return fetch(Volunteer.VOLUNTEER.INITIALS, values);
+    public List<VolunteerPojo> fetchByInsertion(String... values) {
+        return fetch(Volunteer.VOLUNTEER.INSERTION, values);
     }
 
     /**
@@ -92,13 +92,6 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
      */
     public List<VolunteerPojo> fetchByDateofbirth(Date... values) {
         return fetch(Volunteer.VOLUNTEER.DATEOFBIRTH, values);
-    }
-
-    /**
-     * Fetch records that have <code>CITY IN (values)</code>
-     */
-    public List<VolunteerPojo> fetchByCity(String... values) {
-        return fetch(Volunteer.VOLUNTEER.CITY, values);
     }
 
     /**
@@ -127,5 +120,33 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
      */
     public List<VolunteerPojo> fetchByHastraining(Boolean... values) {
         return fetch(Volunteer.VOLUNTEER.HASTRAINING, values);
+    }
+
+    /**
+     * Fetch records that have <code>POSTALCODE IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByPostalcode(String... values) {
+        return fetch(Volunteer.VOLUNTEER.POSTALCODE, values);
+    }
+
+    /**
+     * Fetch records that have <code>CITY IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByCity(String... values) {
+        return fetch(Volunteer.VOLUNTEER.CITY, values);
+    }
+
+    /**
+     * Fetch records that have <code>STREETNAME IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByStreetname(String... values) {
+        return fetch(Volunteer.VOLUNTEER.STREETNAME, values);
+    }
+
+    /**
+     * Fetch records that have <code>HOUSENR IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByHousenr(String... values) {
+        return fetch(Volunteer.VOLUNTEER.HOUSENR, values);
     }
 }

@@ -23,56 +23,68 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteerPojo implements Serializable {
 
-    private static final long serialVersionUID = 168050174;
+    private static final long serialVersionUID = -11128480;
 
     private Integer volunteerid;
     private String  firstname;
-    private String  initials;
+    private String  insertion;
     private String  lastname;
     private Date    dateofbirth;
-    private String  city;
     private String  phonenumber;
     private String  mobilephonenumber;
     private String  email;
     private Boolean hastraining;
+    private String  postalcode;
+    private String  city;
+    private String  streetname;
+    private String  housenr;
 
     public VolunteerPojo() {}
 
     public VolunteerPojo(VolunteerPojo value) {
         this.volunteerid = value.volunteerid;
         this.firstname = value.firstname;
-        this.initials = value.initials;
+        this.insertion = value.insertion;
         this.lastname = value.lastname;
         this.dateofbirth = value.dateofbirth;
-        this.city = value.city;
         this.phonenumber = value.phonenumber;
         this.mobilephonenumber = value.mobilephonenumber;
         this.email = value.email;
         this.hastraining = value.hastraining;
+        this.postalcode = value.postalcode;
+        this.city = value.city;
+        this.streetname = value.streetname;
+        this.housenr = value.housenr;
     }
 
     public VolunteerPojo(
         Integer volunteerid,
         String  firstname,
-        String  initials,
+        String  insertion,
         String  lastname,
         Date    dateofbirth,
-        String  city,
         String  phonenumber,
         String  mobilephonenumber,
         String  email,
-        Boolean hastraining
+        Boolean hastraining,
+        String  postalcode,
+        String  city,
+        String  streetname,
+        String  housenr
     ) {
         this.volunteerid = volunteerid;
         this.firstname = firstname;
-        this.initials = initials;
+        this.insertion = insertion;
         this.lastname = lastname;
         this.dateofbirth = dateofbirth;
-        this.city = city;
         this.phonenumber = phonenumber;
         this.mobilephonenumber = mobilephonenumber;
         this.email = email;
         this.hastraining = hastraining;
+        this.postalcode = postalcode;
+        this.city = city;
+        this.streetname = streetname;
+        this.housenr = housenr;
     }
 
     public Integer getVolunteerid() {
@@ -91,12 +103,12 @@ public class VolunteerPojo implements Serializable {
         this.firstname = firstname;
     }
 
-    public String getInitials() {
-        return this.initials;
+    public String getInsertion() {
+        return this.insertion;
     }
 
-    public void setInitials(String initials) {
-        this.initials = initials;
+    public void setInsertion(String insertion) {
+        this.insertion = insertion;
     }
 
     public String getLastname() {
@@ -113,14 +125,6 @@ public class VolunteerPojo implements Serializable {
 
     public void setDateofbirth(Date dateofbirth) {
         this.dateofbirth = dateofbirth;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getPhonenumber() {
@@ -155,20 +159,55 @@ public class VolunteerPojo implements Serializable {
         this.hastraining = hastraining;
     }
 
+    public String getPostalcode() {
+        return this.postalcode;
+    }
+
+    public void setPostalcode(String postalcode) {
+        this.postalcode = postalcode;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreetname() {
+        return this.streetname;
+    }
+
+    public void setStreetname(String streetname) {
+        this.streetname = streetname;
+    }
+
+    public String getHousenr() {
+        return this.housenr;
+    }
+
+    public void setHousenr(String housenr) {
+        this.housenr = housenr;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("VolunteerPojo (");
 
         sb.append(volunteerid);
         sb.append(", ").append(firstname);
-        sb.append(", ").append(initials);
+        sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
         sb.append(", ").append(dateofbirth);
-        sb.append(", ").append(city);
         sb.append(", ").append(phonenumber);
         sb.append(", ").append(mobilephonenumber);
         sb.append(", ").append(email);
         sb.append(", ").append(hastraining);
+        sb.append(", ").append(postalcode);
+        sb.append(", ").append(city);
+        sb.append(", ").append(streetname);
+        sb.append(", ").append(housenr);
 
         sb.append(")");
         return sb.toString();

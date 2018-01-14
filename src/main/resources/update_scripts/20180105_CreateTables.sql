@@ -12,14 +12,17 @@ insert into Scriptlog values ('20180105_CreateTables', current_timestamp, null, 
 create table Volunteer (
   volunteerId int not null,
   firstName varchar(100),
-  initials varchar(100),
+  insertion varchar(100),
   lastName varchar(100),
   dateOfBirth date,
-  city varchar(100),
   phoneNumber varchar(100),
   mobilePhoneNumber varchar(100),
   email varchar(100),
   hasTraining boolean,
+  postalCode varchar(6),
+  city varchar(100),
+  streetName varchar(100),
+  houseNr varchar(10),
   constraint "Volu_PK" primary key (volunteerId)
 );
 
@@ -35,7 +38,7 @@ create table VolunteerInstance (
 create table Student (
   studentId int not null,
   firstName varchar(100),
-  initials varchar(100),
+  insertion varchar(100),
   lastName varchar(100),
   isLookingForVolunteer boolean,
   isGroup boolean not null,

@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.backend.facade;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
@@ -79,4 +80,9 @@ public class VolunteerFacade {
     public List<VolunteerPojo> get50MostRecent() {
         return volunteerMyDao.fetch50MostRecent();
     }
+
+    public List<VolunteerinstancePojo> getVolunteerInstanceInOrder(int volunteerId) {
+        return volunteerInstanceMyDao.getInstanceForVolunteer(volunteerId, false);
+    }
+
 }

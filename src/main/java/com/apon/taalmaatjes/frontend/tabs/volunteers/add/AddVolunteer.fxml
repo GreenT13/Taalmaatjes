@@ -23,7 +23,7 @@
                         </HBox>
                         <HBox styleClass="hboxAlign">
                            <children>
-                              <Label text="Initialen" />
+                              <Label text="Tussenvoegsel" />
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">
@@ -51,6 +51,26 @@
                               <Label text="Email" />
                            </children>
                         </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Postcode" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Stad" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Straatnaam" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Huisnummer" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox prefHeight="336.0" prefWidth="289.0">
@@ -62,7 +82,7 @@
                         </HBox>
                         <HBox styleClass="hboxAlign">
                            <children>
-                              <TextField fx:id="inputInitials" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="inputInsertion" prefHeight="43.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">
@@ -92,6 +112,26 @@
                         <HBox styleClass="hboxAlign">
                            <children>
                               <TextField fx:id="inputEmail" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <TextField fx:id="inputPostalCode" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <TextField fx:id="inputCity" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <TextField fx:id="inputStreetName" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <TextField fx:id="inputHouseNr" prefHeight="43.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT">

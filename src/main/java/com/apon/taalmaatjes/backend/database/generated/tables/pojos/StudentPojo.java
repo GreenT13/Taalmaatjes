@@ -22,11 +22,11 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StudentPojo implements Serializable {
 
-    private static final long serialVersionUID = 1626837675;
+    private static final long serialVersionUID = -1989892543;
 
     private Integer studentid;
     private String  firstname;
-    private String  initials;
+    private String  insertion;
     private String  lastname;
     private Boolean islookingforvolunteer;
     private Boolean isgroup;
@@ -36,7 +36,7 @@ public class StudentPojo implements Serializable {
     public StudentPojo(StudentPojo value) {
         this.studentid = value.studentid;
         this.firstname = value.firstname;
-        this.initials = value.initials;
+        this.insertion = value.insertion;
         this.lastname = value.lastname;
         this.islookingforvolunteer = value.islookingforvolunteer;
         this.isgroup = value.isgroup;
@@ -45,14 +45,14 @@ public class StudentPojo implements Serializable {
     public StudentPojo(
         Integer studentid,
         String  firstname,
-        String  initials,
+        String  insertion,
         String  lastname,
         Boolean islookingforvolunteer,
         Boolean isgroup
     ) {
         this.studentid = studentid;
         this.firstname = firstname;
-        this.initials = initials;
+        this.insertion = insertion;
         this.lastname = lastname;
         this.islookingforvolunteer = islookingforvolunteer;
         this.isgroup = isgroup;
@@ -74,12 +74,12 @@ public class StudentPojo implements Serializable {
         this.firstname = firstname;
     }
 
-    public String getInitials() {
-        return this.initials;
+    public String getInsertion() {
+        return this.insertion;
     }
 
-    public void setInitials(String initials) {
-        this.initials = initials;
+    public void setInsertion(String insertion) {
+        this.insertion = insertion;
     }
 
     public String getLastname() {
@@ -112,7 +112,7 @@ public class StudentPojo implements Serializable {
 
         sb.append(studentid);
         sb.append(", ").append(firstname);
-        sb.append(", ").append(initials);
+        sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
         sb.append(", ").append(islookingforvolunteer);
         sb.append(", ").append(isgroup);

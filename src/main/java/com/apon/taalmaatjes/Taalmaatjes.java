@@ -33,10 +33,6 @@ public class Taalmaatjes extends Application {
         // Set title of the program.
         primaryStage.setTitle("Taalmaatjes");
 
-        // Set correct stylesheets.
-        Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
-        StyleManager.getInstance().addUserAgentStylesheet(FxmlLocation.TAALMAATJES + ".css");
-
         // Load the Main.fxml on the screen.
         Parent root;
         try {
@@ -45,8 +41,14 @@ public class Taalmaatjes extends Application {
             e.printStackTrace();
             return;
         }
-        primaryStage.setScene(new Scene(root));
+        Scene sceneRoot = new Scene(root);
+        primaryStage.setScene(sceneRoot);
         primaryStage.show();
+
+        // Set correct stylesheets.
+        Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+        StyleManager.getInstance().addUserAgentStylesheet(FxmlLocation.TAALMAATJES + ".css");
+        sceneRoot.getStylesheets().add(getClass().getResource("Taalmaatjes.css").toExternalForm());
 
         // Use the FlatterFX css-theme (the flatterfx.css is not used!).
         FlatterFX.style();

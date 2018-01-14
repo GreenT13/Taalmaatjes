@@ -1,3 +1,19 @@
-#labelName {
+.largeLabel {
     -fx-font-size: 26px;
+}
+
+.hboxAlign {
+    /* Fix height of each element to 43 + padding */
+    -fx-min-height: 25px;
+    -fx-pref-height: 25px;
+    -fx-max-height: 25px;
+
+    -fx-alignment: center-left;
+
+    /* Little bit of space between the elements. */
+    -fx-padding: 5px;
+}
+
+.labelActive {
+    -fx-padding: 0px 0px 5px 0px;
 }

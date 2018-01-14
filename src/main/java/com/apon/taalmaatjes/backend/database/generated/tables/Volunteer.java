@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteer extends TableImpl<VolunteerRecord> {
 
-    private static final long serialVersionUID = -216212572;
+    private static final long serialVersionUID = 1781077002;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEER</code>
@@ -65,9 +65,9 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
     public final TableField<VolunteerRecord, String> FIRSTNAME = createField("FIRSTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
-     * The column <code>PUBLIC.VOLUNTEER.INITIALS</code>.
+     * The column <code>PUBLIC.VOLUNTEER.INSERTION</code>.
      */
-    public final TableField<VolunteerRecord, String> INITIALS = createField("INITIALS", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+    public final TableField<VolunteerRecord, String> INSERTION = createField("INSERTION", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEER.LASTNAME</code>.
@@ -78,11 +78,6 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.DATEOFBIRTH</code>.
      */
     public final TableField<VolunteerRecord, Date> DATEOFBIRTH = createField("DATEOFBIRTH", org.jooq.impl.SQLDataType.DATE, this, "");
-
-    /**
-     * The column <code>PUBLIC.VOLUNTEER.CITY</code>.
-     */
-    public final TableField<VolunteerRecord, String> CITY = createField("CITY", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEER.PHONENUMBER</code>.
@@ -103,6 +98,26 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.HASTRAINING</code>.
      */
     public final TableField<VolunteerRecord, Boolean> HASTRAINING = createField("HASTRAINING", org.jooq.impl.SQLDataType.BOOLEAN, this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.POSTALCODE</code>.
+     */
+    public final TableField<VolunteerRecord, String> POSTALCODE = createField("POSTALCODE", org.jooq.impl.SQLDataType.VARCHAR(6), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.CITY</code>.
+     */
+    public final TableField<VolunteerRecord, String> CITY = createField("CITY", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.STREETNAME</code>.
+     */
+    public final TableField<VolunteerRecord, String> STREETNAME = createField("STREETNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.HOUSENR</code>.
+     */
+    public final TableField<VolunteerRecord, String> HOUSENR = createField("HOUSENR", org.jooq.impl.SQLDataType.VARCHAR(10), this, "");
 
     /**
      * Create a <code>PUBLIC.VOLUNTEER</code> table reference

@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers.add;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
+import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.event.ActionEvent;
@@ -13,7 +14,9 @@ import javafx.scene.control.TextField;
 public class AddVolunteer {
 
     @FXML
-    TextField inputFirstName, inputInitials, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail;
+    TextField inputFirstName, inputInsertion, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail, inputPostalCode;
+    @FXML
+    TextField inputCity, inputStreetName, inputHouseNr;
 
     @FXML
     DatePicker inputDateOfBirth;
@@ -36,14 +39,17 @@ public class AddVolunteer {
 
     private VolunteerPojo convertControlsToPojo() {
         VolunteerPojo volunteerPojo = new VolunteerPojo();
-        volunteerPojo.setFirstname(inputFirstName.getText());
-        volunteerPojo.setInitials(inputInitials.getText());
-        volunteerPojo.setLastname(inputLastName.getText());
-        volunteerPojo.setPhonenumber(inputPhoneNr.getText());
-        volunteerPojo.setMobilephonenumber(inputMobPhoneNr.getText());
-        volunteerPojo.setEmail(inputEmail.getText());
-
+        volunteerPojo.setFirstname(StringUtil.getDatabaseString(inputFirstName.getText()));
+        volunteerPojo.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
+        volunteerPojo.setLastname(StringUtil.getDatabaseString(inputLastName.getText()));
         volunteerPojo.setDateofbirth(DateTimeUtil.convertLocalDateToSqlDate(inputDateOfBirth.getValue()));
+        volunteerPojo.setPhonenumber(StringUtil.getDatabaseString(inputPhoneNr.getText()));
+        volunteerPojo.setMobilephonenumber(StringUtil.getDatabaseString(inputMobPhoneNr.getText()));
+        volunteerPojo.setEmail(StringUtil.getDatabaseString(inputEmail.getText()));
+        volunteerPojo.setPostalcode(StringUtil.getDatabaseString(inputPostalCode.getText()));
+        volunteerPojo.setCity(StringUtil.getDatabaseString(inputCity.getText()));
+        volunteerPojo.setStreetname(StringUtil.getDatabaseString(inputStreetName.getText()));
+        volunteerPojo.setHousenr(StringUtil.getDatabaseString(inputHouseNr.getText()));
 
         return volunteerPojo;
     }
