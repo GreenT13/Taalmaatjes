@@ -30,7 +30,7 @@ public class StringUtil {
 
     public static String getOutputString(String string) {
         if (isEmpty(string)) {
-            return "Niet gevuld";
+            return "<Niet gevuld>";
         }
 
         return string;

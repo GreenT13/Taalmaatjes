@@ -1,10 +1,12 @@
 package com.apon.taalmaatjes.backend.facade;
 
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.util.StringUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -83,6 +85,22 @@ public class VolunteerFacade {
 
     public List<VolunteerinstancePojo> getVolunteerInstanceInOrder(int volunteerId) {
         return volunteerInstanceMyDao.getInstanceForVolunteer(volunteerId, false);
+    }
+
+    public List<VolunteerPojo> searchVolunteerBasedOnInput(String input) {
+        // First we modify the input so that it is a "normal" input.
+        // Replace double spaces by a single space.
+        input = input.replaceAll(" ", " ");
+        // Remove any unneeded spaces at the beginning and the end.
+        input = input.trim();
+
+        if (StringUtil.isEmpty(input)) {
+            // We just return the most we can.
+            return get50MostRecent();
+        }
+
+        // The string is not empty, so we search using name etc.
+        return volunteerMyDao.searchOnName(input);
     }
 
 }

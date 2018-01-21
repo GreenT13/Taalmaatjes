@@ -7,9 +7,11 @@ import com.apon.taalmaatjes.frontend.transition.FxmlLocation;
 import com.guigarage.flatterfx.FlatterFX;
 import com.sun.javafx.css.StyleManager;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;

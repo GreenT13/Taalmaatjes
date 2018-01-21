@@ -11,3 +11,11 @@
     /* Kleur van binnenkant van selected textbox: */
     /*-fx-background-color: rgb(220, 244, 250);*/
 }
+
+.copyable-label, .copyable-label:focused {
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0px ;
+    -fx-border-insets: 0px;
+    -fx-text-fill: white;
+    -fx-padding: 0px;
+}

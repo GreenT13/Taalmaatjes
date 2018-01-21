@@ -2,7 +2,6 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
-import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.presentation.Person;
 import com.apon.taalmaatjes.frontend.transition.Transition;
@@ -14,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 
@@ -28,6 +28,9 @@ public class Volunteers {
 
     @FXML
     private TableView<Person> tableViewResult;
+
+    @FXML
+    private TextField textFieldSearch;
 
     @FXML
     public void initialize() {
@@ -80,9 +83,13 @@ public class Volunteers {
     }
 
     @FXML
+    public void onEnter(ActionEvent actionEvent) {
+        search();
+    }
+
+    @FXML
     public void search() {
-        Log.logDebug("Look at me.");
-        fillTable(volunteerFacade.get50MostRecent());
+        fillTable(volunteerFacade.searchVolunteerBasedOnInput(textFieldSearch.getText()));
     }
 
     /**

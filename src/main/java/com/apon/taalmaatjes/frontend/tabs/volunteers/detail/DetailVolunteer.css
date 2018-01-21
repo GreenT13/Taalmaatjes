@@ -1,5 +1,7 @@
-.largeLabel {
+.largeFont, .largeFont:focused {
+    /* Font for title labels/textfields so they stand out more. */
     -fx-font-size: 26px;
+    -fx-text-fill: -blue;
 }
 
 .hboxAlign {

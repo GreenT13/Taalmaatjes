@@ -5,18 +5,25 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.Volunteerins
 import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.FrontendContext;
+import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.Transition;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class DetailVolunteer {
     VolunteerFacade volunteerFacade;
     int volunteerId;
 
     @FXML
-    Label labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity;
+    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity;
 
     @FXML
     VBox vboxActive;
@@ -62,6 +69,8 @@ public class DetailVolunteer {
         // Set street and house number
         if (volunteerPojo.getStreetname() != null && volunteerPojo.getHousenr() != null) {
             labelStreetNameAndHouseNr.setText(StringUtil.getOutputString(volunteerPojo.getStreetname() + " " + volunteerPojo.getHousenr()));
+        } else {
+            labelStreetNameAndHouseNr.setText(StringUtil.getOutputString((String) null));
         }
 
         // Set postal code
@@ -74,11 +83,6 @@ public class DetailVolunteer {
         for (VolunteerinstancePojo volunteerinstancePojo : volunteerFacade.getVolunteerInstanceInOrder(volunteerId)) {
             addActiveLine(volunteerinstancePojo);
         }
-    }
-
-    @FXML
-    public void initialize() {
-
     }
 
     @FXML
@@ -98,5 +102,17 @@ public class DetailVolunteer {
 
         label.setText(text);
         vboxActive.getChildren().add(label);
+    }
+
+    @FXML
+    public void initialize() {
+        TextUtils.setWidthToContent(labelName);
+        TextUtils.setWidthToContent(labelDateOfBirth);
+        TextUtils.setWidthToContent(labelPhoneNr);
+        TextUtils.setWidthToContent(labelMobPhoneNr);
+        TextUtils.setWidthToContent(labelEmail);
+        TextUtils.setWidthToContent(labelStreetNameAndHouseNr);
+        TextUtils.setWidthToContent(labelPostalCode);
+        TextUtils.setWidthToContent(labelCity);
     }
 }

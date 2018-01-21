@@ -38,7 +38,7 @@
                         <Button mnemonicParsing="false" onAction="#addVolunteer" text="Toevoegen vrijwilliger" />
                      </children>
                   </StackPane>
-                  <TextField />
+                  <TextField fx:id="textFieldSearch" onAction="#onEnter" />
                   <Button id="btnSearch" mnemonicParsing="false" onAction="#search" />
                   <Button id="btnAdvanced" mnemonicParsing="false" onAction="#toggleAdvancedSearch" text="▼" />
                </children>

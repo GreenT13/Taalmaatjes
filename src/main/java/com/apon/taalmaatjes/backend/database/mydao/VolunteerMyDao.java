@@ -4,6 +4,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.VolunteerDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerRecord;
 import org.jooq.Configuration;
 import org.jooq.Record1;
 import org.jooq.SelectConditionStep;
@@ -137,5 +138,28 @@ public class VolunteerMyDao extends VolunteerDao {
                 .fetch()
                 .map(mapper());
 
+    }
+
+    /**
+     * The input gets split into several strings with space as delimiter.
+     * Return any row in Volunteer for which each string is found in either firstName, insertion or lastName.
+     * @param input Hopefully trimmed input?
+     * @return
+     */
+    public List<VolunteerPojo> searchOnName(String input) {
+        // Change input to lowercase (and also in search query) so casing is ignored.
+        String[] searchStrings = input.toLowerCase().split(" ");
+
+        org.jooq.SelectWhereStep<VolunteerRecord> query = using(configuration()).selectFrom(Volunteer.VOLUNTEER);
+        for (String s : searchStrings) {
+            query.where(
+                    Volunteer.VOLUNTEER.FIRSTNAME.lower().like(s + "%")
+                    .or(Volunteer.VOLUNTEER.INSERTION.lower().like(s + "%"))
+                    .or(Volunteer.VOLUNTEER.LASTNAME.lower().like(s + "%"))
+            );
+        }
+
+        // Return the most recent 50 rows.
+        return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
     }
 }
