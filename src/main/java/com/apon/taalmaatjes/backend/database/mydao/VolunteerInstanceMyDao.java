@@ -1,9 +1,12 @@
 package com.apon.taalmaatjes.backend.database.mydao;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.VolunteerinstanceDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerinstanceRecord;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import org.jooq.Configuration;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;

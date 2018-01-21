@@ -3,7 +3,11 @@ package com.apon.taalmaatjes.backend.database.mydao;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.VolunteermatchDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import org.jooq.Configuration;
+import org.jooq.SelectConditionStep;
+
+import java.util.List;
 
 import static org.jooq.impl.DSL.using;
 
@@ -48,5 +52,18 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         super.insert(volunteermatchPojo);
     }
 
+    public List<VolunteermatchPojo> getMatchForVolunteer(int volunteerId, boolean sortAscending) {
+        SelectConditionStep<VolunteermatchRecord> query = using(configuration())
+                .selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(volunteerId));
+
+        if (sortAscending) {
+            query.orderBy(Volunteermatch.VOLUNTEERMATCH.DATESTART.asc());
+        } else {
+            query.orderBy(Volunteermatch.VOLUNTEERMATCH.DATESTART.desc());
+        }
+
+        return query.fetch().map(mapper());
+    }
 
 }

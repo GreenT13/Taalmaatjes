@@ -1,7 +1,10 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
+import com.apon.taalmaatjes.backend.facade.StudentFacade;
 import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.FrontendContext;
@@ -20,17 +23,20 @@ import javafx.scene.text.Text;
 
 public class DetailVolunteer {
     VolunteerFacade volunteerFacade;
+    StudentFacade studentFacade;
+
     int volunteerId;
 
     @FXML
     TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity;
 
     @FXML
-    VBox vboxActive;
+    VBox vboxActive, vboxMatch;
 
     public void setVolunteerId(int volunteerId) {
         this.volunteerId = volunteerId;
         volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
+        studentFacade = new StudentFacade(FrontendContext.getInstance().getContext());
         initializeValues();
     }
 
@@ -83,6 +89,10 @@ public class DetailVolunteer {
         for (VolunteerinstancePojo volunteerinstancePojo : volunteerFacade.getVolunteerInstanceInOrder(volunteerId)) {
             addActiveLine(volunteerinstancePojo);
         }
+
+        for (VolunteermatchPojo volunteermatchPojo : volunteerFacade.getVolunteerMatchInOrder(volunteerId)) {
+            addMatchLine(volunteermatchPojo);
+        }
     }
 
     @FXML
@@ -102,6 +112,22 @@ public class DetailVolunteer {
 
         label.setText(text);
         vboxActive.getChildren().add(label);
+    }
+
+    private void addMatchLine(VolunteermatchPojo volunteermatchPojo) {
+        String studentName = studentFacade.getStudentName(volunteermatchPojo.getStudentid());
+
+        Label label = new Label();
+        label.getStyleClass().add("labelMatch");
+        String text = "Heeft " + studentName + " begeleidt van " + volunteermatchPojo.getDatestart() + " tot ";
+        if (volunteermatchPojo.getDateend() == null) {
+            text += "nu.";
+        } else {
+            text += volunteermatchPojo.getDateend() + ".";
+        }
+
+        label.setText(text);
+        vboxMatch.getChildren().add(label);
     }
 
     @FXML

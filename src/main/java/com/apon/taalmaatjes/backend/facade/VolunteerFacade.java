@@ -3,8 +3,10 @@ package com.apon.taalmaatjes.backend.facade;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
+import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 
@@ -15,11 +17,13 @@ public class VolunteerFacade {
     protected Context context;
     protected VolunteerMyDao volunteerMyDao;
     protected VolunteerInstanceMyDao volunteerInstanceMyDao;
+    protected VolunteerMatchMyDao volunteerMatchMyDao;
 
     public VolunteerFacade (Context context) {
         this.context = context;
         volunteerMyDao = new VolunteerMyDao(context.getConfiguration());
         volunteerInstanceMyDao = new VolunteerInstanceMyDao(context.getConfiguration());
+        volunteerMatchMyDao = new VolunteerMatchMyDao(context.getConfiguration());
     }
 
     /**
@@ -85,6 +89,10 @@ public class VolunteerFacade {
 
     public List<VolunteerinstancePojo> getVolunteerInstanceInOrder(int volunteerId) {
         return volunteerInstanceMyDao.getInstanceForVolunteer(volunteerId, false);
+    }
+
+    public List<VolunteermatchPojo> getVolunteerMatchInOrder(int volunteerId) {
+        return volunteerMatchMyDao.getMatchForVolunteer(volunteerId, false);
     }
 
     public List<VolunteerPojo> searchVolunteerBasedOnInput(String input) {

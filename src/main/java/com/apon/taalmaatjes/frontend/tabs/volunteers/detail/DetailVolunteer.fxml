@@ -138,7 +138,7 @@
                         </HBox>
                     </children>
                 </VBox>
-                <VBox prefHeight="200.0" prefWidth="100.0">
+                <VBox prefWidth="100.0">
                     <children>
                         <Label styleClass="largeFont" text="Actief" />
                         <VBox fx:id="vboxActive" />
@@ -146,6 +146,15 @@
                     <padding>
                         <Insets top="10.0" />
                     </padding>
+                </VBox>
+                <VBox prefWidth="100.0">
+                   <children>
+                      <Label styleClass="largeFont" text="Koppelingen" />
+                      <VBox fx:id="vboxMatch" />
+                   </children>
+                   <padding>
+                      <Insets top="10.0" />
+                   </padding>
                 </VBox>
             </children>
         </VBox>
