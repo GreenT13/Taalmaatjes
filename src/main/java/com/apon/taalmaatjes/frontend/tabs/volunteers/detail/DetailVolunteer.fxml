@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
@@ -22,6 +23,7 @@
                               <String fx:value="copyable-label" />
                               <String fx:value="largeFont" />
                            </styleClass></TextField>
+                        <Hyperlink onAction="#edit" styleClass="largeFont" text="(bewerken)" />
                                 <Region prefHeight="1.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
                                 <Button mnemonicParsing="false" onAction="#back" text="Terug" />
                             </children>

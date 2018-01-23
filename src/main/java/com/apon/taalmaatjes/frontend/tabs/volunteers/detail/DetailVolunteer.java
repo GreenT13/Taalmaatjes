@@ -13,6 +13,7 @@ import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -47,17 +48,15 @@ public class DetailVolunteer {
         VolunteerPojo volunteerPojo = volunteerFacade.getVolunteer(volunteerId);
 
         // Set the name.
-        String name = "";
+        String name = String.valueOf(volunteerPojo.getVolunteerid()) + ": ";
         if (volunteerPojo.getFirstname() != null) {
             name += volunteerPojo.getFirstname() + " ";
         }
         if (volunteerPojo.getInsertion() != null) {
             name += volunteerPojo.getInsertion()  + " ";
         }
-        if (volunteerPojo.getLastname() != null) {
-            name += volunteerPojo.getLastname() + " ";
-        }
-        name += "(" + String.valueOf(volunteerPojo.getVolunteerid()) + ")";
+
+        name += volunteerPojo.getLastname();
         labelName.setText(name);
 
         // Set the date of birth.
@@ -140,5 +139,10 @@ public class DetailVolunteer {
         TextUtils.setWidthToContent(labelStreetNameAndHouseNr);
         TextUtils.setWidthToContent(labelPostalCode);
         TextUtils.setWidthToContent(labelCity);
+    }
+
+    @FXML
+    public void edit(ActionEvent actionEvent) {
+        Transition.getInstance().volunteerAdd(volunteerId);
     }
 }

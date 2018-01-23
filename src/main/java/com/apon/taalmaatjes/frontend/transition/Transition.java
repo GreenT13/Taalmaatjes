@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.frontend.transition;
 
 import com.apon.taalmaatjes.backend.log.Log;
+import com.apon.taalmaatjes.frontend.tabs.volunteers.add.AddVolunteer;
 import com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -51,6 +52,24 @@ public class Transition {
     public void volunteerAdd() {
         tabVolunteer.setContent(load(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
     }
+
+    public void volunteerAdd(int volunteerId) {
+        Parent root;
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
+        // Load so we have the controller instantiated.
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        AddVolunteer addVolunteer = loader.getController();
+        addVolunteer.setVolunteerId(volunteerId);
+
+        // Set content last, so we make sure that what is shown on the screen is initialized.
+        tabVolunteer.setContent(root);
+    }
+
 
     public void volunteerOverview() {
         tabVolunteer.setContent(previousVolunteer);
