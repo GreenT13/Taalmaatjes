@@ -8,6 +8,7 @@ import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 
 import javax.annotation.Nonnull;
@@ -27,11 +28,11 @@ public class VolunteerFacade {
     }
 
     /**
-     * Add a volunteer to the database.
+     * Add a volunteer to the database, starting as active.
      * @param volunteerPojo
      * @return
      */
-    public Result addVolunteer(@Nonnull VolunteerPojo volunteerPojo) {
+    public Result addActiveVolunteer(@Nonnull VolunteerPojo volunteerPojo) {
         if (volunteerPojo == null) {
             return new Result("Cannot enter a null pojo.");
         }
@@ -39,8 +40,14 @@ public class VolunteerFacade {
         if (volunteerPojo.getLastname() == null) {
             return new Result("Last name must be filled.");
         }
-
         volunteerMyDao.insert(volunteerPojo);
+
+        // Add VolunteerInstance line starting today.
+        VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
+        volunteerinstancePojo.setVolunteerid(volunteerPojo.getVolunteerid());
+        volunteerinstancePojo.setDatestart(DateTimeUtil.getCurrentDate());
+        volunteerInstanceMyDao.insert(volunteerinstancePojo);
+
         if (!context.commit()) {
             return new Result("Could not save the volunteer.");
         }
@@ -111,4 +118,39 @@ public class VolunteerFacade {
         return volunteerMyDao.searchOnName(input);
     }
 
+    public boolean isActive(int volunteerId) {
+        return volunteerMyDao.isActive(volunteerId);
+    }
+
+    public boolean isLastDayActive(int volunteerId) {
+        return volunteerMyDao.isLastDayActive(volunteerId);
+    }
+
+    public void changeActive(int volunteerId) {
+        boolean currentlyActive = isActive(volunteerId);
+
+        if (!currentlyActive) {
+            // Just add a new line to volunteerinstance.
+            VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
+            volunteerinstancePojo.setVolunteerid(volunteerId);
+            volunteerinstancePojo.setDatestart(DateTimeUtil.getCurrentDate());
+            volunteerInstanceMyDao.insert(volunteerinstancePojo);
+            return;
+        }
+
+        // Set dateEnd of the latest line to today. If the dateStart is also today, we just remove the line.
+        VolunteerinstancePojo volunteerinstancePojo = volunteerInstanceMyDao.getInstanceToday(volunteerId);
+        if (volunteerinstancePojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) == 0) {
+            volunteerInstanceMyDao.delete(volunteerinstancePojo);
+        } else if (volunteerinstancePojo.getDateend() != null &&
+                volunteerinstancePojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) == 0) {
+            volunteerinstancePojo.setDateend(null);
+            volunteerInstanceMyDao.update(volunteerinstancePojo);
+        } else {
+            volunteerinstancePojo.setDateend(DateTimeUtil.getCurrentDate());
+            volunteerInstanceMyDao.update(volunteerinstancePojo);
+        }
+
+        context.commit();
+    }
 }

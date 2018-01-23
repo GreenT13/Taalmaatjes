@@ -162,4 +162,35 @@ public class VolunteerMyDao extends VolunteerDao {
         // Return the most recent 50 rows.
         return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
     }
+
+    public boolean isActive(int volunteerId) {
+        int isActive = using(configuration())
+                .selectCount()
+                .from(Volunteerinstance.VOLUNTEERINSTANCE)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
+                // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
+                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())))
+                .fetchOne(0, int.class);
+
+        // Return if at least one row is found.
+        return (isActive >= 1);
+    }
+
+    public boolean isLastDayActive(int volunteerId) {
+        int isActive = using(configuration())
+                .selectCount()
+                .from(Volunteerinstance.VOLUNTEERINSTANCE)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
+                // dateStart <= current_date and (dateEnd is null || current_date < dateEnd)
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
+                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.greaterThan(DSL.currentDate())))
+                .fetchOne(0, int.class);
+
+        // Return if at least one row is found.
+        return (isActive >= 1);
+    }
+
 }

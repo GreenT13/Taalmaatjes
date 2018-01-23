@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 
 public class DateTimeUtil {
 
@@ -35,6 +36,10 @@ public class DateTimeUtil {
 
     public static Timestamp getCurrentTimestamp() {
         return new Timestamp(System.currentTimeMillis());
+    }
+
+    public static Date getCurrentDate() {
+        return Date.valueOf(LocalDate.now());
     }
 
 }

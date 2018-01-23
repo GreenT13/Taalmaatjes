@@ -36,7 +36,7 @@ public class AddVolunteer {
         VolunteerPojo volunteerPojo = convertControlsToPojo();
         if (volunteerId == null) {
             // Use facade to add the user.
-            volunteerFacade.addVolunteer(volunteerPojo);
+            volunteerFacade.addActiveVolunteer(volunteerPojo);
         } else {
             volunteerPojo.setVolunteerid(volunteerId);
             volunteerFacade.updateVolunteer(volunteerPojo);
@@ -72,7 +72,9 @@ public class AddVolunteer {
         inputFirstName.setText(volunteerPojo.getFirstname());
         inputInsertion.setText(volunteerPojo.getInsertion());
         inputLastName.setText(volunteerPojo.getLastname());
-        inputDateOfBirth.setValue(volunteerPojo.getDateofbirth().toLocalDate());
+        if (volunteerPojo.getDateofbirth() != null) {
+            inputDateOfBirth.setValue(volunteerPojo.getDateofbirth().toLocalDate());
+        }
         inputPhoneNr.setText(volunteerPojo.getPhonenumber());
         inputMobPhoneNr.setText(volunteerPojo.getMobilephonenumber());
         inputEmail.setText(volunteerPojo.getEmail());

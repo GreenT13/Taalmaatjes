@@ -1,6 +1,6 @@
-insert into STUDENT (STUDENTID, FIRSTNAME, LASTNAME, ISGROUP) VALUES
-  (1, 'Cursie', 'Taal', false),
-  (2, null, 'Groep 5A', true);
+insert into STUDENT (STUDENTID, FIRSTNAME, LASTNAME, ISGROUP, ISLOOKINGFORVOLUNTEER) VALUES
+  (1, 'Cursie', 'Taal', false, true),
+  (2, null, 'Groep 5A', true, false);
 
 insert into VOLUNTEERMATCH (VOLUNTEERID, VOLUNTEERMATCHID, STUDENTID, DATESTART, DATEEND) values
   (1, 1, 1, '2017-10-02', null),

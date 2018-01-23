@@ -10,6 +10,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.records.Volunteerm
 import org.jooq.Configuration;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
+import org.jooq.impl.DSL;
 
 import java.util.List;
 
@@ -70,4 +71,21 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
         return query.fetch().map(mapper());
     }
 
+    @Override
+    public List<VolunteerinstancePojo> fetchByVolunteerid(Integer... values) {
+        return super.fetchByVolunteerid(values);
+    }
+
+    public VolunteerinstancePojo getInstanceToday(int volunteerId) {
+        VolunteerinstanceRecord record =  using(configuration())
+                .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
+                // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
+                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())))
+                .fetchOne();
+
+        return mapper().map(record);
+    }
 }

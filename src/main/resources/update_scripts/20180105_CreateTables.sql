@@ -13,8 +13,8 @@ create table Volunteer (
   volunteerId int not null,
   firstName varchar(100),
   insertion varchar(100),
-  lastName varchar(100),
-  dateOfBirth date,
+  lastName varchar(100) not null,
+  dateOfBirth date not null,
   phoneNumber varchar(100),
   mobilePhoneNumber varchar(100),
   email varchar(100),
@@ -29,7 +29,7 @@ create table Volunteer (
 create table VolunteerInstance (
   volunteerId int not null,
   volunteerInstanceId int not null,
-  dateStart date,
+  dateStart date not null,
   dateEnd date,
   constraint "VoIn_PK" primary key (volunteerId, volunteerInstanceId),
   constraint "VoIn_Volu_FK" foreign key (volunteerId) references Volunteer (volunteerId)
@@ -39,8 +39,8 @@ create table Student (
   studentId int not null,
   firstName varchar(100),
   insertion varchar(100),
-  lastName varchar(100),
-  isLookingForVolunteer boolean,
+  lastName varchar(100) not null,
+  isLookingForVolunteer boolean not null,
   isGroup boolean not null,
   constraint "Stud_PK" primary key (studentId)
 );
@@ -49,7 +49,7 @@ create table VolunteerMatch (
   volunteerId int not null,
   volunteerMatchId int not null,
   studentId int not null,
-  dateStart date,
+  dateStart date not null,
   dateEnd date,
   constraint "VoMa_PK" primary key (volunteerId, volunteerMatchId),
   constraint "VoMa_Volu_FK" foreign key (volunteerId) references Volunteer (volunteerId),

@@ -1,6 +1,5 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
@@ -10,17 +9,12 @@ import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.Transition;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public class DetailVolunteer {
     VolunteerFacade volunteerFacade;
@@ -33,6 +27,10 @@ public class DetailVolunteer {
 
     @FXML
     VBox vboxActive, vboxMatch;
+
+    @FXML
+    Hyperlink hyperlinkChangeActive;
+    boolean isActive;
 
     public void setVolunteerId(int volunteerId) {
         this.volunteerId = volunteerId;
@@ -92,6 +90,9 @@ public class DetailVolunteer {
         for (VolunteermatchPojo volunteermatchPojo : volunteerFacade.getVolunteerMatchInOrder(volunteerId)) {
             addMatchLine(volunteermatchPojo);
         }
+
+        // Change hyperlink text according to active state of volunteer.
+        setTextHyperlink();
     }
 
     @FXML
@@ -144,5 +145,27 @@ public class DetailVolunteer {
     @FXML
     public void edit(ActionEvent actionEvent) {
         Transition.getInstance().volunteerAdd(volunteerId);
+    }
+
+    @FXML
+    public void changeActive(ActionEvent actionEvent) {
+        volunteerFacade.changeActive(volunteerId);
+
+        // Refresh output.
+        vboxActive.getChildren().clear();
+        for (VolunteerinstancePojo volunteerinstancePojo : volunteerFacade.getVolunteerInstanceInOrder(volunteerId)) {
+            addActiveLine(volunteerinstancePojo);
+        }
+
+        setTextHyperlink();
+    }
+
+    private void setTextHyperlink() {
+        // Change hyperlink text according to active state of volunteer.
+        if (volunteerFacade.isActive(volunteerId) && volunteerFacade.isLastDayActive(volunteerId)) {
+            hyperlinkChangeActive.setText("(stop)");
+        } else {
+            hyperlinkChangeActive.setText("(start)");
+        }
     }
 }

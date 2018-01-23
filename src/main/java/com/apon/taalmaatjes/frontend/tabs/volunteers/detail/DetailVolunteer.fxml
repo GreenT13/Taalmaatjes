@@ -142,7 +142,12 @@
                 </VBox>
                 <VBox prefWidth="100.0">
                     <children>
-                        <Label styleClass="largeFont" text="Actief" />
+                  <HBox>
+                     <children>
+                              <Label styleClass="largeFont" text="Actief " />
+                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#changeActive" styleClass="largeFont" text="(start)" />
+                     </children>
+                  </HBox>
                         <VBox fx:id="vboxActive" />
                     </children>
                     <padding>
