@@ -119,7 +119,7 @@ public class DetailVolunteer {
 
         Label label = new Label();
         label.getStyleClass().add("labelMatch");
-        String text = "Heeft " + studentName + " begeleidt van " + volunteermatchPojo.getDatestart() + " tot ";
+        String text = "Heeft " + studentName + " begeleid van " + volunteermatchPojo.getDatestart() + " tot ";
         if (volunteermatchPojo.getDateend() == null) {
             text += "nu.";
         } else {

@@ -2,7 +2,7 @@ package com.apon.taalmaatjes.backend.facade;
 
 import java.sql.Date;
 
-public class Report {
+public class ReportResult {
     private Date dateStart;
     private Date dateEnd;
     private Integer nrOfNewVolunteers;
@@ -12,7 +12,7 @@ public class Report {
     private Integer nrOfNewGroups;
     private Integer nrOfActiveGroups;
 
-    public Report(Date dateStart, Date dateEnd) {
+    public ReportResult(Date dateStart, Date dateEnd) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
     }

@@ -1,46 +1,45 @@
-.root {
-    -fx-font-size: 15px !important;
-    /* Some variables */
-    -gray: rgb(221, 221, 221);
-    -dark: rgb(47.0, 52.0, 57.0);
+.tab {
+    /* Create a round background (some random large number). */
+    -fx-background-radius: 1000px;
+    /* Unselected tabs are the background of the bar. */
+    -fx-background-color: transparent;
+    /* Make the tab (as well as the whole bar) larger. */
+    -fx-padding: 60px 0px 60px 0px;
+
+    -fx-text-fill: white;
 }
 
-.tab-pane {
-    /* Pad the pane so that no spaces are left. */
-    -fx-padding: 0px 0px 0px -8px;
+.tab:selected {
+    /* Selected tabs have a blue background. */
+    -fx-background-color: -blue;
 }
 
-.tab-pane .tab {
-    /* Make the tab panes larger so the text fits. */
-    -fx-padding: 60px 0px 40px 0px;
-    /* Remove all space around the tabs */
-    -fx-background-insets: 0.0;
-    /* Use the same background color for everything */
-    -fx-background-color: -gray;
+.tab .tab-label {
+    -fx-text-fill: white;
 }
 
-/* Styling of the selected tab. */
-.tab-pane .tab:selected {
-    -fx-background-color: rgb(183, 183, 183);
-}
-
-.tab-pane .tab .tab-label {
+.tab .tab-label {
     /* Rotate the label 90 degrees */
     -fx-rotate: 90;
 
-    /* Style the label of the tab correctly. */
-    -fx-text-fill: -dark;
-    -fx-alignment: CENTER;
+    /* Make the tabs large blocks. */
     -fx-pref-width: 150px;
-    -fx-padding: 0px 0px 0px -18px ;
+
+    /* Center the text better. */
+    -fx-padding: 5px 0px 0px 0px ;
 }
 
-.tab-pane .tab-header-area {
-    /* Pad the header area so that no spaces are left. */
-    -fx-padding: 0px 0px 0px 0px;
+.tab-header-area {
+    /* Small space around the circle so it doesn't touch the edges. */
+    -fx-padding: 2px 2px 0px 2px;
 }
 
 /* Border is not correctly aligned with the other css, so we just 'remove' it. */
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
     -fx-border-color: transparent;
+}
+
+.tab-pane *.tab-header-background {
+    /* Background color of the bar */
+    -fx-background-color: -darkgray;
 }

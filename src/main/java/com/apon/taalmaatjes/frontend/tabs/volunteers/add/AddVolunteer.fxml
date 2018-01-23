@@ -92,11 +92,7 @@
                         </HBox>
                         <HBox styleClass="hboxAlign">
                            <children>
-                              <DatePicker fx:id="inputDateOfBirth" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </DatePicker>
+                              <DatePicker fx:id="inputDateOfBirth" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">

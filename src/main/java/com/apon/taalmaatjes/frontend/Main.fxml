@@ -15,7 +15,6 @@
     <tabs>
         <Tab text="Home" fx:id="tabHome">
             <content>
-                <!-- Just for testing!! So I don't have to click Vrijwilliger every time. -->
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
         </Tab>
@@ -31,7 +30,7 @@
         </Tab>
         <Tab text="Rapportage" fx:id="tabReport">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <fx:include source="tabs/report/Report.fxml"/>
             </content>
         </Tab>
 

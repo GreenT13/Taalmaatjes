@@ -1,21 +1,49 @@
 .root {
     -fx-font-size: 15px !important;
     -gray: rgb(221, 221, 221);
+    /*-darkgray: rgb(138,149,159);*/
+    -darkgray: rgb(104,117,128);
     -dark: rgb(47.0, 52.0, 57.0);
     -blue: rgb(0, 184, 222);
 }
 
-.button {
+.largeFont, .largeFont:focused {
+    /* Font for title labels and textfields so they stand out more. */
+    -fx-font-size: 26px;
+    -fx-text-fill: -blue !important; /* Important so it doesn't turn gray. */
+}
+
+.hboxAlign {
+    /* Fix height of each element to 43 + padding */
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
+
+    -fx-alignment: center-left;
+
+    /* Little bit of space between the elements. */
+    -fx-padding: 5px;
+}
+
+.button, .button:focused {
     /* Kleur van buitenkant van selected textbox:*/
     -fx-background-color: -blue;
-    /* Kleur van binnenkant van selected textbox: */
-    /*-fx-background-color: rgb(220, 244, 250);*/
+    -fx-text-fill: white;
 }
 
 .copyable-label, .copyable-label:focused {
     -fx-background-color: transparent ;
     -fx-background-insets: 0px ;
     -fx-border-insets: 0px;
-    -fx-text-fill: white;
     -fx-padding: 0px;
+}
+
+.label {
+    -fx-text-fill: -darkgray;
+}
+.text-field {
+    -fx-text-fill: -darkgray;
+}
+.text-area {
+    -fx-text-fill: -darkgray;
 }

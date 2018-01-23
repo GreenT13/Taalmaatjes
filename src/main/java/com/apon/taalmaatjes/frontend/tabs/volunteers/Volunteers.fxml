@@ -16,9 +16,9 @@
    <center>
       <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="150.0" text="Voornaam" />
-          <TableColumn prefWidth="222.0" text="Achternaam" />
-           <TableColumn prefWidth="222.0" text="Email" />
+          <TableColumn prefWidth="150.0" styleClass="grayColumnText" text="Voornaam" />
+          <TableColumn prefWidth="222.0" styleClass="grayColumnText" text="Achternaam" />
+           <TableColumn prefWidth="222.0" styleClass="grayColumnText" text="Email" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -39,7 +39,6 @@
                      </children>
                   </StackPane>
                   <TextField fx:id="textFieldSearch" onAction="#onEnter" />
-                  <Button id="btnSearch" mnemonicParsing="false" onAction="#search" />
                   <Button id="btnAdvanced" mnemonicParsing="false" onAction="#toggleAdvancedSearch" text="▼" />
                </children>
             </HBox>
