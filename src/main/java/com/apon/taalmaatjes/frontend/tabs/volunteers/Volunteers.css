@@ -45,7 +45,19 @@
     -fx-background-color: transparent;
 }
 
+.grayColumnText, .grayColumnText:focused {
+    -fx-text-fill: -darkgray;
+    -columnWidth: 250px;
+    -fx-max-width: -columnWidth;
+    -fx-min-width: -columnWidth;
+    -fx-pref-width: -columnWidth;
+}
 
-.grayColumnText,  .grayColumnText:focused {
-    -fx-text-fill: -darkgray !important;
+.grayColumnTextId {
+    -fx-text-fill: -darkgray;
+    -columnWidth: 50px;
+    -fx-max-width: -columnWidth;
+    -fx-min-width: -columnWidth;
+    -fx-pref-width: -columnWidth;
+
 }
