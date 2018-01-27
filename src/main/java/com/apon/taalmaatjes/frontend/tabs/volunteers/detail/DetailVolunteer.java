@@ -112,6 +112,7 @@ public class DetailVolunteer {
 
     @FXML
     public void back() {
+        // In case we added a volunteer, we refresh.
         Transition.getInstance().volunteerOverview();
     }
 

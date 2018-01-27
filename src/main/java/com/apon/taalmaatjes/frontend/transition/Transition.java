@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class Transition {
     private static Transition ourInstance = new Transition();
+    public static boolean hasAddedVolunteer = false;
 
     public static Transition getInstance() {
         return ourInstance;
@@ -72,7 +73,17 @@ public class Transition {
 
 
     public void volunteerOverview() {
-        tabVolunteer.setContent(previousVolunteer);
+        if (hasAddedVolunteer) {
+            try {
+                tabVolunteer.setContent(FXMLLoader.load(getClass().getClassLoader().getResource(FxmlLocation.VOLUNTEERS + ".fxml")));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            hasAddedVolunteer = false;
+        } else {
+            tabVolunteer.setContent(previousVolunteer);
+        }
     }
 
     public void setTabHome(Tab tabHome) {

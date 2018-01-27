@@ -29,8 +29,14 @@ public class AddVolunteer {
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        //Transition.getInstance().transitionVolunteer(VolunteerScreens.OVERVIEW);
-        Transition.getInstance().volunteerOverview();
+        if (volunteerExtId != null) {
+            // Tried to edit a volunteer, but cancelled. Hence we go back to the detail screen.
+            Transition.getInstance().volunteerDetail(volunteerExtId);
+
+        } else {
+            // Tried to add a volunteer, but cancelled. Hence we go back to the overview screen.
+            Transition.getInstance().volunteerOverview();
+        }
     }
 
     @FXML HBox hboxError; @FXML Label labelError;
@@ -75,6 +81,7 @@ public class AddVolunteer {
             }
         }
 
+        Transition.hasAddedVolunteer = true;
         Transition.getInstance().volunteerDetail(volunteerExtId);
     }
 
