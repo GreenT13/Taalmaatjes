@@ -15,7 +15,7 @@ public class VolunteerMyDaoTest extends BaseTest {
 
     @Before
     public void initializeMyDao() {
-        volunteerMyDao = new VolunteerMyDao(context.getConfiguration());
+        //volunteerMyDao = new VolunteerMyDao(context);
     }
 
     @Test
@@ -25,19 +25,19 @@ public class VolunteerMyDaoTest extends BaseTest {
 
         // Test that with an empty table, the id equals the starting id.
         volunteerMyDao.generateIds(volunteerPojo);
-        assertEquals(volunteerPojo.getVolunteerid(), VolunteerMyDao.STARTING_ID);
+        assertEquals(volunteerPojo.getVolunteerid(), VolunteerMyDao.STARTING_EXT_ID);
 
         // Test that with a non-empty table, the id equals the number of items + starting id.
         dummy.addVolunteer();
         volunteerPojo.setVolunteerid(null);
         volunteerMyDao.generateIds(volunteerPojo);
-        assertEquals(volunteerPojo.getVolunteerid(), Integer.valueOf(VolunteerMyDao.STARTING_ID + 1));
+        assertEquals(volunteerPojo.getVolunteerid(), Integer.valueOf(VolunteerMyDao.STARTING_EXT_ID + 1));
 
         // Test it for two items in the database.
         dummy.addVolunteer();
         volunteerPojo.setVolunteerid(null);
         volunteerMyDao.generateIds(volunteerPojo);
-        assertEquals(volunteerPojo.getVolunteerid(), Integer.valueOf(VolunteerMyDao.STARTING_ID + 2));
+        assertEquals(volunteerPojo.getVolunteerid(), Integer.valueOf(VolunteerMyDao.STARTING_EXT_ID + 2));
     }
 
     @Test

@@ -7,10 +7,13 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.Volunteerins
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerinstanceRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
+import com.apon.taalmaatjes.backend.database.jooq.Context;
+import com.apon.taalmaatjes.backend.log.Log;
 import org.jooq.Configuration;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
 import org.jooq.impl.DSL;
+import org.jooq.util.mysql.MySQLDataType;
 
 import java.util.List;
 
@@ -18,6 +21,11 @@ import static org.jooq.impl.DSL.using;
 
 public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
 
+    public VolunteerInstanceMyDao(Context context) {
+        super(context.getConfiguration());
+    }
+
+    @Deprecated
     public VolunteerInstanceMyDao(Configuration configuration) {
         super(configuration);
     }
@@ -28,18 +36,25 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
             return false;
         }
 
-        // Do not generate id if it is already filled.
-        if (volunteerinstancePojo.getVolunteerinstanceid() != null) {
-            return true;
+        if (volunteerinstancePojo.getVolunteerinstanceid() == null) {
+            Integer maxId = getMaxId(volunteerinstancePojo.getVolunteerid());
+            volunteerinstancePojo.setVolunteerinstanceid(maxId != null ? maxId + 1 : Integer.valueOf(0));
         }
 
-        Integer maxId = getMaxInteger(volunteerinstancePojo.getVolunteerid());
-        volunteerinstancePojo.setVolunteerinstanceid(maxId != null ? maxId + 1 : Integer.valueOf(0));
+        if (volunteerinstancePojo.getExternalidentifier() == null) {
+            String maxExtId = getMaxExtId(volunteerinstancePojo.getVolunteerid());
+            if (maxExtId == null) {
+                maxExtId = "1";
+            } else {
+                maxExtId = String.valueOf(Integer.valueOf(maxExtId) + 1);
+            }
+            volunteerinstancePojo.setExternalidentifier(maxExtId);
+        }
 
         return true;
     }
 
-    protected Integer getMaxInteger(Integer volunteerId) {
+    protected Integer getMaxId(int volunteerId) {
         return using(configuration())
                 .select(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID.max())
                 .from(Volunteerinstance.VOLUNTEERINSTANCE)
@@ -47,14 +62,27 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
                 .fetchOne(0, Integer.class);
     }
 
-    @Override
-    public void insert(VolunteerinstancePojo volunteerinstancePojo) {
+    protected String getMaxExtId(int volunteerId) {
+        return using(configuration())
+                .select(Volunteerinstance.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
+                .from(Volunteerinstance.VOLUNTEERINSTANCE)
+                .fetchOne(0, String.class);
+    }
+
+    public boolean insertPojo(VolunteerinstancePojo volunteerinstancePojo) {
         if (!generateIds(volunteerinstancePojo)) {
             // Some kind of error message?
-            return;
+            return false;
         }
 
-        super.insert(volunteerinstancePojo);
+        try {
+            super.insert(volunteerinstancePojo);
+        } catch (Exception e) {
+            Log.error("Could not insert new volunteerinstance.", e);
+            return false;
+        }
+
+        return true;
     }
 
     public List<VolunteerinstancePojo> getInstanceForVolunteer(int volunteerId, boolean sortAscending) {

@@ -5,23 +5,23 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Person {
     // TODO: rewrite this class so it is "normal".
-    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty extId;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty email;
 
-    public Person(Integer id, String fName, String lName, String email) {
-        this.id = new SimpleIntegerProperty(id);
+    public Person(String extId, String fName, String lName, String email) {
+        this.extId = new SimpleStringProperty(extId);
         this.firstName = new SimpleStringProperty(fName);
         this.lastName = new SimpleStringProperty(lName);
         this.email = new SimpleStringProperty(email);
     }
 
-    public Integer getId() {
-        return id.get();
+    public String getExtId() {
+        return extId.get();
     }
-    public void setId(Integer id) {
-        this.id.set(id);
+    public void setExtId(String extId) {
+        this.extId.set(extId);
     }
 
     public String getFirstName() {

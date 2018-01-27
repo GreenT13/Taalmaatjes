@@ -4,6 +4,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.Student;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.StudentDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
+import com.apon.taalmaatjes.backend.database.jooq.Context;
 import org.jooq.Configuration;
 import org.jooq.Record1;
 import org.jooq.SelectConditionStep;
@@ -18,6 +19,11 @@ import static org.jooq.impl.DSL.using;
 public class StudentMyDao extends StudentDao {
     public final static Integer STARTING_ID = Integer.valueOf(5001);
 
+    public StudentMyDao(Context context) {
+        super(context.getConfiguration());
+    }
+
+    @Deprecated
     public StudentMyDao(Configuration configuration) {
         super(configuration);
     }
@@ -49,6 +55,14 @@ public class StudentMyDao extends StudentDao {
         }
 
         super.insert(studentPojo);
+    }
+
+    public String getExtIdFromId(Integer studentId) {
+        return using(configuration())
+                .select(Student.STUDENT.EXTERNALIDENTIFIER)
+                .from(Student.STUDENT)
+                .where(Student.STUDENT.STUDENTID.eq(studentId))
+                .fetchOne(0, String.class);
     }
 
     /**

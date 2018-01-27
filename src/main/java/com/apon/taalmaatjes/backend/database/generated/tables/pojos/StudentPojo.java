@@ -22,9 +22,10 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StudentPojo implements Serializable {
 
-    private static final long serialVersionUID = -1989892543;
+    private static final long serialVersionUID = -561141391;
 
     private Integer studentid;
+    private String  externalidentifier;
     private String  firstname;
     private String  insertion;
     private String  lastname;
@@ -35,6 +36,7 @@ public class StudentPojo implements Serializable {
 
     public StudentPojo(StudentPojo value) {
         this.studentid = value.studentid;
+        this.externalidentifier = value.externalidentifier;
         this.firstname = value.firstname;
         this.insertion = value.insertion;
         this.lastname = value.lastname;
@@ -44,6 +46,7 @@ public class StudentPojo implements Serializable {
 
     public StudentPojo(
         Integer studentid,
+        String  externalidentifier,
         String  firstname,
         String  insertion,
         String  lastname,
@@ -51,6 +54,7 @@ public class StudentPojo implements Serializable {
         Boolean isgroup
     ) {
         this.studentid = studentid;
+        this.externalidentifier = externalidentifier;
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
@@ -64,6 +68,14 @@ public class StudentPojo implements Serializable {
 
     public void setStudentid(Integer studentid) {
         this.studentid = studentid;
+    }
+
+    public String getExternalidentifier() {
+        return this.externalidentifier;
+    }
+
+    public void setExternalidentifier(String externalidentifier) {
+        this.externalidentifier = externalidentifier;
     }
 
     public String getFirstname() {
@@ -111,6 +123,7 @@ public class StudentPojo implements Serializable {
         StringBuilder sb = new StringBuilder("StudentPojo (");
 
         sb.append(studentid);
+        sb.append(", ").append(externalidentifier);
         sb.append(", ").append(firstname);
         sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);

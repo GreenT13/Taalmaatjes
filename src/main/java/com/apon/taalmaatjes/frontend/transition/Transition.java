@@ -32,7 +32,7 @@ public class Transition {
     private Tab tabHome, tabVolunteer, tabStudent, tabReport;
     private Node previousVolunteer;
 
-    public void volunteerDetail(int volunteerId) {
+    public void volunteerDetail(String volunteerExtId) {
         Parent root;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.DETAIL_VOLUNTEERS + ".fxml"));
         // Load so we have the controller instantiated.
@@ -43,7 +43,7 @@ public class Transition {
             return;
         }
         DetailVolunteer detailVolunteer = loader.getController();
-        detailVolunteer.setVolunteerId(volunteerId);
+        detailVolunteer.setVolunteerExtId(volunteerExtId);
 
         // Set content last, so we make sure that what is shown on the screen is initialized.
         tabVolunteer.setContent(root);
@@ -53,7 +53,7 @@ public class Transition {
         tabVolunteer.setContent(load(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
     }
 
-    public void volunteerAdd(int volunteerId) {
+    public void volunteerAdd(String volunteerExtId) {
         Parent root;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
         // Load so we have the controller instantiated.
@@ -64,7 +64,7 @@ public class Transition {
             return;
         }
         AddVolunteer addVolunteer = loader.getController();
-        addVolunteer.setVolunteerId(volunteerId);
+        addVolunteer.setVolunteerExtId(volunteerExtId);
 
         // Set content last, so we make sure that what is shown on the screen is initialized.
         tabVolunteer.setContent(root);

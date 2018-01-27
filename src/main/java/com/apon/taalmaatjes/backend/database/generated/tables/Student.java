@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Student extends TableImpl<StudentRecord> {
 
-    private static final long serialVersionUID = -1043793022;
+    private static final long serialVersionUID = -893603202;
 
     /**
      * The reference instance of <code>PUBLIC.STUDENT</code>
@@ -59,6 +59,11 @@ public class Student extends TableImpl<StudentRecord> {
     public final TableField<StudentRecord, Integer> STUDENTID = createField("STUDENTID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
+     * The column <code>PUBLIC.STUDENT.EXTERNALIDENTIFIER</code>.
+     */
+    public final TableField<StudentRecord, String> EXTERNALIDENTIFIER = createField("EXTERNALIDENTIFIER", org.jooq.impl.SQLDataType.VARCHAR(10).nullable(false), this, "");
+
+    /**
      * The column <code>PUBLIC.STUDENT.FIRSTNAME</code>.
      */
     public final TableField<StudentRecord, String> FIRSTNAME = createField("FIRSTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
@@ -71,12 +76,12 @@ public class Student extends TableImpl<StudentRecord> {
     /**
      * The column <code>PUBLIC.STUDENT.LASTNAME</code>.
      */
-    public final TableField<StudentRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+    public final TableField<StudentRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.STUDENT.ISLOOKINGFORVOLUNTEER</code>.
      */
-    public final TableField<StudentRecord, Boolean> ISLOOKINGFORVOLUNTEER = createField("ISLOOKINGFORVOLUNTEER", org.jooq.impl.SQLDataType.BOOLEAN, this, "");
+    public final TableField<StudentRecord, Boolean> ISLOOKINGFORVOLUNTEER = createField("ISLOOKINGFORVOLUNTEER", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.STUDENT.ISGROUP</code>.
@@ -125,7 +130,7 @@ public class Student extends TableImpl<StudentRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_BA);
+        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_BA, Indexes.STUD_EXTID_INDEX_B);
     }
 
     /**
@@ -141,7 +146,7 @@ public class Student extends TableImpl<StudentRecord> {
      */
     @Override
     public List<UniqueKey<StudentRecord>> getKeys() {
-        return Arrays.<UniqueKey<StudentRecord>>asList(Keys.STUD_PK);
+        return Arrays.<UniqueKey<StudentRecord>>asList(Keys.STUD_PK, Keys.STUD_EXTID);
     }
 
     /**

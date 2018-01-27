@@ -14,7 +14,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Configuration;
-import org.jooq.Field;
 import org.jooq.Record2;
 import org.jooq.impl.DAOImpl;
 
@@ -68,9 +67,11 @@ public class VolunteerinstanceDao extends DAOImpl<VolunteerinstanceRecord, Volun
         return fetch(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID, values);
     }
 
-    @Override
-    public <Z> VolunteerinstancePojo fetchOne(Field<Z> field, Z value) {
-        return super.fetchOne(field, value);
+    /**
+     * Fetch records that have <code>EXTERNALIDENTIFIER IN (values)</code>
+     */
+    public List<VolunteerinstancePojo> fetchByExternalidentifier(String... values) {
+        return fetch(Volunteerinstance.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER, values);
     }
 
     /**

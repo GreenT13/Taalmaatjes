@@ -66,6 +66,20 @@ public class StudentDao extends DAOImpl<StudentRecord, StudentPojo, Integer> {
     }
 
     /**
+     * Fetch records that have <code>EXTERNALIDENTIFIER IN (values)</code>
+     */
+    public List<StudentPojo> fetchByExternalidentifier(String... values) {
+        return fetch(Student.STUDENT.EXTERNALIDENTIFIER, values);
+    }
+
+    /**
+     * Fetch a unique record that has <code>EXTERNALIDENTIFIER = value</code>
+     */
+    public StudentPojo fetchOneByExternalidentifier(String value) {
+        return fetchOne(Student.STUDENT.EXTERNALIDENTIFIER, value);
+    }
+
+    /**
      * Fetch records that have <code>FIRSTNAME IN (values)</code>
      */
     public List<StudentPojo> fetchByFirstname(String... values) {

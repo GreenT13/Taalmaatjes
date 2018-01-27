@@ -23,10 +23,11 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteermatchPojo implements Serializable {
 
-    private static final long serialVersionUID = -1444994457;
+    private static final long serialVersionUID = -1332099393;
 
     private Integer volunteerid;
     private Integer volunteermatchid;
+    private String  externalidentifier;
     private Integer studentid;
     private Date    datestart;
     private Date    dateend;
@@ -36,6 +37,7 @@ public class VolunteermatchPojo implements Serializable {
     public VolunteermatchPojo(VolunteermatchPojo value) {
         this.volunteerid = value.volunteerid;
         this.volunteermatchid = value.volunteermatchid;
+        this.externalidentifier = value.externalidentifier;
         this.studentid = value.studentid;
         this.datestart = value.datestart;
         this.dateend = value.dateend;
@@ -44,12 +46,14 @@ public class VolunteermatchPojo implements Serializable {
     public VolunteermatchPojo(
         Integer volunteerid,
         Integer volunteermatchid,
+        String  externalidentifier,
         Integer studentid,
         Date    datestart,
         Date    dateend
     ) {
         this.volunteerid = volunteerid;
         this.volunteermatchid = volunteermatchid;
+        this.externalidentifier = externalidentifier;
         this.studentid = studentid;
         this.datestart = datestart;
         this.dateend = dateend;
@@ -69,6 +73,14 @@ public class VolunteermatchPojo implements Serializable {
 
     public void setVolunteermatchid(Integer volunteermatchid) {
         this.volunteermatchid = volunteermatchid;
+    }
+
+    public String getExternalidentifier() {
+        return this.externalidentifier;
+    }
+
+    public void setExternalidentifier(String externalidentifier) {
+        this.externalidentifier = externalidentifier;
     }
 
     public Integer getStudentid() {
@@ -101,6 +113,7 @@ public class VolunteermatchPojo implements Serializable {
 
         sb.append(volunteerid);
         sb.append(", ").append(volunteermatchid);
+        sb.append(", ").append(externalidentifier);
         sb.append(", ").append(studentid);
         sb.append(", ").append(datestart);
         sb.append(", ").append(dateend);

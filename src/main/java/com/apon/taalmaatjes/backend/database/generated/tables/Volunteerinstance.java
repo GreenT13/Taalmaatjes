@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteerinstance extends TableImpl<VolunteerinstanceRecord> {
 
-    private static final long serialVersionUID = 1963371322;
+    private static final long serialVersionUID = 877162994;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEERINSTANCE</code>
@@ -66,9 +66,14 @@ public class Volunteerinstance extends TableImpl<VolunteerinstanceRecord> {
     public final TableField<VolunteerinstanceRecord, Integer> VOLUNTEERINSTANCEID = createField("VOLUNTEERINSTANCEID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
+     * The column <code>PUBLIC.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER</code>.
+     */
+    public final TableField<VolunteerinstanceRecord, String> EXTERNALIDENTIFIER = createField("EXTERNALIDENTIFIER", org.jooq.impl.SQLDataType.VARCHAR(10).nullable(false), this, "");
+
+    /**
      * The column <code>PUBLIC.VOLUNTEERINSTANCE.DATESTART</code>.
      */
-    public final TableField<VolunteerinstanceRecord, Date> DATESTART = createField("DATESTART", org.jooq.impl.SQLDataType.DATE, this, "");
+    public final TableField<VolunteerinstanceRecord, Date> DATESTART = createField("DATESTART", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEERINSTANCE.DATEEND</code>.
@@ -117,7 +122,7 @@ public class Volunteerinstance extends TableImpl<VolunteerinstanceRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_5);
+        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_5, Indexes.VOIN_EXTID_INDEX_5);
     }
 
     /**
@@ -133,7 +138,7 @@ public class Volunteerinstance extends TableImpl<VolunteerinstanceRecord> {
      */
     @Override
     public List<UniqueKey<VolunteerinstanceRecord>> getKeys() {
-        return Arrays.<UniqueKey<VolunteerinstanceRecord>>asList(Keys.VOIN_PK);
+        return Arrays.<UniqueKey<VolunteerinstanceRecord>>asList(Keys.VOIN_PK, Keys.VOIN_EXTID);
     }
 
     /**

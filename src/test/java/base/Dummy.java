@@ -4,6 +4,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
+import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
@@ -19,10 +20,11 @@ public class Dummy {
     }
 
     public VolunteerPojo addVolunteer() {
-        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(configuration);
-        VolunteerPojo volunteerPojo = createDummyVolunteer();
-        volunteerMyDao.insert(volunteerPojo);
-        return volunteerPojo;
+//        VolunteerMyDao volunteerMyDao = new VolunteerMyDao();
+//        VolunteerPojo volunteerPojo = createDummyVolunteer();
+//        volunteerMyDao.insert(volunteerPojo);
+//        return volunteerPojo;
+        return null;
     }
 
     public VolunteerinstancePojo addVolunteerinstance(Integer volunteerId, String dateStart, String dateEnd) {

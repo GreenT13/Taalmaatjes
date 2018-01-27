@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteer extends TableImpl<VolunteerRecord> {
 
-    private static final long serialVersionUID = 1781077002;
+    private static final long serialVersionUID = 990138406;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEER</code>
@@ -60,6 +60,11 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
     public final TableField<VolunteerRecord, Integer> VOLUNTEERID = createField("VOLUNTEERID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
+     * The column <code>PUBLIC.VOLUNTEER.EXTERNALIDENTIFIER</code>.
+     */
+    public final TableField<VolunteerRecord, String> EXTERNALIDENTIFIER = createField("EXTERNALIDENTIFIER", org.jooq.impl.SQLDataType.VARCHAR(10).nullable(false), this, "");
+
+    /**
      * The column <code>PUBLIC.VOLUNTEER.FIRSTNAME</code>.
      */
     public final TableField<VolunteerRecord, String> FIRSTNAME = createField("FIRSTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
@@ -72,12 +77,12 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
     /**
      * The column <code>PUBLIC.VOLUNTEER.LASTNAME</code>.
      */
-    public final TableField<VolunteerRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+    public final TableField<VolunteerRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEER.DATEOFBIRTH</code>.
      */
-    public final TableField<VolunteerRecord, Date> DATEOFBIRTH = createField("DATEOFBIRTH", org.jooq.impl.SQLDataType.DATE, this, "");
+    public final TableField<VolunteerRecord, Date> DATEOFBIRTH = createField("DATEOFBIRTH", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEER.PHONENUMBER</code>.
@@ -161,7 +166,7 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_2);
+        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_2, Indexes.VOLU_EXTID_INDEX_2);
     }
 
     /**
@@ -177,7 +182,7 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      */
     @Override
     public List<UniqueKey<VolunteerRecord>> getKeys() {
-        return Arrays.<UniqueKey<VolunteerRecord>>asList(Keys.VOLU_PK);
+        return Arrays.<UniqueKey<VolunteerRecord>>asList(Keys.VOLU_PK, Keys.VOLU_EXTID);
     }
 
     /**

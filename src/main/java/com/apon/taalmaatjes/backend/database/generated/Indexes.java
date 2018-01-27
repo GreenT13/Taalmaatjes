@@ -36,9 +36,13 @@ public class Indexes {
 
     public static final Index PRIMARY_KEY_B = Indexes0.PRIMARY_KEY_B;
     public static final Index PRIMARY_KEY_BA = Indexes0.PRIMARY_KEY_BA;
+    public static final Index STUD_EXTID_INDEX_B = Indexes0.STUD_EXTID_INDEX_B;
     public static final Index PRIMARY_KEY_2 = Indexes0.PRIMARY_KEY_2;
+    public static final Index VOLU_EXTID_INDEX_2 = Indexes0.VOLU_EXTID_INDEX_2;
     public static final Index PRIMARY_KEY_5 = Indexes0.PRIMARY_KEY_5;
+    public static final Index VOIN_EXTID_INDEX_5 = Indexes0.VOIN_EXTID_INDEX_5;
     public static final Index PRIMARY_KEY_1 = Indexes0.PRIMARY_KEY_1;
+    public static final Index VOMA_EXTID_INDEX_1 = Indexes0.VOMA_EXTID_INDEX_1;
     public static final Index VOMA_STUD_FK_INDEX_1 = Indexes0.VOMA_STUD_FK_INDEX_1;
 
     // -------------------------------------------------------------------------
@@ -48,9 +52,13 @@ public class Indexes {
     private static class Indexes0 extends AbstractKeys {
         public static Index PRIMARY_KEY_B = createIndex("PRIMARY_KEY_B", Scriptlog.SCRIPTLOG, new OrderField[] { Scriptlog.SCRIPTLOG.SCRIPTNAME }, true);
         public static Index PRIMARY_KEY_BA = createIndex("PRIMARY_KEY_BA", Student.STUDENT, new OrderField[] { Student.STUDENT.STUDENTID }, true);
+        public static Index STUD_EXTID_INDEX_B = createIndex("Stud_ExtId_INDEX_B", Student.STUDENT, new OrderField[] { Student.STUDENT.EXTERNALIDENTIFIER }, true);
         public static Index PRIMARY_KEY_2 = createIndex("PRIMARY_KEY_2", Volunteer.VOLUNTEER, new OrderField[] { Volunteer.VOLUNTEER.VOLUNTEERID }, true);
+        public static Index VOLU_EXTID_INDEX_2 = createIndex("Volu_ExtId_INDEX_2", Volunteer.VOLUNTEER, new OrderField[] { Volunteer.VOLUNTEER.EXTERNALIDENTIFIER }, true);
         public static Index PRIMARY_KEY_5 = createIndex("PRIMARY_KEY_5", Volunteerinstance.VOLUNTEERINSTANCE, new OrderField[] { Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID }, true);
+        public static Index VOIN_EXTID_INDEX_5 = createIndex("VoIn_ExtId_INDEX_5", Volunteerinstance.VOLUNTEERINSTANCE, new OrderField[] { Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER }, true);
         public static Index PRIMARY_KEY_1 = createIndex("PRIMARY_KEY_1", Volunteermatch.VOLUNTEERMATCH, new OrderField[] { Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID, Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID }, true);
+        public static Index VOMA_EXTID_INDEX_1 = createIndex("VoMa_ExtId_INDEX_1", Volunteermatch.VOLUNTEERMATCH, new OrderField[] { Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID, Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER }, true);
         public static Index VOMA_STUD_FK_INDEX_1 = createIndex("VoMa_Stud_FK_INDEX_1", Volunteermatch.VOLUNTEERMATCH, new OrderField[] { Volunteermatch.VOLUNTEERMATCH.STUDENTID }, false);
     }
 }

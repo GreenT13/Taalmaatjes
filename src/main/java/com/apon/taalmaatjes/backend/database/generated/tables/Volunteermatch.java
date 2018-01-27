@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteermatch extends TableImpl<VolunteermatchRecord> {
 
-    private static final long serialVersionUID = 1385312176;
+    private static final long serialVersionUID = 324842032;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEERMATCH</code>
@@ -66,6 +66,11 @@ public class Volunteermatch extends TableImpl<VolunteermatchRecord> {
     public final TableField<VolunteermatchRecord, Integer> VOLUNTEERMATCHID = createField("VOLUNTEERMATCHID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
+     * The column <code>PUBLIC.VOLUNTEERMATCH.EXTERNALIDENTIFIER</code>.
+     */
+    public final TableField<VolunteermatchRecord, String> EXTERNALIDENTIFIER = createField("EXTERNALIDENTIFIER", org.jooq.impl.SQLDataType.VARCHAR(10).nullable(false), this, "");
+
+    /**
      * The column <code>PUBLIC.VOLUNTEERMATCH.STUDENTID</code>.
      */
     public final TableField<VolunteermatchRecord, Integer> STUDENTID = createField("STUDENTID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
@@ -73,7 +78,7 @@ public class Volunteermatch extends TableImpl<VolunteermatchRecord> {
     /**
      * The column <code>PUBLIC.VOLUNTEERMATCH.DATESTART</code>.
      */
-    public final TableField<VolunteermatchRecord, Date> DATESTART = createField("DATESTART", org.jooq.impl.SQLDataType.DATE, this, "");
+    public final TableField<VolunteermatchRecord, Date> DATESTART = createField("DATESTART", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEERMATCH.DATEEND</code>.
@@ -122,7 +127,7 @@ public class Volunteermatch extends TableImpl<VolunteermatchRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_1, Indexes.VOMA_STUD_FK_INDEX_1);
+        return Arrays.<Index>asList(Indexes.PRIMARY_KEY_1, Indexes.VOMA_EXTID_INDEX_1, Indexes.VOMA_STUD_FK_INDEX_1);
     }
 
     /**
@@ -138,7 +143,7 @@ public class Volunteermatch extends TableImpl<VolunteermatchRecord> {
      */
     @Override
     public List<UniqueKey<VolunteermatchRecord>> getKeys() {
-        return Arrays.<UniqueKey<VolunteermatchRecord>>asList(Keys.VOMA_PK);
+        return Arrays.<UniqueKey<VolunteermatchRecord>>asList(Keys.VOMA_PK, Keys.VOMA_EXTID);
     }
 
     /**

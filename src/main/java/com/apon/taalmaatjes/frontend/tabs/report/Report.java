@@ -1,9 +1,9 @@
 package com.apon.taalmaatjes.frontend.tabs.report;
 
-import com.apon.taalmaatjes.backend.facade.ReportResult;
-import com.apon.taalmaatjes.backend.facade.ReportingFacade;
+import com.apon.taalmaatjes.backend.api.ReportAPI;
+import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
+import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
-import com.apon.taalmaatjes.frontend.FrontendContext;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -11,8 +11,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
 public class Report {
-    ReportingFacade reportingFacade;
-
     @FXML
     VBox vboxResult;
 
@@ -22,9 +20,12 @@ public class Report {
     @FXML
     DatePicker datePickerStart, datePickerEnd;
 
+    public void showError(Result result) {
+        //
+    }
+
     @FXML
     public void initialize() {
-        reportingFacade = new ReportingFacade(FrontendContext.getInstance().getContext());
         // Hide the result, which gets shown when result button is clicked.
         // Add line to make sure that the space is removed.
         vboxResult.managedProperty().bind(vboxResult.visibleProperty());
@@ -34,9 +35,15 @@ public class Report {
     @FXML
     public void createReport(ActionEvent actionEvent) {
         // Retrieve the needed information.
-        ReportResult report = reportingFacade.createReport(
+        Result result = ReportAPI.getInstance().createReport(
                 DateTimeUtil.convertLocalDateToSqlDate(datePickerStart.getValue()),
                 DateTimeUtil.convertLocalDateToSqlDate(datePickerEnd.getValue()));
+
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        ReportReturn report = (ReportReturn) result.getResult();
 
         vboxResult.setVisible(true);
         // Clear the text first.

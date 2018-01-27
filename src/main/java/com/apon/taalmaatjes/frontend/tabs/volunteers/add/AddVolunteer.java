@@ -1,10 +1,10 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.add;
 
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
-import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
+import com.apon.taalmaatjes.backend.api.VolunteerAPI;
+import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
-import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +22,7 @@ public class AddVolunteer {
     @FXML
     DatePicker inputDateOfBirth;
 
-    Integer volunteerId;
+    String volunteerExtId;
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
@@ -30,57 +30,80 @@ public class AddVolunteer {
         Transition.getInstance().volunteerOverview();
     }
 
+    public void showError(Result result) {
+        //
+    }
+
     @FXML
     public void save(ActionEvent actionEvent) {
-        VolunteerFacade volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
-        VolunteerPojo volunteerPojo = convertControlsToPojo();
-        if (volunteerId == null) {
-            // Use facade to add the user.
-            volunteerFacade.addActiveVolunteer(volunteerPojo);
+        VolunteerReturn volunteerReturn = convertControlsToPojo();
+        if (volunteerExtId == null) {
+            // Add a new volunteer.
+            Result result = VolunteerAPI.getInstance().add(volunteerReturn);
+
+            if (result == null || result.hasErrors()) {
+                showError(result);
+                return;
+            }
+            volunteerExtId = (String) result.getResult();
         } else {
-            volunteerPojo.setVolunteerid(volunteerId);
-            volunteerFacade.updateVolunteer(volunteerPojo);
+            // External identifier is not a field you can fill in, hence we fill it here with the value.
+            volunteerReturn.setExternalIdentifier(volunteerExtId);
+
+            // Update the volunteer.
+            Result result = VolunteerAPI.getInstance().update(volunteerReturn);
+
+            if (result == null || result.hasErrors()) {
+                showError(result);
+                return;
+            }
         }
-        Transition.getInstance().volunteerDetail(volunteerPojo.getVolunteerid());
+
+        Transition.getInstance().volunteerDetail(volunteerExtId);
     }
 
-    private VolunteerPojo convertControlsToPojo() {
-        VolunteerPojo volunteerPojo = new VolunteerPojo();
-        volunteerPojo.setFirstname(StringUtil.getDatabaseString(inputFirstName.getText()));
-        volunteerPojo.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
-        volunteerPojo.setLastname(StringUtil.getDatabaseString(inputLastName.getText()));
-        volunteerPojo.setDateofbirth(DateTimeUtil.convertLocalDateToSqlDate(inputDateOfBirth.getValue()));
-        volunteerPojo.setPhonenumber(StringUtil.getDatabaseString(inputPhoneNr.getText()));
-        volunteerPojo.setMobilephonenumber(StringUtil.getDatabaseString(inputMobPhoneNr.getText()));
-        volunteerPojo.setEmail(StringUtil.getDatabaseString(inputEmail.getText()));
-        volunteerPojo.setStreetname(StringUtil.getDatabaseString(inputStreetName.getText()));
-        volunteerPojo.setHousenr(StringUtil.getDatabaseString(inputHouseNr.getText()));
-        volunteerPojo.setPostalcode(StringUtil.getDatabaseString(inputPostalCode.getText()));
-        volunteerPojo.setCity(StringUtil.getDatabaseString(inputCity.getText()));
+    private VolunteerReturn convertControlsToPojo() {
+        VolunteerReturn volunteerReturn = new VolunteerReturn();
+        volunteerReturn.setFirstName(StringUtil.getDatabaseString(inputFirstName.getText()));
+        volunteerReturn.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
+        volunteerReturn.setLastName(StringUtil.getDatabaseString(inputLastName.getText()));
+        volunteerReturn.setDateOfBirth(DateTimeUtil.convertLocalDateToSqlDate(inputDateOfBirth.getValue()));
+        volunteerReturn.setPhoneNumber(StringUtil.getDatabaseString(inputPhoneNr.getText()));
+        volunteerReturn.setMobilePhoneNumber(StringUtil.getDatabaseString(inputMobPhoneNr.getText()));
+        volunteerReturn.setEmail(StringUtil.getDatabaseString(inputEmail.getText()));
+        volunteerReturn.setStreetname(StringUtil.getDatabaseString(inputStreetName.getText()));
+        volunteerReturn.setHouseNr(StringUtil.getDatabaseString(inputHouseNr.getText()));
+        volunteerReturn.setPostalCode(StringUtil.getDatabaseString(inputPostalCode.getText()));
+        volunteerReturn.setCity(StringUtil.getDatabaseString(inputCity.getText()));
 
-        return volunteerPojo;
+        return volunteerReturn;
     }
 
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
-        VolunteerFacade volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
-        VolunteerPojo volunteerPojo = volunteerFacade.getVolunteer(volunteerId);
-        prefillVolunteer(volunteerPojo);
-    }
+    public void setVolunteerExtId(String volunteerExtId) {
+        this.volunteerExtId = volunteerExtId;
 
-    private void prefillVolunteer(VolunteerPojo volunteerPojo) {
-        inputFirstName.setText(volunteerPojo.getFirstname());
-        inputInsertion.setText(volunteerPojo.getInsertion());
-        inputLastName.setText(volunteerPojo.getLastname());
-        if (volunteerPojo.getDateofbirth() != null) {
-            inputDateOfBirth.setValue(volunteerPojo.getDateofbirth().toLocalDate());
+        Result result = VolunteerAPI.getInstance().get(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
         }
-        inputPhoneNr.setText(volunteerPojo.getPhonenumber());
-        inputMobPhoneNr.setText(volunteerPojo.getMobilephonenumber());
-        inputEmail.setText(volunteerPojo.getEmail());
-        inputStreetName.setText(volunteerPojo.getStreetname());
-        inputHouseNr.setText(volunteerPojo.getHousenr());
-        inputPostalCode.setText(volunteerPojo.getPostalcode());
-        inputCity.setText(volunteerPojo.getCity());
+
+        prefillVolunteer((VolunteerReturn) result.getResult());
+    }
+
+    private void prefillVolunteer(VolunteerReturn volunteerReturn) {
+        inputFirstName.setText(volunteerReturn.getFirstName());
+        inputInsertion.setText(volunteerReturn.getInsertion());
+        inputLastName.setText(volunteerReturn.getLastName());
+        if (volunteerReturn.getDateOfBirth() != null) {
+            inputDateOfBirth.setValue(volunteerReturn.getDateOfBirth().toLocalDate());
+        }
+        inputPhoneNr.setText(volunteerReturn.getPhoneNumber());
+        inputMobPhoneNr.setText(volunteerReturn.getMobilePhoneNumber());
+        inputEmail.setText(volunteerReturn.getEmail());
+        inputStreetName.setText(volunteerReturn.getStreetname());
+        inputHouseNr.setText(volunteerReturn.getHouseNr());
+        inputPostalCode.setText(volunteerReturn.getPostalCode());
+        inputCity.setText(volunteerReturn.getCity());
     }
 }

@@ -1,12 +1,13 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
-import com.apon.taalmaatjes.backend.facade.StudentFacade;
-import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
+import com.apon.taalmaatjes.backend.api.VolunteerAPI;
+import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
-import com.apon.taalmaatjes.frontend.FrontendContext;
+import com.apon.taalmaatjes.frontend.presentation.NameUtil;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.event.ActionEvent;
@@ -17,10 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class DetailVolunteer {
-    VolunteerFacade volunteerFacade;
-    StudentFacade studentFacade;
-
-    int volunteerId;
+    String volunteerExtId;
 
     @FXML
     TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity;
@@ -32,67 +30,75 @@ public class DetailVolunteer {
     Hyperlink hyperlinkChangeActive;
     boolean isActive;
 
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
-        volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
-        studentFacade = new StudentFacade(FrontendContext.getInstance().getContext());
+    public void setVolunteerExtId(String volunteerExtId) {
+        this.volunteerExtId = volunteerExtId;
         initializeValues();
+    }
+
+    private void showError(Result result) {
+        // Do something.
     }
 
     /**
      * Controller is initialized before volunteerId is set, therefore we don't use @FXML here.
      */
     public void initializeValues() {
-        VolunteerPojo volunteerPojo = volunteerFacade.getVolunteer(volunteerId);
+        Result result = VolunteerAPI.getInstance().get(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
 
         // Set the name.
-        String name = String.valueOf(volunteerPojo.getVolunteerid()) + ": ";
-        if (volunteerPojo.getFirstname() != null) {
-            name += volunteerPojo.getFirstname() + " ";
+        String name = String.valueOf(volunteerReturn.getExternalIdentifier()) + ": ";
+        if (volunteerReturn.getFirstName() != null) {
+            name += volunteerReturn.getFirstName() + " ";
         }
-        if (volunteerPojo.getInsertion() != null) {
-            name += volunteerPojo.getInsertion()  + " ";
+        if (volunteerReturn.getInsertion() != null) {
+            name += volunteerReturn.getInsertion()  + " ";
         }
 
-        name += volunteerPojo.getLastname();
+        name += volunteerReturn.getLastName();
         labelName.setText(name);
 
         // Set the date of birth.
-        labelDateOfBirth.setText(StringUtil.getOutputString(volunteerPojo.getDateofbirth()));
+        labelDateOfBirth.setText(StringUtil.getOutputString(volunteerReturn.getDateOfBirth()));
 
         // Set phonenumber,
-        labelPhoneNr.setText(StringUtil.getOutputString(volunteerPojo.getPhonenumber()));
+        labelPhoneNr.setText(StringUtil.getOutputString(volunteerReturn.getPhoneNumber()));
 
         // Set mobile phone nr.
-        labelMobPhoneNr.setText(StringUtil.getOutputString(volunteerPojo.getMobilephonenumber()));
+        labelMobPhoneNr.setText(StringUtil.getOutputString(volunteerReturn.getMobilePhoneNumber()));
 
         // Set email.
-        labelEmail.setText(StringUtil.getOutputString(volunteerPojo.getEmail()));
+        labelEmail.setText(StringUtil.getOutputString(volunteerReturn.getEmail()));
 
         // Set street and house number
-        if (volunteerPojo.getStreetname() != null && volunteerPojo.getHousenr() != null) {
-            labelStreetNameAndHouseNr.setText(StringUtil.getOutputString(volunteerPojo.getStreetname() + " " + volunteerPojo.getHousenr()));
+        if (volunteerReturn.getStreetname() != null && volunteerReturn.getHouseNr() != null) {
+            labelStreetNameAndHouseNr.setText(StringUtil.getOutputString(volunteerReturn.getStreetname() + " " + volunteerReturn.getHouseNr()));
         } else {
             labelStreetNameAndHouseNr.setText(StringUtil.getOutputString((String) null));
         }
 
         // Set postal code
-        labelPostalCode.setText(StringUtil.getOutputString(volunteerPojo.getPostalcode()));
+        labelPostalCode.setText(StringUtil.getOutputString(volunteerReturn.getPostalCode()));
 
         // Set city
-        labelCity.setText(StringUtil.getOutputString(volunteerPojo.getCity()));
+        labelCity.setText(StringUtil.getOutputString(volunteerReturn.getCity()));
 
         // Add all volunteerInstance lines (in order!).
-        for (VolunteerinstancePojo volunteerinstancePojo : volunteerFacade.getVolunteerInstanceInOrder(volunteerId)) {
-            addActiveLine(volunteerinstancePojo);
+        for (VolunteerInstanceReturn volunteerInstanceReturn : volunteerReturn.getListVolunteerInstance()) {
+            addActiveLine(volunteerInstanceReturn);
         }
 
-        for (VolunteermatchPojo volunteermatchPojo : volunteerFacade.getVolunteerMatchInOrder(volunteerId)) {
-            addMatchLine(volunteermatchPojo);
+        for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
+            addMatchLine(volunteerMatchReturn);
         }
 
         // Change hyperlink text according to active state of volunteer.
-        setTextHyperlink();
+        setTextHyperlink(volunteerReturn);
     }
 
     @FXML
@@ -100,30 +106,30 @@ public class DetailVolunteer {
         Transition.getInstance().volunteerOverview();
     }
 
-    private void addActiveLine(VolunteerinstancePojo volunteerinstancePojo) {
+    private void addActiveLine(VolunteerInstanceReturn volunteerInstanceReturn) {
         Label label = new Label();
         label.getStyleClass().add("labelActive");
-        String text = "Actief vanaf " + volunteerinstancePojo.getDatestart() + " tot ";
-        if (volunteerinstancePojo.getDateend() == null) {
+        String text = "Actief vanaf " + volunteerInstanceReturn.getDateStart() + " tot ";
+        if (volunteerInstanceReturn.getDateEnd() == null) {
             text += "nu.";
         } else {
-            text += volunteerinstancePojo.getDateend() + ".";
+            text += volunteerInstanceReturn.getDateEnd() + ".";
         }
 
         label.setText(text);
         vboxActive.getChildren().add(label);
     }
 
-    private void addMatchLine(VolunteermatchPojo volunteermatchPojo) {
-        String studentName = studentFacade.getStudentName(volunteermatchPojo.getStudentid());
+    private void addMatchLine(VolunteerMatchReturn volunteerMatchReturn) {
+        String studentName = NameUtil.getStudentName(volunteerMatchReturn.getStudent());
 
         Label label = new Label();
         label.getStyleClass().add("labelMatch");
-        String text = "Heeft " + studentName + " begeleid van " + volunteermatchPojo.getDatestart() + " tot ";
-        if (volunteermatchPojo.getDateend() == null) {
+        String text = "Heeft " + studentName + " begeleid van " + volunteerMatchReturn.getDateStart() + " tot ";
+        if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu.";
         } else {
-            text += volunteermatchPojo.getDateend() + ".";
+            text += volunteerMatchReturn.getDateEnd() + ".";
         }
 
         label.setText(text);
@@ -144,25 +150,37 @@ public class DetailVolunteer {
 
     @FXML
     public void edit(ActionEvent actionEvent) {
-        Transition.getInstance().volunteerAdd(volunteerId);
+        Transition.getInstance().volunteerAdd(volunteerExtId);
     }
 
     @FXML
     public void changeActive(ActionEvent actionEvent) {
-        volunteerFacade.changeActive(volunteerId);
-
-        // Refresh output.
-        vboxActive.getChildren().clear();
-        for (VolunteerinstancePojo volunteerinstancePojo : volunteerFacade.getVolunteerInstanceInOrder(volunteerId)) {
-            addActiveLine(volunteerinstancePojo);
+        //volunteerFacade.changeActive(volunteerId);
+        Result result = VolunteerAPI.getInstance().toggleActive(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
         }
 
-        setTextHyperlink();
+        // Refresh output, but also needs to retrieve the volunteer again.
+        result = VolunteerAPI.getInstance().get(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        vboxActive.getChildren().clear();
+        for (VolunteerInstanceReturn volunteerInstanceReturn : ((VolunteerReturn) result.getResult()).getListVolunteerInstance()) {
+            addActiveLine(volunteerInstanceReturn);
+        }
+
+        setTextHyperlink((VolunteerReturn) result.getResult());
     }
 
-    private void setTextHyperlink() {
+    private void setTextHyperlink(VolunteerReturn volunteerReturn) {
         // Change hyperlink text according to active state of volunteer.
-        if (volunteerFacade.isActive(volunteerId) && volunteerFacade.isLastDayActive(volunteerId)) {
+        if (volunteerReturn.isActiveToday() &&
+                (volunteerReturn.getActiveUntil() == null ||
+                    volunteerReturn.getActiveUntil().compareTo(DateTimeUtil.getCurrentDate()) < 0)) {
             hyperlinkChangeActive.setText("(stop)");
         } else {
             hyperlinkChangeActive.setText("(start)");

@@ -1,8 +1,8 @@
 package com.apon.taalmaatjes;
 
+import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.update.VersionManagement;
 import com.apon.taalmaatjes.backend.log.Log;
-import com.apon.taalmaatjes.frontend.FrontendContext;
 import com.apon.taalmaatjes.frontend.transition.FxmlLocation;
 import com.sun.javafx.css.StyleManager;
 import javafx.application.Application;
@@ -18,7 +18,9 @@ public class Taalmaatjes extends Application {
     public static void main(String[] args) {
         // First update the database.
         try {
-            VersionManagement.getInstance().runUpdates(FrontendContext.getInstance().getContext());
+            Context context = new Context();
+            VersionManagement.getInstance().runUpdates(context);
+            context.close();
         } catch (Exception e) {
             Log.error("Could not update the database.", e);
             return;

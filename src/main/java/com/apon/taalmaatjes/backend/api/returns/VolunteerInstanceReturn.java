@@ -1,0 +1,42 @@
+package com.apon.taalmaatjes.backend.api.returns;
+
+import java.sql.Date;
+
+public class VolunteerInstanceReturn {
+    private String volunteerExternalIdentifier;
+    private String externalIdentifier;
+    private Date dateStart;
+    private Date dateEnd;
+
+    public String getVolunteerExternalIdentifier() {
+        return volunteerExternalIdentifier;
+    }
+
+    public void setVolunteerExternalIdentifier(String volunteerExternalIdentifier) {
+        this.volunteerExternalIdentifier = volunteerExternalIdentifier;
+    }
+
+    public String getExternalIdentifier() {
+        return externalIdentifier;
+    }
+
+    public void setExternalIdentifier(String externalIdentifier) {
+        this.externalIdentifier = externalIdentifier;
+    }
+
+    public Date getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(Date dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public Date getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+}

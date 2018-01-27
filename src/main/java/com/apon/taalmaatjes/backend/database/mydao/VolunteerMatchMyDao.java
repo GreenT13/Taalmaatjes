@@ -4,6 +4,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.VolunteermatchDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
+import com.apon.taalmaatjes.backend.database.jooq.Context;
 import org.jooq.Configuration;
 import org.jooq.SelectConditionStep;
 
@@ -13,6 +14,11 @@ import static org.jooq.impl.DSL.using;
 
 public class VolunteerMatchMyDao extends VolunteermatchDao {
 
+    public VolunteerMatchMyDao(Context context) {
+        super(context.getConfiguration());
+    }
+
+    @Deprecated
     public VolunteerMatchMyDao(Configuration configuration) {
         super(configuration);
     }

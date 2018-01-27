@@ -47,9 +47,13 @@ public class Keys {
 
     public static final UniqueKey<ScriptlogRecord> SCLO_PK = UniqueKeys0.SCLO_PK;
     public static final UniqueKey<StudentRecord> STUD_PK = UniqueKeys0.STUD_PK;
+    public static final UniqueKey<StudentRecord> STUD_EXTID = UniqueKeys0.STUD_EXTID;
     public static final UniqueKey<VolunteerRecord> VOLU_PK = UniqueKeys0.VOLU_PK;
+    public static final UniqueKey<VolunteerRecord> VOLU_EXTID = UniqueKeys0.VOLU_EXTID;
     public static final UniqueKey<VolunteerinstanceRecord> VOIN_PK = UniqueKeys0.VOIN_PK;
+    public static final UniqueKey<VolunteerinstanceRecord> VOIN_EXTID = UniqueKeys0.VOIN_EXTID;
     public static final UniqueKey<VolunteermatchRecord> VOMA_PK = UniqueKeys0.VOMA_PK;
+    public static final UniqueKey<VolunteermatchRecord> VOMA_EXTID = UniqueKeys0.VOMA_EXTID;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -66,9 +70,13 @@ public class Keys {
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<ScriptlogRecord> SCLO_PK = createUniqueKey(Scriptlog.SCRIPTLOG, "ScLo_PK", Scriptlog.SCRIPTLOG.SCRIPTNAME);
         public static final UniqueKey<StudentRecord> STUD_PK = createUniqueKey(Student.STUDENT, "Stud_PK", Student.STUDENT.STUDENTID);
+        public static final UniqueKey<StudentRecord> STUD_EXTID = createUniqueKey(Student.STUDENT, "Stud_ExtId", Student.STUDENT.EXTERNALIDENTIFIER);
         public static final UniqueKey<VolunteerRecord> VOLU_PK = createUniqueKey(Volunteer.VOLUNTEER, "Volu_PK", Volunteer.VOLUNTEER.VOLUNTEERID);
+        public static final UniqueKey<VolunteerRecord> VOLU_EXTID = createUniqueKey(Volunteer.VOLUNTEER, "Volu_ExtId", Volunteer.VOLUNTEER.EXTERNALIDENTIFIER);
         public static final UniqueKey<VolunteerinstanceRecord> VOIN_PK = createUniqueKey(Volunteerinstance.VOLUNTEERINSTANCE, "VoIn_PK", Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID);
+        public static final UniqueKey<VolunteerinstanceRecord> VOIN_EXTID = createUniqueKey(Volunteerinstance.VOLUNTEERINSTANCE, "VoIn_ExtId", Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER);
         public static final UniqueKey<VolunteermatchRecord> VOMA_PK = createUniqueKey(Volunteermatch.VOLUNTEERMATCH, "VoMa_PK", Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID, Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID);
+        public static final UniqueKey<VolunteermatchRecord> VOMA_EXTID = createUniqueKey(Volunteermatch.VOLUNTEERMATCH, "VoMa_ExtId", Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID, Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {

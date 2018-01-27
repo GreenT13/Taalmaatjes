@@ -16,11 +16,11 @@ public class Context {
     private DSLContext create;
     private Configuration configuration;
 
-    public Context() {
+    public Context() throws SQLException {
         createNewConnection();
     }
 
-    private void createNewConnection() {
+    private void createNewConnection() throws SQLException {
         // Create a new connection to the database.
         String userName = "";
         String password = "";
@@ -28,14 +28,9 @@ public class Context {
 
         // Connection is the only JDBC resource that we need
         // PreparedStatement and ResultSet are handled by jOOQ, internally
-        try {
-            connection = DriverManager.getConnection(url, userName, password);
-            connection.setAutoCommit(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-        } catch (SQLException e) {
-            Log.error("Could not create connection.", e);
-            return;
-        }
+        connection = DriverManager.getConnection(url, userName, password);
+        connection.setAutoCommit(false);
+        connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
         create = DSL.using(connection, SQLDialect.H2);
         configuration = DSL.using(connection, JDBCUtils.dialect(connection)).configuration();

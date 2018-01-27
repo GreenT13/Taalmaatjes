@@ -23,10 +23,11 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteerinstancePojo implements Serializable {
 
-    private static final long serialVersionUID = -1557451301;
+    private static final long serialVersionUID = 454503387;
 
     private Integer volunteerid;
     private Integer volunteerinstanceid;
+    private String  externalidentifier;
     private Date    datestart;
     private Date    dateend;
 
@@ -35,6 +36,7 @@ public class VolunteerinstancePojo implements Serializable {
     public VolunteerinstancePojo(VolunteerinstancePojo value) {
         this.volunteerid = value.volunteerid;
         this.volunteerinstanceid = value.volunteerinstanceid;
+        this.externalidentifier = value.externalidentifier;
         this.datestart = value.datestart;
         this.dateend = value.dateend;
     }
@@ -42,11 +44,13 @@ public class VolunteerinstancePojo implements Serializable {
     public VolunteerinstancePojo(
         Integer volunteerid,
         Integer volunteerinstanceid,
+        String  externalidentifier,
         Date    datestart,
         Date    dateend
     ) {
         this.volunteerid = volunteerid;
         this.volunteerinstanceid = volunteerinstanceid;
+        this.externalidentifier = externalidentifier;
         this.datestart = datestart;
         this.dateend = dateend;
     }
@@ -65,6 +69,14 @@ public class VolunteerinstancePojo implements Serializable {
 
     public void setVolunteerinstanceid(Integer volunteerinstanceid) {
         this.volunteerinstanceid = volunteerinstanceid;
+    }
+
+    public String getExternalidentifier() {
+        return this.externalidentifier;
+    }
+
+    public void setExternalidentifier(String externalidentifier) {
+        this.externalidentifier = externalidentifier;
     }
 
     public Date getDatestart() {
@@ -89,6 +101,7 @@ public class VolunteerinstancePojo implements Serializable {
 
         sb.append(volunteerid);
         sb.append(", ").append(volunteerinstanceid);
+        sb.append(", ").append(externalidentifier);
         sb.append(", ").append(datestart);
         sb.append(", ").append(dateend);
 

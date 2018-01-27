@@ -1,8 +1,8 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers;
 
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
-import com.apon.taalmaatjes.backend.facade.VolunteerFacade;
-import com.apon.taalmaatjes.frontend.FrontendContext;
+import com.apon.taalmaatjes.backend.api.VolunteerAPI;
+import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.frontend.presentation.Person;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.application.Platform;
@@ -20,7 +20,6 @@ import javafx.scene.layout.FlowPane;
 import java.util.List;
 
 public class Volunteers {
-    private VolunteerFacade volunteerFacade;
     private boolean isVisible = false;
 
     @FXML
@@ -32,10 +31,14 @@ public class Volunteers {
     @FXML
     private TextField textFieldSearch;
 
+    public void showError(Result result) {
+        ///
+    }
+
     @FXML
     public void initialize() {
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<Person, String>("id"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<Person, String>("extId"));
         ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
         ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
         ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
@@ -47,7 +50,6 @@ public class Volunteers {
         flowPaneAdvancedSearch.setVisible(isVisible);
 
         // Fill the table.
-        volunteerFacade = new VolunteerFacade(FrontendContext.getInstance().getContext());
         search();
 
         // Add listener to when an item is clicked.
@@ -67,17 +69,17 @@ public class Volunteers {
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
         // Transition to detail screen.
-        Transition.getInstance().volunteerDetail(person.getId());
+        Transition.getInstance().volunteerDetail(person.getExtId());
     }
 
-    private void fillTable(List<VolunteerPojo> list) {
+    private void fillTable(List<VolunteerReturn> list) {
         ObservableList<Person> data = FXCollections.observableArrayList();
 
-        for (VolunteerPojo volunteerPojo : list) {
-            data.add(new Person(volunteerPojo.getVolunteerid(),
-                    volunteerPojo.getFirstname(),
-                    volunteerPojo.getLastname(),
-                    volunteerPojo.getEmail()));
+        for (VolunteerReturn volunteerReturn : list) {
+            data.add(new Person(volunteerReturn.getExternalIdentifier(),
+                    volunteerReturn.getFirstName(),
+                    volunteerReturn.getLastName(),
+                    volunteerReturn.getEmail()));
         }
 
         tableViewResult.setItems(data);
@@ -90,7 +92,13 @@ public class Volunteers {
 
     @FXML
     public void search() {
-        fillTable(volunteerFacade.searchVolunteerBasedOnInput(textFieldSearch.getText()));
+        Result result = VolunteerAPI.getInstance().searchByInput(textFieldSearch.getText());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        fillTable((List<VolunteerReturn>) result.getResult());
     }
 
     /**

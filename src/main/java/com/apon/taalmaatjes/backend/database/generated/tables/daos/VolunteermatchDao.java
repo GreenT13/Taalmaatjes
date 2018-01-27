@@ -68,6 +68,13 @@ public class VolunteermatchDao extends DAOImpl<VolunteermatchRecord, Volunteerma
     }
 
     /**
+     * Fetch records that have <code>EXTERNALIDENTIFIER IN (values)</code>
+     */
+    public List<VolunteermatchPojo> fetchByExternalidentifier(String... values) {
+        return fetch(Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER, values);
+    }
+
+    /**
      * Fetch records that have <code>STUDENTID IN (values)</code>
      */
     public List<VolunteermatchPojo> fetchByStudentid(Integer... values) {

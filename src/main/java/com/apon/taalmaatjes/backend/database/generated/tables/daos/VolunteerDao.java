@@ -67,6 +67,20 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
     }
 
     /**
+     * Fetch records that have <code>EXTERNALIDENTIFIER IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByExternalidentifier(String... values) {
+        return fetch(Volunteer.VOLUNTEER.EXTERNALIDENTIFIER, values);
+    }
+
+    /**
+     * Fetch a unique record that has <code>EXTERNALIDENTIFIER = value</code>
+     */
+    public VolunteerPojo fetchOneByExternalidentifier(String value) {
+        return fetchOne(Volunteer.VOLUNTEER.EXTERNALIDENTIFIER, value);
+    }
+
+    /**
      * Fetch records that have <code>FIRSTNAME IN (values)</code>
      */
     public List<VolunteerPojo> fetchByFirstname(String... values) {
