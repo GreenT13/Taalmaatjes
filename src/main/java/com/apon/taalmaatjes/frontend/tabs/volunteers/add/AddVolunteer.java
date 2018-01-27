@@ -5,11 +5,14 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
+import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 
 public class AddVolunteer {
 
@@ -30,8 +33,21 @@ public class AddVolunteer {
         Transition.getInstance().volunteerOverview();
     }
 
+    @FXML HBox hboxError; @FXML Label labelError;
+
     public void showError(Result result) {
-        //
+        hboxError.setVisible(true);
+        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+    }
+
+    public void hideError() {
+        hboxError.setVisible(false);
+    }
+
+    @FXML
+    public void initialize() {
+        hboxError.managedProperty().bind(hboxError.visibleProperty());
+        hideError();
     }
 
     @FXML

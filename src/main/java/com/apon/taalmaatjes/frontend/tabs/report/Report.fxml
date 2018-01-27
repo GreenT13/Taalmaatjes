@@ -12,6 +12,11 @@
    <children>
       <VBox>
          <children>
+            <HBox id="hboxError" fx:id="hboxError" alignment="CENTER_LEFT">
+               <children>
+                  <Label id="labelError" fx:id="labelError" text="Error" />
+               </children>
+            </HBox>
             <Label styleClass="largeFont" text="Rapportage" />
             <HBox>
                <children>

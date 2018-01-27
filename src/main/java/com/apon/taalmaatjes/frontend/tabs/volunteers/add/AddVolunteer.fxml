@@ -12,6 +12,11 @@
    <children>
       <VBox prefHeight="870.0" prefWidth="536.0">
          <children>
+            <HBox fx:id="hboxError">
+               <children>
+                  <Label id="labelError" fx:id="labelError" text="Label" />
+               </children>
+            </HBox>
             <HBox prefHeight="384.0" prefWidth="513.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="124.0">

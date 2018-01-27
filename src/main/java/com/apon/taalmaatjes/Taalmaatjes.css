@@ -47,3 +47,7 @@
 .text-area {
     -fx-text-fill: -darkgray;
 }
+
+#labelError {
+    -fx-text-fill: red;
+}

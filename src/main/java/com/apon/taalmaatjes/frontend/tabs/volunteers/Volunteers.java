@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Person;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.application.Platform;
@@ -11,11 +12,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 
 import java.util.List;
 
@@ -31,12 +34,22 @@ public class Volunteers {
     @FXML
     private TextField textFieldSearch;
 
+    @FXML HBox hboxError; @FXML Label labelError;
+
     public void showError(Result result) {
-        ///
+        hboxError.setVisible(true);
+        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+    }
+
+    public void hideError() {
+        hboxError.setVisible(false);
     }
 
     @FXML
     public void initialize() {
+        hboxError.managedProperty().bind(hboxError.visibleProperty());
+        hideError();
+
         // Initialize the table.
         ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<Person, String>("extId"));
         ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));

@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 
 import java.sql.Date;
@@ -29,11 +30,21 @@ public class ReportAPI {
      * @return ReportReturn
      */
     public Result createReport(Date dateStart, Date dateEnd) {
+        if (dateStart == null || dateEnd == null) {
+            return ResultUtil.createError("ReportAPI.createReport.error.noDate");
+        }
+
+        if (dateStart.compareTo(dateEnd) > 0) {
+            return ResultUtil.createError("ReportAPI.createReport.error.startBeforeEnd");
+        }
+
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
+
+        Log.logDebug("Start ReportAPI.createReport from " + dateStart.toString() + " until " + dateEnd.toString());
 
         ReportReturn report = new ReportReturn(dateStart, dateEnd);
 
@@ -49,6 +60,8 @@ public class ReportAPI {
         report.setNrOfActiveGroups(studentMyDao.countActiveInPeriod(dateStart, dateEnd, true));
 
         context.close();
+
+        Log.logDebug("End ReportAPI.createReport");
         return ResultUtil.createOk(report);
     }
 }

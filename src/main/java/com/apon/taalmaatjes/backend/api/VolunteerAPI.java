@@ -10,6 +10,7 @@ import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 
@@ -38,15 +39,17 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
+
+        Log.logDebug("Start VolunteerApi.get for externalIdentifier " + externalIdentifier);
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
 
         // First check if the externalIdentifier is valid.
         Integer volunteerId = volunteerMyDao.getIdFromExtId(externalIdentifier);
         if (volunteerId == null) {
-            return ResultUtil.createError("Could not find volunteer with externalIdentifier " + externalIdentifier);
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
         }
 
         // Mapper to create the output.
@@ -65,6 +68,7 @@ public class VolunteerAPI {
 
         // Close and return.
         context.close();
+        Log.logDebug("End VolunteerApi.get");
         return ResultUtil.createOk(volunteerMapper.getVolunteerReturn());
     }
 
@@ -77,24 +81,25 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
+        Log.logDebug("Start VolunteerAPI.update for externalIdentifier " + volunteerReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
         if (volunteerReturn.getDateOfBirth() == null) {
-            return ResultUtil.createError("Date of birth must be filled.");
+            return ResultUtil.createError("VolunteerAPI.update.error.fillDateOfBirth");
         }
         if (volunteerReturn.getExternalIdentifier() == null) {
-            return ResultUtil.createError("External identifier must be filled.");
+            return ResultUtil.createError("VolunteerAPI.update.error.fillExtId");
         }
         if (volunteerReturn.getLastName() == null) {
-            return ResultUtil.createError("Last name must be filled.");
+            return ResultUtil.createError("VolunteerAPI.update.error.fillLastName");
         }
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerReturn.getExternalIdentifier());
         if (volunteerId == null) {
-            return ResultUtil.createError("There is no volunteer in the database with this error.");
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
         }
 
         // Volunteer is valid, so we map return to pojo.
@@ -107,9 +112,10 @@ public class VolunteerAPI {
         try {
             context.getConnection().commit();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not commit.", e);
+            return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
+        Log.logDebug("End VolunteerAPI.update");
         return ResultUtil.createOk();
     }
 
@@ -122,15 +128,16 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
+        Log.logDebug("Start VolunteerAPI.add for externalIdentifier " + volunteerReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
         if (volunteerReturn.getDateOfBirth() == null) {
-            return ResultUtil.createError("Date of birth must be filled.");
+            return ResultUtil.createError("VolunteerAPI.update.error.fillDateOfBirth");
         }
         if (volunteerReturn.getLastName() == null) {
-            return ResultUtil.createError("Last name must be filled.");
+            return ResultUtil.createError("VolunteerAPI.update.error.fillLastName");
         }
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
@@ -140,7 +147,7 @@ public class VolunteerAPI {
         VolunteerPojo volunteerPojo = volunteerMapper.getPojo(null);
         if (!volunteerMyDao.insertPojo(volunteerPojo)) {
             context.rollback();
-            return ResultUtil.createError("Could not insert volunteer.");
+            return ResultUtil.createError("VolunteerAPI.add.error.insertVolunteer");
         }
 
         // Volunteer is active from today.
@@ -150,16 +157,17 @@ public class VolunteerAPI {
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
         if (!volunteerInstanceMyDao.insertPojo(volunteerinstancePojo)) {
             context.rollback();
-            return ResultUtil.createError("Could not insert volunteer instance.");
+            return ResultUtil.createError("VolunteerAPI.add.error.insertVolunteerInstance");
         }
 
         // Commit, close and return.
         try {
             context.getConnection().commit();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not commit.", e);
+            return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
+        Log.logDebug("End VolunteerAPI.add");
         return ResultUtil.createOk(volunteerPojo.getExternalidentifier());
     }
 
@@ -171,9 +179,9 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
-
+        Log.logDebug("Start VolunteerAPI.get50MostRecent");
         // Retrieve the list from the database.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         List<VolunteerPojo> volunteerPojos = volunteerMyDao.fetch50MostRecent();
@@ -191,6 +199,7 @@ public class VolunteerAPI {
         }
 
         // Return the list.
+        Log.logDebug("End VolunteerAPI.get50MostRecent");
         return ResultUtil.createOk(volunteerReturns);
     }
 
@@ -203,9 +212,9 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
-
+        Log.logDebug("Start VolunteerAPI.searchByInput for input " + input);
         // Retrieve the list from the database.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         List<VolunteerPojo> volunteerPojos;
@@ -229,6 +238,7 @@ public class VolunteerAPI {
         }
 
         // Return the list.
+        Log.logDebug("End VolunteerAPI.searchByInput");
         return ResultUtil.createOk(volunteerReturns);
     }
 
@@ -241,14 +251,15 @@ public class VolunteerAPI {
         try {
             context = new Context();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not create a new database connection.", e);
+            return ResultUtil.createError("Context.error.create", e);
         }
+        Log.logDebug("Start VolunteerAPI.toggleActive for externalIdentifier " + externalIdentifier);
 
         // Get volunteerId.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(externalIdentifier);
         if (volunteerId == null) {
-            return ResultUtil.createError("There is no volunteer in the database with this error.");
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
         }
 
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
@@ -279,9 +290,10 @@ public class VolunteerAPI {
         try {
             context.getConnection().commit();
         } catch (SQLException e) {
-            return ResultUtil.createError("Could not commit.", e);
+            return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
+        Log.logDebug("End VolunteerAPI.toggleActive");
         return ResultUtil.createOk();
     }
 }

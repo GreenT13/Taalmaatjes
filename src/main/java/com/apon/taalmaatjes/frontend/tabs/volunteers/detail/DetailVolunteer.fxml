@@ -14,6 +14,11 @@
     <children>
         <VBox HBox.hgrow="ALWAYS">
             <children>
+            <HBox fx:id="hboxError">
+               <children>
+                  <Label id="labelError" fx:id="labelError" text="Label" />
+               </children>
+            </HBox>
                 <VBox>
                     <children>
                         <HBox>

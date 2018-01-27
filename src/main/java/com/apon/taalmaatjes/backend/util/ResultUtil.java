@@ -4,14 +4,14 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 
 public class ResultUtil {
 
-    public static Result createError(String errorMessage) {
-        return createError(errorMessage, null);
+    public static Result createError(String errorCode) {
+        return createError(errorCode, null);
     }
 
-    public static Result createError(String errorMessage, Exception e) {
+    public static Result createError(String errorCode, Exception e) {
         Result result = new Result();
         result.setHasErrors(true);
-        result.setErrorMessage(errorMessage);
+        result.setErrorMessage(errorCode);
         result.setE(e);
 
         return result;

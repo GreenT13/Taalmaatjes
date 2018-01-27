@@ -7,6 +7,7 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
+import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.NameUtil;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.Transition;
@@ -15,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class DetailVolunteer {
@@ -35,8 +37,15 @@ public class DetailVolunteer {
         initializeValues();
     }
 
-    private void showError(Result result) {
-        // Do something.
+    @FXML HBox hboxError; @FXML Label labelError;
+
+    public void showError(Result result) {
+        hboxError.setVisible(true);
+        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+    }
+
+    public void hideError() {
+        hboxError.setVisible(false);
     }
 
     /**
@@ -138,6 +147,9 @@ public class DetailVolunteer {
 
     @FXML
     public void initialize() {
+        hboxError.managedProperty().bind(hboxError.visibleProperty());
+        hideError();
+
         TextUtils.setWidthToContent(labelName);
         TextUtils.setWidthToContent(labelDateOfBirth);
         TextUtils.setWidthToContent(labelPhoneNr);
