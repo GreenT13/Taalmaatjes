@@ -72,6 +72,11 @@
                                                 <Label text="Stad" />
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Heeft training gehad" />
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                                 <VBox>
@@ -139,6 +144,15 @@
                                     </TextField>
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelHasTraining" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                             </children>

@@ -36,6 +36,16 @@ public class StringUtil {
         return string;
     }
 
+    public static String getOutputString(Boolean b) {
+        if (b == null) {
+            return "<Niet gevuld>";
+        } else if (b) {
+            return "Ja";
+        } else {
+            return "Nee";
+        }
+    }
+
     public static String getOutputString(Date date) {
         if (date == null) {
             return getOutputString((String) null);

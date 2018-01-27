@@ -71,7 +71,6 @@ public class Transition {
         tabVolunteer.setContent(root);
     }
 
-
     public void volunteerOverview() {
         if (hasAddedVolunteer) {
             try {

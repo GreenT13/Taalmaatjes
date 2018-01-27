@@ -23,7 +23,7 @@ public class DetailVolunteer {
     String volunteerExtId;
 
     @FXML
-    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity;
+    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity, labelHasTraining;
 
     @FXML
     VBox vboxActive, vboxMatch;
@@ -97,6 +97,9 @@ public class DetailVolunteer {
         // Set city
         labelCity.setText(StringUtil.getOutputString(volunteerReturn.getCity()));
 
+        // Set training
+        labelHasTraining.setText(StringUtil.getOutputString(volunteerReturn.getHasTraining()));
+
         // Add all volunteerInstance lines (in order!).
         for (VolunteerInstanceReturn volunteerInstanceReturn : volunteerReturn.getListVolunteerInstance()) {
             addActiveLine(volunteerInstanceReturn);
@@ -159,6 +162,7 @@ public class DetailVolunteer {
         TextUtils.setWidthToContent(labelStreetNameAndHouseNr);
         TextUtils.setWidthToContent(labelPostalCode);
         TextUtils.setWidthToContent(labelCity);
+        TextUtils.setWidthToContent(labelHasTraining);
     }
 
     @FXML

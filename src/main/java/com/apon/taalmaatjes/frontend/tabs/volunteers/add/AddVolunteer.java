@@ -9,6 +9,7 @@ import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -21,6 +22,9 @@ public class AddVolunteer {
 
     @FXML
     TextField inputCity, inputStreetName, inputHouseNr;
+
+    @FXML
+    CheckBox checkTraining;
 
     @FXML
     DatePicker inputDateOfBirth;
@@ -98,6 +102,7 @@ public class AddVolunteer {
         volunteerReturn.setHouseNr(StringUtil.getDatabaseString(inputHouseNr.getText()));
         volunteerReturn.setPostalCode(StringUtil.getDatabaseString(inputPostalCode.getText()));
         volunteerReturn.setCity(StringUtil.getDatabaseString(inputCity.getText()));
+        volunteerReturn.setHasTraining(checkTraining.isSelected());
 
         return volunteerReturn;
     }
