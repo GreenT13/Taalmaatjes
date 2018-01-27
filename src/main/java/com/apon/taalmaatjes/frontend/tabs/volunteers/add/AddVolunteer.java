@@ -128,6 +128,7 @@ public class AddVolunteer {
         inputLastName.setText(volunteerReturn.getLastName());
         if (volunteerReturn.getDateOfBirth() != null) {
             inputDateOfBirth.setValue(volunteerReturn.getDateOfBirth().toLocalDate());
+            labelAge.setText(DateTimeUtil.determineAge(volunteerReturn.getDateOfBirth()).toString());
         }
         inputPhoneNr.setText(volunteerReturn.getPhoneNumber());
         inputMobPhoneNr.setText(volunteerReturn.getMobilePhoneNumber());
