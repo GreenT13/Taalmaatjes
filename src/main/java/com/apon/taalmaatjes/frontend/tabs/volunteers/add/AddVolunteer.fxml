@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox stylesheets="@AddVolunteer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.add.AddVolunteer">
@@ -103,7 +104,9 @@
                         </HBox>
                         <HBox styleClass="hboxAlign">
                            <children>
-                              <DatePicker fx:id="inputDateOfBirth" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                              <DatePicker fx:id="inputDateOfBirth" onAction="#fillAge" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                              <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="NEVER" />
+                              <Label fx:id="labelAge" />
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">

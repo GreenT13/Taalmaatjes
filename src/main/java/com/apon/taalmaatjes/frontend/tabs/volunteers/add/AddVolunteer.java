@@ -24,6 +24,9 @@ public class AddVolunteer {
     TextField inputCity, inputStreetName, inputHouseNr;
 
     @FXML
+    Label labelAge;
+
+    @FXML
     CheckBox checkTraining;
 
     @FXML
@@ -133,5 +136,15 @@ public class AddVolunteer {
         inputHouseNr.setText(volunteerReturn.getHouseNr());
         inputPostalCode.setText(volunteerReturn.getPostalCode());
         inputCity.setText(volunteerReturn.getCity());
+    }
+
+    @FXML
+    public void fillAge(ActionEvent actionEvent) {
+        // Fill the age if the value is valid.
+        if (inputDateOfBirth.getValue() != null) {
+            labelAge.setText(DateTimeUtil.determineAge(inputDateOfBirth.getValue()).toString());
+        } else {
+            labelAge.setText("");
+        }
     }
 }

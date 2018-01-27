@@ -42,6 +42,11 @@
                                                 <Label text="Geboortedatum" />
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Leeftijd" />
+                                 </children>
+                              </HBox>
                                         <HBox styleClass="hboxAlign">
                                             <children>
                                                 <Label text="Telefoon nummer" />
@@ -90,6 +95,15 @@
                                     </TextField>
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelAge" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                                         <HBox styleClass="hboxAlign">
                                             <children>
                                     <TextField fx:id="labelPhoneNr" editable="false" prefHeight="21.0" styleClass="copyable-label">

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class DateTimeUtil {
 
@@ -41,4 +42,11 @@ public class DateTimeUtil {
         return Date.valueOf(LocalDate.now());
     }
 
+    public static Integer determineAge(Date dateOfBirth) {
+        return determineAge(dateOfBirth.toLocalDate());
+    }
+
+    public static Integer determineAge(LocalDate dateOfBirth) {
+        return Period.between(dateOfBirth, getCurrentDate().toLocalDate()).getYears();
+    }
 }

@@ -23,7 +23,9 @@ public class DetailVolunteer {
     String volunteerExtId;
 
     @FXML
-    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr, labelPostalCode, labelCity, labelHasTraining;
+    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr;
+    @FXML
+    TextField labelPostalCode, labelCity, labelHasTraining, labelAge;
 
     @FXML
     VBox vboxActive, vboxMatch;
@@ -72,8 +74,9 @@ public class DetailVolunteer {
         name += volunteerReturn.getLastName();
         labelName.setText(name);
 
-        // Set the date of birth.
+        // Set the date of birth and age.
         labelDateOfBirth.setText(StringUtil.getOutputString(volunteerReturn.getDateOfBirth()));
+        labelAge.setText(DateTimeUtil.determineAge(volunteerReturn.getDateOfBirth()).toString());
 
         // Set phonenumber,
         labelPhoneNr.setText(StringUtil.getOutputString(volunteerReturn.getPhoneNumber()));
