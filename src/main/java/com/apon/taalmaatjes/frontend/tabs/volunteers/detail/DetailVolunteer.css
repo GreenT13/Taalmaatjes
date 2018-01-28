@@ -17,4 +17,5 @@
 .hyperlink {
     /* Move hyperlink slightly upwards to align with the name. */
     -fx-padding: -1px 0px 0px 0px;
+    -fx-border-color: transparent;
 }
