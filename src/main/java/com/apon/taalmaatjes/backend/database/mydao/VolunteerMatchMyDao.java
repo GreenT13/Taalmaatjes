@@ -7,6 +7,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.records.Volunteerm
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import org.jooq.Configuration;
 import org.jooq.SelectConditionStep;
+import org.jooq.util.mysql.MySQLDataType;
 
 import java.util.List;
 
@@ -29,18 +30,25 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
             return false;
         }
 
-        // Do not generate id if it is already filled.
-        if (volunteermatchPojo.getVolunteermatchid() != null) {
-            return true;
+        if (volunteermatchPojo.getVolunteermatchid() == null) {
+            Integer maxId = getMaxId(volunteermatchPojo.getVolunteerid());
+            volunteermatchPojo.setVolunteermatchid(maxId != null ? maxId + 1 : Integer.valueOf(0));
         }
 
-        Integer maxId = getMaxInteger(volunteermatchPojo.getVolunteerid());
-        volunteermatchPojo.setVolunteermatchid(maxId != null ? maxId + 1 : Integer.valueOf(0));
+        if (volunteermatchPojo.getExternalidentifier() == null) {
+            String maxExtId = getMaxExtId(volunteermatchPojo.getVolunteerid());
+            if (maxExtId == null) {
+                maxExtId = "1";
+            } else {
+                maxExtId = String.valueOf(Integer.valueOf(maxExtId) + 1);
+            }
+            volunteermatchPojo.setExternalidentifier(maxExtId);
+        }
 
         return true;
     }
 
-    protected Integer getMaxInteger(Integer volunteerId) {
+    protected Integer getMaxId(Integer volunteerId) {
         return using(configuration())
                 .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.max())
                 .from(Volunteermatch.VOLUNTEERMATCH)
@@ -48,14 +56,25 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
                 .fetchOne(0, Integer.class);
     }
 
-    @Override
-    public void insert(VolunteermatchPojo volunteermatchPojo) {
+    public String getMaxExtId(Integer volunteerId) {
+        return using(configuration())
+                .select(Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
+                .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.max())
+                .from(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(volunteerId))
+                .fetchOne(0, String.class);
+    }
+
+
+    public boolean insertPojo(VolunteermatchPojo volunteermatchPojo) {
         if (!generateIds(volunteermatchPojo)) {
             // Some kind of error message?
-            return;
+            return false;
         }
 
         super.insert(volunteermatchPojo);
+
+        return true;
     }
 
     public List<VolunteermatchPojo> getMatchForVolunteer(int volunteerId, boolean sortAscending) {

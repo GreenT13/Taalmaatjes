@@ -1,10 +1,12 @@
 package com.apon.taalmaatjes.backend.api;
 
 import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
@@ -262,5 +264,49 @@ public class VolunteerAPI {
         context.close();
         Log.logDebug("End VolunteerAPI.toggleActive");
         return ResultUtil.createOk();
+    }
+
+    /**
+     * Add a new match line, starting today, for given student.
+     * @param studentReturn
+     * @return VolunteerMatch.externalIdentifier
+     */
+    public Result addMatch(String volunteerExtId, StudentReturn studentReturn) {
+        try {
+            context = new Context();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.addMatch volunteerExtId " + volunteerExtId + " studentExtId " + studentReturn.getExternalIdentifier());
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.noVolunteer");
+        }
+
+        StudentMyDao studentMyDao = new StudentMyDao(context);
+        Integer studentId = studentMyDao.getIdFromExtId(studentReturn.getExternalIdentifier());
+        if (studentId == null) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.noStudent");
+        }
+
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        VolunteermatchPojo volunteermatchPojo = new VolunteermatchPojo();
+        volunteermatchPojo.setVolunteerid(volunteerId);
+        volunteermatchPojo.setStudentid(studentId);
+        volunteermatchPojo.setDatestart(DateTimeUtil.getCurrentDate());
+        if (!volunteerMatchMyDao.insertPojo(volunteermatchPojo)) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.failedInsert");
+        }
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.addMatch");
+        return ResultUtil.createOk(volunteermatchPojo.getExternalidentifier());
     }
 }

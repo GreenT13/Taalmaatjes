@@ -1,23 +1,30 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
+import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
-import com.apon.taalmaatjes.backend.api.returns.Result;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.api.returns.*;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
+import com.apon.taalmaatjes.backend.util.ResultUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
-import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.NameUtil;
-import com.apon.taalmaatjes.frontend.presentation.TextUtils;
+import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.Transition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailVolunteer {
     String volunteerExtId;
@@ -29,6 +36,9 @@ public class DetailVolunteer {
 
     @FXML
     VBox vboxActive, vboxMatch;
+
+    @FXML
+    ComboBox<String> comboStudents;
 
     @FXML
     Hyperlink hyperlinkChangeActive;
@@ -105,6 +115,15 @@ public class DetailVolunteer {
 
         // Change hyperlink text according to active state of volunteer.
         setTextHyperlink(volunteerReturn);
+
+        // comboStudents stuff.
+        comboStudents.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+                changeList(oldValue, newValue);
+            }
+        });
     }
 
     @FXML
@@ -197,5 +216,95 @@ public class DetailVolunteer {
         } else {
             hyperlinkChangeActive.setText("(start)");
         }
+    }
+
+    @FXML
+    public void addMatch(KeyEvent keyEvent) {
+        if (keyEvent.getCode() != KeyCode.ENTER) {
+            return;
+        }
+
+        // Check if the current input is empty, because then we just clear the list.
+        if (comboStudents.getValue() == null || comboStudents.getValue().trim().length() == 0) {
+            comboStudents.setItems(null);
+            comboStudents.setValue(null);
+            return;
+        }
+
+        // If input is chosen, check that it is valid.
+        String externalIdentifier;
+        if (comboStudents.getValue().indexOf(":") < 0) {
+            externalIdentifier = comboStudents.getValue();
+        } else {
+            externalIdentifier = comboStudents.getValue().substring(0, comboStudents.getValue().indexOf(":"));
+        }
+
+        if (externalIdentifier == null || externalIdentifier.trim().length() == 0) {
+            // Something is wrong.
+            showError(ResultUtil.createError("DetailVolunteer.addMatch.wrongStudent"));
+        }
+
+        Result result = StudentAPI.getInstance().get(externalIdentifier);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        StudentReturn studentReturn = (StudentReturn) result.getResult();
+        if (studentReturn == null) {
+            showError(ResultUtil.createError("DetailVolunteer.addMatch.noStudentFound"));
+        }
+
+        // Add the new match
+        result = VolunteerAPI.getInstance().addMatch(volunteerExtId, studentReturn);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Correctly handled the adding. Now refresh the output.
+        vboxMatch.getChildren().clear();
+        result = VolunteerAPI.getInstance().get(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
+        for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
+            addMatchLine(volunteerMatchReturn);
+        }
+
+        hideError();
+    }
+
+    @FXML
+    public void changeList(String oldValue, String newValue) {
+        if (newValue.contains(":")) {
+            return;
+        }
+
+        if (newValue == null || newValue.trim().length() == 0) {
+            comboStudents.setItems(null);
+            comboStudents.hide();
+            hideError();
+            return;
+        }
+        Result result = StudentAPI.getInstance().advancedSearch(newValue,null,null,null);
+
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // So now we create a list of names to fill in the combobox.
+        ObservableList<String> comboStudentObservableList = FXCollections.observableArrayList();
+        List<StudentReturn> studentReturns = (List<StudentReturn>) result.getResult();
+        for (StudentReturn studentReturn : studentReturns) {
+            comboStudentObservableList.add(studentReturn.getExternalIdentifier() + ": " + NameUtil.getStudentName(studentReturn));
+        }
+
+        // Fill the combobox.
+        comboStudents.setItems(comboStudentObservableList);
+        comboStudents.show();
     }
 }
