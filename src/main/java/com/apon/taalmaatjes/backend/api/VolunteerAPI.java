@@ -204,26 +204,25 @@ public class VolunteerAPI {
     }
 
     /**
-     * Retrieve volunteers from the database that match the input.
+     * Search for volunteers that specify the given conditions, if they are filled.
      * @param input
-     * @return List<VolunteerReturn>
+     * @param isActive
+     * @param hasTraining
+     * @param hasMatch
+     * @param city
+     * @return
      */
-    public Result searchByInput(String input) {
+    public Result advancedSearch(String input, Boolean isActive, Boolean hasTraining, Boolean hasMatch, String city) {
         try {
             context = new Context();
         } catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
-        Log.logDebug("Start VolunteerAPI.searchByInput for input " + input);
+        Log.logDebug("Start VolunteerAPI.advancedSearch for input " + input + " isActive " + isActive + " hasTrainig " + hasTraining
+            + " hasMatch " + hasMatch + " city " + city);
         // Retrieve the list from the database.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
-        List<VolunteerPojo> volunteerPojos;
-        if (input == null || input.trim().length() == 0) {
-            volunteerPojos = volunteerMyDao.fetch50MostRecent();
-        } else {
-            volunteerPojos = volunteerMyDao.searchOnName(input);
-        }
-
+        List<VolunteerPojo> volunteerPojos = volunteerMyDao.advancedSearch(input, isActive, hasTraining, hasMatch, city);
 
         // No connection is needed.
         context.close();

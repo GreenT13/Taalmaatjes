@@ -2,14 +2,15 @@ package com.apon.taalmaatjes.backend.database.mydao;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.VolunteerDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerRecord;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerinstanceRecord;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.log.Log;
-import org.jooq.Configuration;
-import org.jooq.Record1;
-import org.jooq.SelectConditionStep;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.util.mysql.MySQLDataType;
 
@@ -195,6 +196,65 @@ public class VolunteerMyDao extends VolunteerDao {
         }
 
         // Return the most recent 50 rows.
+        return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
+    }
+
+    public List<VolunteerPojo> advancedSearch(String input, Boolean isActive, Boolean hasTraining, Boolean hasMatch, String city) {
+        SelectWhereStep<VolunteerRecord> query = using(configuration()).selectFrom(Volunteer.VOLUNTEER);
+
+        // Add the input to search criteria.
+        if (input != null && input.trim().length() > 0) {
+            String[] searchStrings = input.toLowerCase().split(" ");
+            for (String s : searchStrings) {
+                query.where(
+                        Volunteer.VOLUNTEER.FIRSTNAME.lower().like(s + "%")
+                                .or(Volunteer.VOLUNTEER.INSERTION.lower().like(s + "%"))
+                                .or(Volunteer.VOLUNTEER.LASTNAME.lower().like(s + "%"))
+                );
+            }
+        }
+
+        if (isActive != null) {
+            // Query to find out whether the volunteer is active.
+            Select<VolunteerinstanceRecord> subQuery = using(configuration())
+                    .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
+                    .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(Volunteer.VOLUNTEER.VOLUNTEERID))
+                        // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                        .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
+                        .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
+                                .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())));
+
+            // Depending on the value of isActive, use exists or not exists.
+            if (isActive) {
+                query.whereExists(subQuery);
+            } else {
+                query.whereNotExists(subQuery);
+            }
+        }
+
+        if (hasTraining != null) {
+            query.where(Volunteer.VOLUNTEER.HASTRAINING.eq(hasTraining));
+        }
+
+        if (hasMatch != null) {
+            Select<VolunteermatchRecord> subQuery =using(configuration()).selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                    .where(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(Volunteer.VOLUNTEER.VOLUNTEERID)
+                                    // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                                    .and(Volunteermatch.VOLUNTEERMATCH.DATESTART.le(DSL.currentDate()))
+                                    .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
+                                            .or(Volunteermatch.VOLUNTEERMATCH.DATEEND.ge(DSL.currentDate()))));
+
+            if (hasMatch) {
+                query.whereExists(subQuery);
+            } else {
+                query.whereNotExists(subQuery);
+            }
+        }
+
+        if (city != null && city.trim().length() > 0) {
+            query.where(Volunteer.VOLUNTEER.CITY.lower().like("%" + city.toLowerCase() + "%"));
+        }
+
         return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
     }
 

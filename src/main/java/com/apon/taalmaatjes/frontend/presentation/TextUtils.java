@@ -32,4 +32,17 @@ public class TextUtils {
         return width + 5;
     }
 
+    public static Boolean getComboValue(String value) {
+        if (value == null || value.equals("")) {
+            // Leeg
+            return null;
+        } else if (value.equals("Ja")) {
+            return true;
+        } else if (value.equals("Nee")) {
+            return false;
+        }
+
+        return null;
+    }
+
 }

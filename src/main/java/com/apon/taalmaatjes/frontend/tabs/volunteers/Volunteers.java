@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Person;
+import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.Transition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -12,10 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -32,7 +30,10 @@ public class Volunteers {
     private TableView<Person> tableViewResult;
 
     @FXML
-    private TextField textFieldSearch;
+    private TextField textFieldSearch, inputCity;
+
+    @FXML
+    ComboBox<String> comboIsActive, comboTraining, comboHasMatch;
 
     @FXML HBox hboxError; @FXML Label labelError;
 
@@ -105,13 +106,26 @@ public class Volunteers {
 
     @FXML
     public void search() {
-        Result result = VolunteerAPI.getInstance().searchByInput(textFieldSearch.getText());
+        // Don't do an advanced search if we have the advanced bar collapsed.
+        Result result;
+        if (!isVisible) {
+            result = VolunteerAPI.getInstance().advancedSearch(textFieldSearch.getText(),
+                    null, null, null, null);
+        } else {
+            result = VolunteerAPI.getInstance().advancedSearch(textFieldSearch.getText(),
+                    TextUtils.getComboValue(comboIsActive.getValue()),
+                    TextUtils.getComboValue(comboTraining.getValue()),
+                    TextUtils.getComboValue(comboHasMatch.getValue()),
+                    inputCity.getText());
+        }
+
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
         }
 
         fillTable((List<VolunteerReturn>) result.getResult());
+        return;
     }
 
     /**
