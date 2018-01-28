@@ -10,7 +10,10 @@ import com.apon.taalmaatjes.backend.database.generated.tables.records.Volunteeri
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.log.Log;
-import org.jooq.*;
+import org.jooq.Record1;
+import org.jooq.Select;
+import org.jooq.SelectConditionStep;
+import org.jooq.SelectWhereStep;
 import org.jooq.impl.DSL;
 import org.jooq.util.mysql.MySQLDataType;
 
@@ -161,44 +164,15 @@ public class VolunteerMyDao extends VolunteerDao {
         return query.fetchOne(0, int.class);
     }
 
-    @Override
-    public List<VolunteerPojo> findAll() {
-        return super.findAll();
-    }
-
-    public List<VolunteerPojo> fetch50MostRecent() {
-        return using(configuration())
-                .selectFrom(Volunteer.VOLUNTEER)
-                .orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc())
-                .limit(50)
-                .fetch()
-                .map(mapper());
-
-    }
-
     /**
-     * The input gets split into several strings with space as delimiter.
-     * Return any row in Volunteer for which each string is found in either firstName, insertion or lastName.
-     * @param input Hopefully trimmed input?
+     * Search for volunteers based on non-null inputs.
+     * @param input
+     * @param isActive
+     * @param hasTraining
+     * @param hasMatch
+     * @param city
      * @return
      */
-    public List<VolunteerPojo> searchOnName(String input) {
-        // Change input to lowercase (and also in search query) so casing is ignored.
-        String[] searchStrings = input.toLowerCase().split(" ");
-
-        org.jooq.SelectWhereStep<VolunteerRecord> query = using(configuration()).selectFrom(Volunteer.VOLUNTEER);
-        for (String s : searchStrings) {
-            query.where(
-                    Volunteer.VOLUNTEER.FIRSTNAME.lower().like(s + "%")
-                    .or(Volunteer.VOLUNTEER.INSERTION.lower().like(s + "%"))
-                    .or(Volunteer.VOLUNTEER.LASTNAME.lower().like(s + "%"))
-            );
-        }
-
-        // Return the most recent 50 rows.
-        return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
-    }
-
     public List<VolunteerPojo> advancedSearch(String input, Boolean isActive, Boolean hasTraining, Boolean hasMatch, String city) {
         SelectWhereStep<VolunteerRecord> query = using(configuration()).selectFrom(Volunteer.VOLUNTEER);
 

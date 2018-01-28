@@ -72,7 +72,7 @@ public class VolunteerMapper {
 
     public void addMatch(VolunteermatchPojo volunteermatchPojo, StudentMyDao studentMyDao) {
         VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
-        volunteerMatchReturn.setVolunteerExternalIdentifier(volunteerReturn.getExternalIdentifier());
+        volunteerMatchReturn.setVolunteerReturn(volunteerReturn);
         volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());
         volunteerMatchReturn.setDateStart(volunteermatchPojo.getDatestart());
         volunteerMatchReturn.setDateEnd(volunteermatchPojo.getDateend());

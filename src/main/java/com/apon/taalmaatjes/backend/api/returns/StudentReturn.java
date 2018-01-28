@@ -1,5 +1,7 @@
 package com.apon.taalmaatjes.backend.api.returns;
 
+import java.util.List;
+
 public class StudentReturn {
     private String externalIdentifier;
     private String firstName;
@@ -7,6 +9,8 @@ public class StudentReturn {
     private String lastName;
     private Boolean isLookingForVolunteer;
     private Boolean isGroup;
+
+    private List<VolunteerMatchReturn> listVolunteerMatch;
 
     public String getExternalIdentifier() {
         return externalIdentifier;
@@ -54,5 +58,13 @@ public class StudentReturn {
 
     public void setGroup(Boolean group) {
         isGroup = group;
+    }
+
+    public List<VolunteerMatchReturn> getListVolunteerMatch() {
+        return listVolunteerMatch;
+    }
+
+    public void setListVolunteerMatch(List<VolunteerMatchReturn> listVolunteerMatch) {
+        this.listVolunteerMatch = listVolunteerMatch;
     }
 }

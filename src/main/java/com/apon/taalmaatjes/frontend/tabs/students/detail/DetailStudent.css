@@ -1,0 +1,21 @@
+.hboxAlign {
+    /* Overwrite generic for smaller align. */
+    -fx-min-height: 25px;
+    -fx-pref-height: 25px;
+    -fx-max-height: 25px;
+
+    -fx-alignment: center-left;
+
+    /* Little bit of space between the elements. */
+    -fx-padding: 5px;
+}
+
+.labelActive {
+    -fx-padding: 0px 0px 5px 0px;
+}
+
+.hyperlink {
+    /* Move hyperlink slightly upwards to align with the name. */
+    -fx-padding: -1px 0px 0px 0px;
+    -fx-border-color: transparent;
+}

@@ -172,38 +172,6 @@ public class VolunteerAPI {
     }
 
     /**
-     * Return a list of the 50 most recently added volunteers. Does not fill the instance or match list.
-     * @return List<VolunteerReturn>
-     */
-    public Result get50MostRecent() {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
-            return ResultUtil.createError("Context.error.create", e);
-        }
-        Log.logDebug("Start VolunteerAPI.get50MostRecent");
-        // Retrieve the list from the database.
-        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
-        List<VolunteerPojo> volunteerPojos = volunteerMyDao.fetch50MostRecent();
-
-        // No connection is needed.
-        context.close();
-
-        // Convert the list of pojos to returns.
-        List<VolunteerReturn> volunteerReturns = new ArrayList();
-        for (VolunteerPojo volunteerPojo : volunteerPojos) {
-            VolunteerMapper volunteerMapper = new VolunteerMapper();
-            volunteerMapper.setVolunter(volunteerPojo);
-
-            volunteerReturns.add(volunteerMapper.getVolunteerReturn());
-        }
-
-        // Return the list.
-        Log.logDebug("End VolunteerAPI.get50MostRecent");
-        return ResultUtil.createOk(volunteerReturns);
-    }
-
-    /**
      * Search for volunteers that specify the given conditions, if they are filled.
      * @param input
      * @param isActive

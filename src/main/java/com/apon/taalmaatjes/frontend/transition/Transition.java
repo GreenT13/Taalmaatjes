@@ -1,6 +1,8 @@
 package com.apon.taalmaatjes.frontend.transition;
 
 import com.apon.taalmaatjes.backend.log.Log;
+import com.apon.taalmaatjes.frontend.tabs.students.add.AddStudent;
+import com.apon.taalmaatjes.frontend.tabs.students.detail.DetailStudent;
 import com.apon.taalmaatjes.frontend.tabs.volunteers.add.AddVolunteer;
 import com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class Transition {
     private static Transition ourInstance = new Transition();
     public static boolean hasAddedVolunteer = false;
+    public static boolean hasAddedStudent = false;
 
     public static Transition getInstance() {
         return ourInstance;
@@ -32,6 +35,7 @@ public class Transition {
 
     private Tab tabHome, tabVolunteer, tabStudent, tabReport;
     private Node previousVolunteer;
+    private Node previousStudent;
 
     public void volunteerDetail(String volunteerExtId) {
         Parent root;
@@ -85,6 +89,58 @@ public class Transition {
         }
     }
 
+    public void studentAdd() {
+        tabStudent.setContent(load(FxmlLocation.ADD_STUDENTS + ".fxml"));
+    }
+
+    public void studentAdd(String studentExtId) {
+        Parent root;
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.ADD_STUDENTS + ".fxml"));
+        // Load so we have the controller instantiated.
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        AddStudent addStudent = loader.getController();
+        addStudent.setStudentExtId(studentExtId);
+
+        // Set content last, so we make sure that what is shown on the screen is initialized.
+        tabStudent.setContent(root);
+    }
+
+    public void studentDetail(String studentExtId) {
+        Parent root;
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.DETAIL_STUDENTS + ".fxml"));
+        // Load so we have the controller instantiated.
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        DetailStudent detailStudent = loader.getController();
+        detailStudent.setStudentExtId(studentExtId);
+
+        // Set content last, so we make sure that what is shown on the screen is initialized.
+        tabStudent.setContent(root);
+    }
+
+    public void studentOverview() {
+        if (hasAddedStudent) {
+            try {
+                tabStudent.setContent(FXMLLoader.load(getClass().getClassLoader().getResource(FxmlLocation.STUDENTS + ".fxml")));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            hasAddedStudent = false;
+        } else {
+            tabStudent.setContent(previousStudent);
+        }
+    }
+
     public void setTabHome(Tab tabHome) {
         this.tabHome = tabHome;
     }
@@ -96,6 +152,7 @@ public class Transition {
 
     public void setTabStudent(Tab tabStudent) {
         this.tabStudent = tabStudent;
+        previousStudent = tabStudent.getContent();
     }
 
     public void setTabReport(Tab tabReport) {

@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.frontend.presentation;
 
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 
 public class NameUtil {
 
@@ -22,5 +23,20 @@ public class NameUtil {
             // Last name is always filled.
             return studentName + studentReturn.getLastName();
         }
+    }
+
+    public static String getVolunteerName(VolunteerReturn volunteerReturn) {
+        String volunteerName = "";
+
+        if (volunteerReturn.getFirstName() != null) {
+            volunteerName += volunteerReturn.getFirstName() + " ";
+        }
+
+        if (volunteerReturn.getInsertion() != null) {
+            volunteerName += volunteerReturn.getInsertion() + " ";
+        }
+
+        // Last name is always filled.
+        return volunteerName + volunteerReturn.getLastName();
     }
 }

@@ -1,7 +1,13 @@
 package com.apon.taalmaatjes.backend.api.returns.mapper;
 
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
+import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentMapper {
     StudentReturn studentReturn;
@@ -24,5 +30,42 @@ public class StudentMapper {
         studentReturn.setLastName(studentPojo.getLastname());
         studentReturn.setLookingForVolunteer(studentPojo.getIslookingforvolunteer());
         studentReturn.setGroup(studentPojo.getIsgroup());
+    }
+
+    public void addMatch(VolunteermatchPojo volunteermatchPojo, VolunteerMyDao volunteerMyDao) {
+        VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
+        volunteerMatchReturn.setStudent(studentReturn);
+        volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());
+        volunteerMatchReturn.setDateStart(volunteermatchPojo.getDatestart());
+        volunteerMatchReturn.setDateEnd(volunteermatchPojo.getDateend());
+
+        // Set the volunteer.
+        VolunteerMapper volunteerMapper = new VolunteerMapper();
+        volunteerMapper.setVolunter(volunteerMyDao.fetchOneByVolunteerid(volunteermatchPojo.getVolunteerid()));
+        volunteerMatchReturn.setVolunteerReturn(volunteerMapper.getVolunteerReturn());
+
+        studentReturn.getListVolunteerMatch().add(volunteerMatchReturn);
+    }
+
+    public void setMatchList(List<VolunteermatchPojo> volunteermatchPojoList, VolunteerMyDao volunteerMyDao) {
+        List<VolunteerMatchReturn> listVolunteerMatchReturn = new ArrayList();
+        studentReturn.setListVolunteerMatch(listVolunteerMatchReturn);
+
+        for (VolunteermatchPojo volunteermatchPojo : volunteermatchPojoList) {
+            addMatch(volunteermatchPojo, volunteerMyDao);
+        }
+    }
+
+    public StudentPojo getPojo(Integer studentId) {
+        StudentPojo studentPojo = new StudentPojo();
+        studentPojo.setStudentid(studentId);
+        studentPojo.setExternalidentifier(studentReturn.getExternalIdentifier());
+        studentPojo.setFirstname(studentReturn.getFirstName());
+        studentPojo.setInsertion(studentReturn.getInsertion());
+        studentPojo.setLastname(studentReturn.getLastName());
+        studentPojo.setIslookingforvolunteer(studentReturn.getLookingForVolunteer());
+        studentPojo.setIsgroup(studentReturn.getGroup());
+
+        return studentPojo;
     }
 }

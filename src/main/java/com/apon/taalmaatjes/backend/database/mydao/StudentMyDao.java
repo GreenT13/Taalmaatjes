@@ -1,23 +1,27 @@
 package com.apon.taalmaatjes.backend.database.mydao;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.StudentDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.StudentRecord;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
-import org.jooq.Configuration;
-import org.jooq.Record1;
-import org.jooq.SelectConditionStep;
+import com.apon.taalmaatjes.backend.log.Log;
+import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.jooq.util.mysql.MySQLDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.Date;
+import java.util.List;
 
 import static org.jooq.impl.DSL.using;
 
 public class StudentMyDao extends StudentDao {
-    public final static Integer STARTING_ID = Integer.valueOf(5001);
+    public final static Integer STARTING_EXT_ID = Integer.valueOf(5001);
 
     public StudentMyDao(Context context) {
         super(context.getConfiguration());
@@ -29,40 +33,60 @@ public class StudentMyDao extends StudentDao {
     }
 
     public boolean generateIds(StudentPojo studentPojo) {
-        // Do not generate id if it is already filled.
-        if (studentPojo.getStudentid() != null) {
-            return true;
+        if (studentPojo.getStudentid() == null) {
+            Integer maxId = getMaxId();
+            studentPojo.setStudentid(maxId != null ? maxId + 1 : 0);
         }
 
-        Integer maxId = getMaxInteger();
-        studentPojo.setStudentid(maxId != null ? maxId + 1 : STARTING_ID);
+        if (studentPojo.getExternalidentifier() == null) {
+            String maxExtId = getMaxExtId();
+            if (maxExtId == null) {
+                maxExtId = STARTING_EXT_ID.toString();
+            } else {
+                maxExtId = String.valueOf(Integer.valueOf(maxExtId) + 1);
+            }
+            studentPojo.setExternalidentifier(maxExtId);
+        }
 
         return true;
     }
 
-    protected Integer getMaxInteger() {
+    public Integer getMaxId() {
         return using(configuration())
                 .select(Student.STUDENT.STUDENTID.max())
                 .from(Student.STUDENT)
                 .fetchOne(0, Integer.class);
     }
 
-    @Override
-    public void insert(StudentPojo studentPojo) {
-        if (!generateIds(studentPojo)) {
-            // Some kind of error message?
-            return;
-        }
-
-        super.insert(studentPojo);
+    public String getMaxExtId() {
+        return using(configuration())
+                .select(Student.STUDENT.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
+                .from(Student.STUDENT)
+                .fetchOne(0, String.class);
     }
 
-    public String getExtIdFromId(Integer studentId) {
+    public Integer getIdFromExtId(String externalIdentifier) {
         return using(configuration())
-                .select(Student.STUDENT.EXTERNALIDENTIFIER)
+                .select(Student.STUDENT.STUDENTID)
                 .from(Student.STUDENT)
-                .where(Student.STUDENT.STUDENTID.eq(studentId))
-                .fetchOne(0, String.class);
+                .where(Student.STUDENT.EXTERNALIDENTIFIER.eq(externalIdentifier))
+                .fetchOne(0, Integer.class);
+    }
+
+    public boolean insertPojo(StudentPojo studentPojo) {
+        if (!generateIds(studentPojo)) {
+            // Some kind of error message?
+            return false;
+        }
+
+        try {
+            super.insert(studentPojo);
+        } catch (Exception e) {
+            Log.error("Could not insert student", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -135,4 +159,54 @@ public class StudentMyDao extends StudentDao {
         // Return the single row integer.
         return query.fetchOne(0, int.class);
     }
+
+    /**
+     * Search for students based on non-null inputs.
+     * @param input
+     * @param isLookingForVolunteer
+     * @param isGroup
+     * @param hasMatch
+     * @return
+     */
+    public List<StudentPojo> advancedSearch(String input, Boolean isLookingForVolunteer, Boolean isGroup, Boolean hasMatch) {
+        SelectWhereStep<StudentRecord> query = using(configuration()).selectFrom(Student.STUDENT);
+
+        // Add the input to search criteria.
+        if (input != null && input.trim().length() > 0) {
+            String[] searchStrings = input.toLowerCase().split(" ");
+            for (String s : searchStrings) {
+                query.where(
+                        Student.STUDENT.FIRSTNAME.lower().like(s + "%")
+                                .or(Student.STUDENT.INSERTION.lower().like(s + "%"))
+                                .or(Student.STUDENT.LASTNAME.lower().like(s + "%"))
+                );
+            }
+        }
+
+        if (isLookingForVolunteer != null) {
+            query.where(Student.STUDENT.ISLOOKINGFORVOLUNTEER.eq(isLookingForVolunteer));
+        }
+
+        if (isGroup != null) {
+            query.where(Student.STUDENT.ISGROUP.eq(isGroup));
+        }
+
+        if (hasMatch != null) {
+            Select<VolunteermatchRecord> subQuery =using(configuration()).selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                    .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(Student.STUDENT.STUDENTID)
+                            // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                            .and(Volunteermatch.VOLUNTEERMATCH.DATESTART.le(DSL.currentDate()))
+                            .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
+                                    .or(Volunteermatch.VOLUNTEERMATCH.DATEEND.ge(DSL.currentDate()))));
+
+            if (hasMatch) {
+                query.whereExists(subQuery);
+            } else {
+                query.whereNotExists(subQuery);
+            }
+        }
+
+        return query.orderBy(Student.STUDENT.STUDENTID.desc()).limit(50).fetch().map(mapper());
+    }
+
 }

@@ -63,16 +63,7 @@ public class DetailVolunteer {
         VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
 
         // Set the name.
-        String name = String.valueOf(volunteerReturn.getExternalIdentifier()) + ": ";
-        if (volunteerReturn.getFirstName() != null) {
-            name += volunteerReturn.getFirstName() + " ";
-        }
-        if (volunteerReturn.getInsertion() != null) {
-            name += volunteerReturn.getInsertion()  + " ";
-        }
-
-        name += volunteerReturn.getLastName();
-        labelName.setText(name);
+        labelName.setText(String.valueOf(volunteerReturn.getExternalIdentifier()) + ": " + NameUtil.getVolunteerName(volunteerReturn));
 
         // Set the date of birth and age.
         labelDateOfBirth.setText(StringUtil.getOutputString(volunteerReturn.getDateOfBirth()));
@@ -141,12 +132,13 @@ public class DetailVolunteer {
 
         Label label = new Label();
         label.getStyleClass().add("labelMatch");
-        String text = "Heeft " + studentName + " begeleid van " + volunteerMatchReturn.getDateStart() + " tot ";
+        String text = "Heeft van " + volunteerMatchReturn.getDateStart() + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
-            text += "nu.";
+            text += "nu";
         } else {
-            text += volunteerMatchReturn.getDateEnd() + ".";
+            text += volunteerMatchReturn.getDateEnd();
         }
+        text+= " " + studentName + " begeleid.";
 
         label.setText(text);
         vboxMatch.getChildren().add(label);

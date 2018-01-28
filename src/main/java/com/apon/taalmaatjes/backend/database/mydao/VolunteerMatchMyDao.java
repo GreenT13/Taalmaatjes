@@ -72,4 +72,17 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         return query.fetch().map(mapper());
     }
 
+    public List<VolunteermatchPojo> getMatchForStudent(int studentId, boolean sortAscending) {
+        SelectConditionStep<VolunteermatchRecord> query = using(configuration())
+                .selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(studentId));
+
+        if (sortAscending) {
+            query.orderBy(Volunteermatch.VOLUNTEERMATCH.DATESTART.asc());
+        } else {
+            query.orderBy(Volunteermatch.VOLUNTEERMATCH.DATESTART.desc());
+        }
+
+        return query.fetch().map(mapper());
+    }
 }

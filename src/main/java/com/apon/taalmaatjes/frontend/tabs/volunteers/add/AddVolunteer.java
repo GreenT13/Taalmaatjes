@@ -137,6 +137,7 @@ public class AddVolunteer {
         inputHouseNr.setText(volunteerReturn.getHouseNr());
         inputPostalCode.setText(volunteerReturn.getPostalCode());
         inputCity.setText(volunteerReturn.getCity());
+        checkTraining.setSelected(volunteerReturn.getHasTraining());
     }
 
     @FXML

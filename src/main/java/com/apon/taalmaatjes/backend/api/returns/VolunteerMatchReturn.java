@@ -3,18 +3,18 @@ package com.apon.taalmaatjes.backend.api.returns;
 import java.sql.Date;
 
 public class VolunteerMatchReturn {
-    private String volunteerExternalIdentifier;
+    private VolunteerReturn volunteerReturn;
     private String externalIdentifier;
     private StudentReturn student;
     private Date dateStart;
     private Date dateEnd;
 
-    public String getVolunteerExternalIdentifier() {
-        return volunteerExternalIdentifier;
+    public VolunteerReturn getVolunteerReturn() {
+        return volunteerReturn;
     }
 
-    public void setVolunteerExternalIdentifier(String volunteerExternalIdentifier) {
-        this.volunteerExternalIdentifier = volunteerExternalIdentifier;
+    public void setVolunteerReturn(VolunteerReturn volunteerReturn) {
+        this.volunteerReturn = volunteerReturn;
     }
 
     public String getExternalIdentifier() {
