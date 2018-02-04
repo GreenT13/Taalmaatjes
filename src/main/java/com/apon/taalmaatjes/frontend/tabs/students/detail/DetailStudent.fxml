@@ -10,10 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox stylesheets="@DetailStudent.css"
-      xmlns="http://javafx.com/javafx/8.0.141"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.apon.taalmaatjes.frontend.tabs.students.detail.DetailStudent">
+<HBox stylesheets="@DetailStudent.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.students.detail.DetailStudent">
     <children>
         <VBox HBox.hgrow="ALWAYS">
             <children>
@@ -26,6 +23,7 @@
                     <children>
                         <HBox>
                             <children>
+                        <Hyperlink graphicTextGap="0.0" prefHeight="0.0" prefWidth="0.0" />
                                 <TextField fx:id="labelName" editable="false">
                                     <styleClass>
                                         <String fx:value="copyable-label" />

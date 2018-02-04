@@ -30,7 +30,7 @@ public class AddStudent implements Screen {
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goBack();
+        TransitionHandler.getInstance().goBack(studentExtId);
     }
 
     @FXML HBox hboxError; @FXML Label labelError;

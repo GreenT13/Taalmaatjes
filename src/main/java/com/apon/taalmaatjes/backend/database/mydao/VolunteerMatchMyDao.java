@@ -115,6 +115,15 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         return query.fetch().map(mapper());
     }
 
+    public List<VolunteermatchPojo> getMatchForVolunteerAndStudent(int volunteerId, int studentId) {
+        SelectConditionStep<VolunteermatchRecord> query = using(configuration())
+                .selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(studentId))
+                .and(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(volunteerId));
+
+        return query.fetch().map(mapper());
+    }
+
     public VolunteermatchPojo fetchById(int volunteerId, int volunteerMatchId) {
         VolunteermatchRecord record = using(configuration())
                 .selectFrom(Volunteermatch.VOLUNTEERMATCH)

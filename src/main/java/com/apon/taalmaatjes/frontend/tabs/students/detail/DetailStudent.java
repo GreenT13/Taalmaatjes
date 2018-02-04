@@ -125,6 +125,6 @@ public class DetailStudent implements Screen {
     @FXML
     public void edit(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_ADD, studentExtId,
-                true, true);
+                false, true);
     }
 }

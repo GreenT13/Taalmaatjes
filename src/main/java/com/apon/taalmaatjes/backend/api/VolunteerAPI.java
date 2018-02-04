@@ -2,8 +2,10 @@ package com.apon.taalmaatjes.backend.api;
 
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
+import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMatchMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
@@ -355,6 +357,74 @@ public class VolunteerAPI {
             // Activate it.
             volunteermatchPojo.setDateend(null);
             volunteerMatchMyDao.update(volunteermatchPojo);
+        }
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.toggleMatch");
+        return ResultUtil.createOk();
+    }
+
+    /**
+     * Add a new match to the database. However, we need to check that it is a valid match to add.
+     * This means there is no other match for the same student that overlaps in date.
+     * @param volunteerMatchReturn
+     * @return
+     */
+    public Result addMatch(String volunteerExtId, VolunteerMatchReturn volunteerMatchReturn) {
+        if (volunteerMatchReturn.getDateStart() == null) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.noDateStart");
+        }
+
+        if (volunteerMatchReturn.getDateEnd() != null &&
+                volunteerMatchReturn.getDateStart().compareTo(volunteerMatchReturn.getDateEnd()) > 0) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.dateStartAfterDateEnd");
+        }
+
+        if (volunteerMatchReturn.getStudent() == null ||
+                volunteerMatchReturn.getStudent().getExternalIdentifier() == null) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.noStudentFilled");
+        }
+
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.addMatch volunteerExtId " + volunteerExtId);
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+        }
+
+        // Get studentId.
+        StudentMyDao studentMyDao = new StudentMyDao(context);
+        Integer studentId = studentMyDao.getIdFromExtId(volunteerMatchReturn.getStudent().getExternalIdentifier());
+        if (studentId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFoundStudent");
+        }
+
+        // Check there is no other VolunteerMatch that overlaps with this student.
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        for (VolunteermatchPojo volunteerMatchPojo : volunteerMatchMyDao.getMatchForVolunteerAndStudent(volunteerId, studentId)) {
+            if (DateTimeUtil.isOverlap(volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd(),
+                    volunteerMatchPojo.getDatestart(), volunteerMatchPojo.getDateend())) {
+                // We cannot have overlap.
+                return ResultUtil.createError("VolunteerAPI.addMatch.overlap");
+            }
+        }
+
+        // Add the match to the database.
+        VolunteerMatchMapper volunteerMatchMapper = new VolunteerMatchMapper(volunteerMatchReturn);
+        if (!volunteerMatchMyDao.insertPojo(volunteerMatchMapper.getPojo(volunteerId, studentId))) {
+            return ResultUtil.createError("VolunteerAPI.addMatch.insert");
         }
 
         // Commit, close and return.

@@ -93,6 +93,7 @@ public class TransitionHandler {
             transition.setNodeFrom(mapEnumTab.get(currentTab).getContent());
         }
         currentBreadcrum.push(transition);
+        currentScreen = screenEnum;
 
         if (!loadScreen(screenEnum, object)) {
             // Something went wrong.
@@ -102,22 +103,28 @@ public class TransitionHandler {
     }
 
     public void goBack() {
+        goBack(null);
+    }
+
+    public void goBack(Object object) {
         // Loop over the stack until you find a transition for which holds:
-        // transition.getNodeFrom != null OR transition.getScreenFrom != null.
+        // node in memory is not empty OR (from screen is not null AND not equals to current screen).
         Log.logDebug("Start going back.");
         do {
             Transition transition = currentBreadcrum.pop();
-            if (transition.getNodeFrom() != null) {
+            if (transition.getNodeFrom() != null && !transition.getScreenFrom().equals(currentScreen)) {
                 // Load the node.
                 Log.logDebug("Returning to already initialized tab " + transition.getScreenFrom().toString());
+                currentScreen = transition.getScreenFrom();
                 mapEnumTab.get(currentTab).setContent(transition.getNodeFrom());
                 return;
             }
 
-            if (transition.getScreenFrom() != null) {
+            if (transition.getScreenFrom() != null && !transition.getScreenFrom().equals(currentScreen)) {
+                currentScreen = transition.getScreenFrom();
                 // Load the screen.
                 Log.logDebug("Start returning to tab " + transition.getScreenFrom().toString());
-                loadScreen(transition.getScreenFrom(), null);
+                loadScreen(transition.getScreenFrom(), object);
                 Log.logDebug("End returning to tab " + transition.getScreenFrom().toString());
                 return;
             }

@@ -41,7 +41,7 @@ public class AddVolunteer implements Screen {
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goBack();
+        TransitionHandler.getInstance().goBack(volunteerExtId);
     }
 
     @FXML HBox hboxError; @FXML Label labelError;

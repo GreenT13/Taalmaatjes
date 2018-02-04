@@ -57,16 +57,7 @@ public class DateTimeUtil {
      * @return
      */
     public static boolean isActiveToday(Date dateStart, Date dateEnd) {
-        Date currentDate = getCurrentDate();
-        if (dateStart != null && dateStart.compareTo(currentDate) > 0) {
-            return false;
-        }
-
-        if (dateEnd != null && dateEnd.compareTo(currentDate) < 0) {
-            return false;
-        }
-
-        return true;
+        return isBetween(getCurrentDate(), dateStart, dateEnd);
     }
 
     /**
@@ -87,5 +78,56 @@ public class DateTimeUtil {
         }
 
         return true;
+    }
+
+    /**
+     * Determine whether date d lies inside the range [r1,r2].
+     * @param d Date
+     * @param r1 Start date of the range.
+     * @param r2 End date of the range.
+     * @return
+     */
+    public static boolean isBetween(Date d, Date r1, Date r2) {
+        if (d == null) {
+            return false;
+        }
+
+        if (r1 != null && r1.compareTo(d) > 0) {
+            return false;
+        }
+
+        if (r2 != null && r2.compareTo(d) < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Return whether the days [d1, d2] has at least one day overlap with [e1, e2].
+     * @param d1 Start range 1.
+     * @param d2 End range 1.
+     * @param e1 Start range 1.
+     * @param e2 End range 1.
+     * @return boolean
+     */
+    public static boolean isOverlap(Date d1, Date d2, Date e1, Date e2) {
+        if (isBetween(e1, d1, d2)) {
+            return true;
+        }
+
+        if (isBetween(e2, d1, d2)) {
+            return true;
+        }
+
+        if (isBetween(d1, e1, e2)) {
+            return true;
+        }
+
+        if (isBetween(d2, e1, e2)) {
+            return true;
+        }
+
+        return false;
     }
 }
