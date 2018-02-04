@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VolunteerMapper {
-    VolunteerReturn volunteerReturn;
+    private VolunteerReturn volunteerReturn;
 
     public VolunteerMapper() {
         volunteerReturn = new VolunteerReturn();
@@ -42,7 +42,7 @@ public class VolunteerMapper {
         volunteerReturn.setHouseNr(volunteerPojo.getHousenr());
     }
 
-    public void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
+    private void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
         VolunteerInstanceReturn volunteerInstanceReturn = new VolunteerInstanceReturn();
         volunteerInstanceReturn.setVolunteerExternalIdentifier(volunteerReturn.getExternalIdentifier());
         volunteerInstanceReturn.setExternalIdentifier(volunteerinstancePojo.getExternalidentifier());
@@ -70,7 +70,7 @@ public class VolunteerMapper {
         }
     }
 
-    public void addMatch(VolunteermatchPojo volunteermatchPojo, StudentMyDao studentMyDao) {
+    private void addMatch(VolunteermatchPojo volunteermatchPojo, StudentMyDao studentMyDao) {
         VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
         volunteerMatchReturn.setVolunteerReturn(volunteerReturn);
         volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());

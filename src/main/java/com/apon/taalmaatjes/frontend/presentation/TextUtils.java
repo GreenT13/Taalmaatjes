@@ -23,7 +23,7 @@ public class TextUtils {
         tf.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
     }
 
-    public static double getWidth(TextField tf, String currText) {
+    private static double getWidth(TextField tf, String currText) {
         Text text = new Text(currText);
         text.setFont(tf.getFont()); // Set the same font, so the size is the same
         double width = text.getLayoutBounds().getWidth() // This big is the Text in the TextField
@@ -34,7 +34,7 @@ public class TextUtils {
 
     public static Boolean getComboValue(String value) {
         if (value == null || value.equals("")) {
-            // Leeg
+            // Empty
             return null;
         } else if (value.equals("Ja")) {
             return true;

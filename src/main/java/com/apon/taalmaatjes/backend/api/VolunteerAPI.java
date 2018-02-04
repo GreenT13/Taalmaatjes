@@ -29,18 +29,14 @@ public class VolunteerAPI {
 
     private VolunteerAPI() { }
 
-    // So I don't need to define it every time.
-    Context context;
-
     /**
      * Get a volunteer based on the external identifier.
-     * @param externalIdentifier
+     * @param externalIdentifier The external identifier.
      * @return VolunteerReturn
      */
     public Result get(String externalIdentifier) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
 
@@ -76,13 +72,12 @@ public class VolunteerAPI {
 
     /**
      * Update a volunteer based on frontend object.
-     * @param volunteerReturn
+     * @param volunteerReturn The volunteer.
      * @return nothing
      */
     public Result update(VolunteerReturn volunteerReturn) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.update for externalIdentifier " + volunteerReturn.getExternalIdentifier());
@@ -123,13 +118,12 @@ public class VolunteerAPI {
 
     /**
      * Add a volunteer based on frontend object.
-     * @param volunteerReturn
+     * @param volunteerReturn The volunteer.
      * @return external identifier from the added volunteer.
      */
     public Result add(VolunteerReturn volunteerReturn) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.add for externalIdentifier " + volunteerReturn.getExternalIdentifier());
@@ -175,17 +169,16 @@ public class VolunteerAPI {
 
     /**
      * Search for volunteers that specify the given conditions, if they are filled.
-     * @param input
-     * @param isActive
-     * @param hasTraining
-     * @param hasMatch
-     * @param city
-     * @return
+     * @param input The input searched for in firstName, insertion, lastName.
+     * @param isActive Whether the volunteer must be active today.
+     * @param hasTraining Whether the value of Volunteer.hasTraining is true or false.
+     * @param hasMatch Whether there exists a VolunteerMatch for this volunteer.
+     * @param city The city of the volunteer.
+     * @return List&lt;VolunteerReturn&gt;
      */
     public Result advancedSearch(String input, Boolean isActive, Boolean hasTraining, Boolean hasMatch, String city) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.advancedSearch for input " + input + " isActive " + isActive + " hasTrainig " + hasTraining
@@ -213,13 +206,12 @@ public class VolunteerAPI {
 
     /**
      * Toggle active state of a volunteer.
-     * @param externalIdentifier
-     * @return
+     * @param externalIdentifier The external identifier of the volunteer.
+     * @return Nothing.
      */
     public Result toggleActive(String externalIdentifier) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.toggleActive for externalIdentifier " + externalIdentifier);
@@ -268,13 +260,12 @@ public class VolunteerAPI {
 
     /**
      * Add a new match line, starting today, for given student.
-     * @param studentReturn
+     * @param studentReturn The student.
      * @return VolunteerMatch.externalIdentifier
      */
     public Result addMatch(String volunteerExtId, StudentReturn studentReturn) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.addMatch volunteerExtId " + volunteerExtId + " studentExtId " + studentReturn.getExternalIdentifier());
@@ -294,11 +285,11 @@ public class VolunteerAPI {
         // If there is a match with the student, it must not be active today.
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
         for (VolunteermatchPojo volunteermatchPojo : volunteerMatchMyDao.getMatchForVolunteer(volunteerId, true)) {
-            if (volunteermatchPojo.getStudentid() != studentId) {
+            if (!volunteermatchPojo.getStudentid().equals(studentId)) {
                 continue;
             }
 
-            // If the match is active today, return an error.
+            // If the match is active today, return an logError.
             if (DateTimeUtil.isActiveToday(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
                 return ResultUtil.createError("VolunteerAPI.addMatch.alreadyExistsAndActive");
             }
@@ -325,14 +316,13 @@ public class VolunteerAPI {
 
     /**
      * Toggle the active state of a match.
-     * @param volunteerExtId
-     * @param volunteerMatchExtId
-     * @return
+     * @param volunteerExtId The external identifier of the volunteer.
+     * @param volunteerMatchExtId The external identifier of the volunteerMatch.
+     * @return Nothing.
      */
     public Result toggleMatch(String volunteerExtId, String volunteerMatchExtId) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start VolunteerAPI.toggleMatch volunteerExtId " + volunteerExtId + " volunteerMatchExtId " + volunteerMatchExtId);

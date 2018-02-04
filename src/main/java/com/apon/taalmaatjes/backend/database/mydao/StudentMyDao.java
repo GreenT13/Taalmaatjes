@@ -1,7 +1,6 @@
 package com.apon.taalmaatjes.backend.database.mydao;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
-import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.StudentDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
@@ -21,7 +20,7 @@ import java.util.List;
 import static org.jooq.impl.DSL.using;
 
 public class StudentMyDao extends StudentDao {
-    public final static Integer STARTING_EXT_ID = Integer.valueOf(5001);
+    private final static Integer STARTING_EXT_ID = 5001;
 
     public StudentMyDao(Context context) {
         super(context.getConfiguration());
@@ -32,7 +31,8 @@ public class StudentMyDao extends StudentDao {
         super(configuration);
     }
 
-    public boolean generateIds(StudentPojo studentPojo) {
+    @SuppressWarnings("Duplicates")
+    private boolean generateIds(StudentPojo studentPojo) {
         if (studentPojo.getStudentid() == null) {
             Integer maxId = getMaxId();
             studentPojo.setStudentid(maxId != null ? maxId + 1 : 0);
@@ -51,14 +51,14 @@ public class StudentMyDao extends StudentDao {
         return true;
     }
 
-    public Integer getMaxId() {
+    private Integer getMaxId() {
         return using(configuration())
                 .select(Student.STUDENT.STUDENTID.max())
                 .from(Student.STUDENT)
                 .fetchOne(0, Integer.class);
     }
 
-    public String getMaxExtId() {
+    private String getMaxExtId() {
         return using(configuration())
                 .select(Student.STUDENT.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
                 .from(Student.STUDENT)
@@ -75,14 +75,14 @@ public class StudentMyDao extends StudentDao {
 
     public boolean insertPojo(StudentPojo studentPojo) {
         if (!generateIds(studentPojo)) {
-            // Some kind of error message?
+            // Some kind of logError message?
             return false;
         }
 
         try {
             super.insert(studentPojo);
         } catch (Exception e) {
-            Log.error("Could not insert student", e);
+            Log.logError("Could not insert student", e);
             return false;
         }
 
@@ -92,10 +92,10 @@ public class StudentMyDao extends StudentDao {
     /**
      * Count how many students have their first dateStart from a match between minimumDate and maximumDate.
      * If isGroup is non-null, add criteria that it must match.
-     * @param minimumDate
-     * @param maximumDate
-     * @param isGroup
-     * @return
+     * @param minimumDate Minimum start date.
+     * @param maximumDate Maximum start date.
+     * @param isGroup Whether Student.isGroup is true or false.
+     * @return Integer value of students that satisfy the criteria.
      */
     public int countNewStudents(@Nonnull Date minimumDate, @Nonnull Date maximumDate, @Nullable Boolean isGroup) {
         SelectConditionStep<Record1<Integer>> query =  using(configuration())

@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@SuppressWarnings("UnusedReturnValue")
 public class Context {
     private Connection connection;
     private DSLContext create;
@@ -41,7 +42,7 @@ public class Context {
             connection.commit();
             return true;
         } catch (SQLException e) {
-            Log.error("Could not commit connection.", e);
+            Log.logError("Could not commit connection.", e);
             return false;
         }
     }
@@ -51,7 +52,7 @@ public class Context {
             connection.rollback();
             return true;
         } catch (SQLException e) {
-            Log.error("Could not rollback connection.", e);
+            Log.logError("Could not rollback connection.", e);
             return false;
         }
     }
@@ -61,7 +62,7 @@ public class Context {
             connection.close();
             return true;
         } catch (SQLException e) {
-            Log.error("Could not close connection.", e);
+            Log.logError("Could not close connection.", e);
             return false;
         }
     }

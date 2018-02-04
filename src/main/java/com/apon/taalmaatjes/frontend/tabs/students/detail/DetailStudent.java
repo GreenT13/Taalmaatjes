@@ -7,8 +7,10 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.NameUtil;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
-import com.apon.taalmaatjes.frontend.transition.Transition;
+import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
+import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,8 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class DetailStudent {
-    String studentExtId;
+import javax.annotation.Nullable;
+
+public class DetailStudent implements Screen {
+    private String studentExtId;
 
     @FXML
     TextField labelName, labelIsLookingForVolunteer, labelIsGroup;
@@ -25,28 +29,34 @@ public class DetailStudent {
     @FXML
     VBox vboxMatch;
 
-    public void setStudentExtId(String studentExtId) {
-        this.studentExtId = studentExtId;
+    @Override
+    public void setObject(Object studentExtId) {
+        this.studentExtId = (String) studentExtId;
         initializeValues();
     }
 
     @FXML
-    HBox hboxError; @FXML
+    HBox hboxError;
+    @FXML
     Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
     /**
      * Controller is initialized before volunteerId is set, therefore we don't use @FXML here.
      */
-    public void initializeValues() {
+    private void initializeValues() {
         Result result = StudentAPI.getInstance().get(studentExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
@@ -81,8 +91,7 @@ public class DetailStudent {
 
     @FXML
     public void back() {
-        // In case we added a volunteer, we refresh.
-        Transition.getInstance().studentOverview();
+        TransitionHandler.getInstance().goBack();
     }
 
     private void addMatchLine(VolunteerMatchReturn volunteerMatchReturn) {
@@ -112,9 +121,10 @@ public class DetailStudent {
         TextUtils.setWidthToContent(labelIsGroup);
     }
 
+    @SuppressWarnings("unused")
     @FXML
     public void edit(ActionEvent actionEvent) {
-        Transition.getInstance().studentAdd(studentExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_ADD, studentExtId,
+                true, true);
     }
-
 }

@@ -6,7 +6,9 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.transition.Transition;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
+import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -15,7 +17,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
-public class AddVolunteer {
+import javax.annotation.Nullable;
+
+@SuppressWarnings("unused")
+public class AddVolunteer implements Screen {
 
     @FXML
     TextField inputFirstName, inputInsertion, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail, inputPostalCode;
@@ -32,28 +37,25 @@ public class AddVolunteer {
     @FXML
     DatePicker inputDateOfBirth;
 
-    String volunteerExtId;
+    private String volunteerExtId;
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        if (volunteerExtId != null) {
-            // Tried to edit a volunteer, but cancelled. Hence we go back to the detail screen.
-            Transition.getInstance().volunteerDetail(volunteerExtId);
-
-        } else {
-            // Tried to add a volunteer, but cancelled. Hence we go back to the overview screen.
-            Transition.getInstance().volunteerOverview();
-        }
+        TransitionHandler.getInstance().goBack();
     }
 
     @FXML HBox hboxError; @FXML Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
@@ -88,8 +90,8 @@ public class AddVolunteer {
             }
         }
 
-        Transition.hasAddedVolunteer = true;
-        Transition.getInstance().volunteerDetail(volunteerExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, volunteerExtId,
+                false, false);
     }
 
     private VolunteerReturn convertControlsToPojo() {
@@ -110,10 +112,10 @@ public class AddVolunteer {
         return volunteerReturn;
     }
 
-    public void setVolunteerExtId(String volunteerExtId) {
-        this.volunteerExtId = volunteerExtId;
+    public void setObject(Object volunteerExtId) {
+        this.volunteerExtId = (String) volunteerExtId;
 
-        Result result = VolunteerAPI.getInstance().get(volunteerExtId);
+        Result result = VolunteerAPI.getInstance().get(this.volunteerExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

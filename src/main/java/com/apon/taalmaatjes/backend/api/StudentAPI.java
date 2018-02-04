@@ -24,18 +24,14 @@ public class StudentAPI {
 
     private StudentAPI() { }
 
-    // So I don't need to define it every time.
-    Context context;
-
     /**
-     * Get a volunteer based on the external identifier.
-     * @param externalIdentifier
+     * Get a student based on the external identifier.
+     * @param externalIdentifier The external identifier from a student.
      * @return VolunteerReturn
      */
     public Result get(String externalIdentifier) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
 
@@ -67,13 +63,12 @@ public class StudentAPI {
 
     /**
      * Update a student based on frontend object.
-     * @param studentReturn
+     * @param studentReturn The student.
      * @return nothing
      */
     public Result update(StudentReturn studentReturn) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start StudentAPI.update for externalIdentifier " + studentReturn.getExternalIdentifier());
@@ -113,14 +108,13 @@ public class StudentAPI {
     }
 
     /**
-     * Add a volunteer based on frontend object.
-     * @param studentReturn
-     * @return external identifier from the added volunteer.
+     * Add a student based on frontend object.
+     * @param studentReturn The student.
+     * @return external identifier from the added student.
      */
     public Result add(StudentReturn studentReturn) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start StudentAPI.add for externalIdentifier " + studentReturn.getExternalIdentifier());
@@ -156,16 +150,15 @@ public class StudentAPI {
 
     /**
      * Search for volunteers that specify the given conditions, if they are filled.
-     * @param input
-     * @param isLookingForVolunteer
-     * @param isGroup
-     * @param hasMatch
-     * @return
+     * @param input Search input for firstName, insertion, lastName.
+     * @param isLookingForVolunteer Whether Student.isLookingForVolunteer must be true or false.
+     * @param isGroup Whether Student.isGroup must be true or false.
+     * @param hasMatch Whether there is a VolunteerMatch for the student.
+     * @return List&lt;StudentReturn&gt; with the students found.
      */
     public Result advancedSearch(String input, Boolean isLookingForVolunteer, Boolean isGroup, Boolean hasMatch) {
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
         Log.logDebug("Start StudentAPI.advancedSearch for input " + input + " isLookingForVolunteer " + isLookingForVolunteer

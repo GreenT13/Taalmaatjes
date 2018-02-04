@@ -24,7 +24,8 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         super(configuration);
     }
 
-    public boolean generateIds(VolunteermatchPojo volunteermatchPojo) {
+    @SuppressWarnings("Duplicates")
+    private boolean generateIds(VolunteermatchPojo volunteermatchPojo) {
         // We cannot generate an id if the volunteerId is unknown.
         if (volunteermatchPojo.getVolunteerid() == null) {
             return false;
@@ -32,7 +33,7 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
 
         if (volunteermatchPojo.getVolunteermatchid() == null) {
             Integer maxId = getMaxId(volunteermatchPojo.getVolunteerid());
-            volunteermatchPojo.setVolunteermatchid(maxId != null ? maxId + 1 : Integer.valueOf(0));
+            volunteermatchPojo.setVolunteermatchid(maxId != null ? maxId + 1 : 0);
         }
 
         if (volunteermatchPojo.getExternalidentifier() == null) {
@@ -48,7 +49,7 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         return true;
     }
 
-    protected Integer getMaxId(Integer volunteerId) {
+    private Integer getMaxId(Integer volunteerId) {
         return using(configuration())
                 .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.max())
                 .from(Volunteermatch.VOLUNTEERMATCH)
@@ -56,7 +57,7 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
                 .fetchOne(0, Integer.class);
     }
 
-    public String getMaxExtId(Integer volunteerId) {
+    private String getMaxExtId(Integer volunteerId) {
         return using(configuration())
                 .select(Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
                 .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.max())
@@ -77,7 +78,7 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
 
     public boolean insertPojo(VolunteermatchPojo volunteermatchPojo) {
         if (!generateIds(volunteermatchPojo)) {
-            // Some kind of error message?
+            // Some kind of logError message?
             return false;
         }
 

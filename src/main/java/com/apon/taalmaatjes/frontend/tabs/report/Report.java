@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -13,7 +14,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Report {
+import javax.annotation.Nullable;
+
+@SuppressWarnings("unused")
+public class Report implements Screen {
     @FXML
     VBox vboxResult;
 
@@ -25,12 +29,16 @@ public class Report {
 
     @FXML HBox hboxError; @FXML Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
@@ -72,4 +80,8 @@ public class Report {
         hideError();
     }
 
+    @Override
+    public void setObject(Object o) {
+        // Do nothing.
+    }
 }

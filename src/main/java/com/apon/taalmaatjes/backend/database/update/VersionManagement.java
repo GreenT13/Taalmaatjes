@@ -5,7 +5,6 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.ScriptlogPoj
 import com.apon.taalmaatjes.backend.database.mydao.ScriptlogMyDao;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
-import org.jooq.Query;
 import org.jooq.exception.DataAccessException;
 
 import java.io.BufferedReader;
@@ -44,7 +43,7 @@ public class VersionManagement {
      * Execute the following steps:
      * 1. If the table Scriptlog does not exist, we run CREATE_TABLE_SCRIPT.
      * 2. Run any SQL scrit from ALL_SCRIPT_NAMES that did not run yet.
-     * @param context
+     * @param context The context used.
      * @return {@code true} if successful, else {@code false}.
      */
     public boolean runUpdates(Context context) {
@@ -164,7 +163,7 @@ public class VersionManagement {
 
             context.getCreate().execute(readFile(getLocation(scriptName)));
         } catch (IOException e) {
-            Log.error("Could not find script " + scriptName, e);
+            Log.logError("Could not find script " + scriptName, e);
             return false;
         }
 

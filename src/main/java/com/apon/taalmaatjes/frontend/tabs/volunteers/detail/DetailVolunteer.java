@@ -3,18 +3,18 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.*;
-import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
-import com.apon.taalmaatjes.frontend.presentation.*;
-import com.apon.taalmaatjes.frontend.transition.Transition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.apon.taalmaatjes.frontend.presentation.MessageResource;
+import com.apon.taalmaatjes.frontend.presentation.NameUtil;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.presentation.TextUtils;
+import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
+import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -25,11 +25,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class DetailVolunteer {
-    String volunteerExtId;
+@SuppressWarnings("unused")
+public class DetailVolunteer implements Screen {
+    private String volunteerExtId;
 
     @FXML
     TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr;
@@ -46,26 +47,30 @@ public class DetailVolunteer {
     Hyperlink hyperlinkChangeActive;
     boolean isActive;
 
-    public void setVolunteerExtId(String volunteerExtId) {
-        this.volunteerExtId = volunteerExtId;
+    public void setObject(Object volunteerExtId) {
+        this.volunteerExtId = (String) volunteerExtId;
         initializeValues();
     }
 
     @FXML HBox hboxError; @FXML Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
     /**
      * Controller is initialized before volunteerId is set, therefore we don't use @FXML here.
      */
-    public void initializeValues() {
+    private void initializeValues() {
         Result result = VolunteerAPI.getInstance().get(volunteerExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
@@ -119,19 +124,12 @@ public class DetailVolunteer {
         setTextHyperlink(volunteerReturn);
 
         // comboStudents stuff.
-        comboStudents.getEditor().textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                                String oldValue, String newValue) {
-                changeList(oldValue, newValue);
-            }
-        });
+        comboStudents.getEditor().textProperty().addListener((observable, oldValue, newValue) -> changeList(oldValue, newValue));
     }
 
     @FXML
     public void back() {
-        // In case we added a volunteer, we refresh.
-        Transition.getInstance().volunteerOverview();
+        TransitionHandler.getInstance().goBack();
     }
 
     private void addActiveLine(VolunteerInstanceReturn volunteerInstanceReturn) {
@@ -150,7 +148,7 @@ public class DetailVolunteer {
 
     /**
      * Adds an hbox to vboxMatch, containing hyperlinks to stop/delete and showing the information from the match in a label.
-     * @param volunteerMatchReturn
+     * @param volunteerMatchReturn Object to retrieve all the data from.
      */
     private void addMatchLine(VolunteerMatchReturn volunteerMatchReturn) {
         // Initialize the frontend variables.
@@ -205,7 +203,8 @@ public class DetailVolunteer {
 
     @FXML
     public void edit(ActionEvent actionEvent) {
-        Transition.getInstance().volunteerAdd(volunteerExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD, volunteerExtId,
+                true, true);
     }
 
     @FXML
@@ -257,7 +256,7 @@ public class DetailVolunteer {
 
         // If input is chosen, check that it is valid.
         String externalIdentifier;
-        if (comboStudents.getValue().indexOf(":") < 0) {
+        if (!comboStudents.getValue().contains(":")) {
             externalIdentifier = comboStudents.getValue();
         } else {
             externalIdentifier = comboStudents.getValue().substring(0, comboStudents.getValue().indexOf(":"));
@@ -302,12 +301,12 @@ public class DetailVolunteer {
     }
 
     @FXML
-    public void changeList(String oldValue, String newValue) {
+    private void changeList(String oldValue, String newValue) {
         if (newValue.contains(":")) {
             return;
         }
 
-        if (newValue == null || newValue.trim().length() == 0) {
+        if (newValue.trim().length() == 0) {
             comboStudents.setItems(null);
             comboStudents.hide();
             hideError();
@@ -332,7 +331,7 @@ public class DetailVolunteer {
         comboStudents.show();
     }
 
-    public void startStopMatch(String volunteerMatchExtId) {
+    private void startStopMatch(String volunteerMatchExtId) {
         Result result = VolunteerAPI.getInstance().toggleMatch(volunteerExtId, volunteerMatchExtId);
         if (result == null || result.hasErrors()) {
             showError(result);

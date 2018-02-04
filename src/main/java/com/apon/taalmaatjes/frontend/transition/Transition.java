@@ -1,161 +1,35 @@
 package com.apon.taalmaatjes.frontend.transition;
 
-import com.apon.taalmaatjes.backend.log.Log;
-import com.apon.taalmaatjes.frontend.tabs.students.add.AddStudent;
-import com.apon.taalmaatjes.frontend.tabs.students.detail.DetailStudent;
-import com.apon.taalmaatjes.frontend.tabs.volunteers.add.AddVolunteer;
-import com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Tab;
-
-import javax.annotation.Nonnull;
-import java.io.IOException;
 
 public class Transition {
-    private static Transition ourInstance = new Transition();
-    public static boolean hasAddedVolunteer = false;
-    public static boolean hasAddedStudent = false;
+    private ScreenEnum screenFrom;
+    private ScreenEnum screenTo;
+    private Node nodeFrom;
 
-    public static Transition getInstance() {
-        return ourInstance;
+    public Transition() { }
+
+    public ScreenEnum getScreenFrom() {
+        return screenFrom;
     }
 
-    private Transition() { }
-
-    private Parent load(@Nonnull String path) {
-        try {
-            return FXMLLoader.load(getClass().getClassLoader().getResource(path));
-        } catch (IOException e) {
-            Log.error("Could not find fxml with path: " + path, e);
-            return null;
-        }
+    public void setScreenFrom(ScreenEnum screenFrom) {
+        this.screenFrom = screenFrom;
     }
 
-    private Tab tabHome, tabVolunteer, tabStudent, tabReport;
-    private Node previousVolunteer;
-    private Node previousStudent;
-
-    public void volunteerDetail(String volunteerExtId) {
-        Parent root;
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.DETAIL_VOLUNTEERS + ".fxml"));
-        // Load so we have the controller instantiated.
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        DetailVolunteer detailVolunteer = loader.getController();
-        detailVolunteer.setVolunteerExtId(volunteerExtId);
-
-        // Set content last, so we make sure that what is shown on the screen is initialized.
-        tabVolunteer.setContent(root);
+    public ScreenEnum getScreenTo() {
+        return screenTo;
     }
 
-    public void volunteerAdd() {
-        tabVolunteer.setContent(load(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
+    public void setScreenTo(ScreenEnum screenTo) {
+        this.screenTo = screenTo;
     }
 
-    public void volunteerAdd(String volunteerExtId) {
-        Parent root;
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.ADD_VOLUNTEERS + ".fxml"));
-        // Load so we have the controller instantiated.
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        AddVolunteer addVolunteer = loader.getController();
-        addVolunteer.setVolunteerExtId(volunteerExtId);
-
-        // Set content last, so we make sure that what is shown on the screen is initialized.
-        tabVolunteer.setContent(root);
+    public Node getNodeFrom() {
+        return nodeFrom;
     }
 
-    public void volunteerOverview() {
-        if (hasAddedVolunteer) {
-            try {
-                tabVolunteer.setContent(FXMLLoader.load(getClass().getClassLoader().getResource(FxmlLocation.VOLUNTEERS + ".fxml")));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            hasAddedVolunteer = false;
-        } else {
-            tabVolunteer.setContent(previousVolunteer);
-        }
-    }
-
-    public void studentAdd() {
-        tabStudent.setContent(load(FxmlLocation.ADD_STUDENTS + ".fxml"));
-    }
-
-    public void studentAdd(String studentExtId) {
-        Parent root;
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.ADD_STUDENTS + ".fxml"));
-        // Load so we have the controller instantiated.
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        AddStudent addStudent = loader.getController();
-        addStudent.setStudentExtId(studentExtId);
-
-        // Set content last, so we make sure that what is shown on the screen is initialized.
-        tabStudent.setContent(root);
-    }
-
-    public void studentDetail(String studentExtId) {
-        Parent root;
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(FxmlLocation.DETAIL_STUDENTS + ".fxml"));
-        // Load so we have the controller instantiated.
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        DetailStudent detailStudent = loader.getController();
-        detailStudent.setStudentExtId(studentExtId);
-
-        // Set content last, so we make sure that what is shown on the screen is initialized.
-        tabStudent.setContent(root);
-    }
-
-    public void studentOverview() {
-        if (hasAddedStudent) {
-            try {
-                tabStudent.setContent(FXMLLoader.load(getClass().getClassLoader().getResource(FxmlLocation.STUDENTS + ".fxml")));
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            hasAddedStudent = false;
-        } else {
-            tabStudent.setContent(previousStudent);
-        }
-    }
-
-    public void setTabHome(Tab tabHome) {
-        this.tabHome = tabHome;
-    }
-
-    public void setTabVolunteer(Tab tabVolunteer) {
-        this.tabVolunteer = tabVolunteer;
-        previousVolunteer = tabVolunteer.getContent();
-    }
-
-    public void setTabStudent(Tab tabStudent) {
-        this.tabStudent = tabStudent;
-        previousStudent = tabStudent.getContent();
-    }
-
-    public void setTabReport(Tab tabReport) {
-        this.tabReport = tabReport;
+    public void setNodeFrom(Node nodeFrom) {
+        this.nodeFrom = nodeFrom;
     }
 }

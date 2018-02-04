@@ -1,8 +1,8 @@
 package com.apon.taalmaatjes.frontend.presentation;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+@SuppressWarnings("unused")
 public class Person {
     // TODO: rewrite this class so it is "normal".
     private final SimpleStringProperty extId;

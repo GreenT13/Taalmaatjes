@@ -6,7 +6,7 @@ import com.apon.taalmaatjes.backend.util.ResultUtil;
 public class TaalmaatjesAPI {
     private static TaalmaatjesAPI ourInstance = new TaalmaatjesAPI();
     private final static String VERSION_NUMBER = "v0.1";
-    private final static String RELEASE_DATE = "2018-01-27";
+    private final static String RELEASE_DATE = "2018-02-04";
 
     public static TaalmaatjesAPI getInstance() {
         return ourInstance;
@@ -16,7 +16,7 @@ public class TaalmaatjesAPI {
 
     /**
      * Get the version number.
-     * @return
+     * @return String
      */
     public Result getVersionNumber() {
         return ResultUtil.createOk(VERSION_NUMBER);
@@ -24,7 +24,7 @@ public class TaalmaatjesAPI {
 
     /**
      * Get the release date.
-     * @return
+     * @return String
      */
     public Result getReleaseDate() {
         return ResultUtil.createOk(RELEASE_DATE);

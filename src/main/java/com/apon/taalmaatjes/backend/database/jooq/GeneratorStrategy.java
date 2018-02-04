@@ -7,9 +7,9 @@ public class GeneratorStrategy extends DefaultGeneratorStrategy {
 
     /**
      * All Pojo filenames should end with Pojo.
-     * @param definition
-     * @param mode
-     * @return
+     * @param definition The definition.
+     * @param mode The mode.
+     * @return The name.
      */
     @Override
     public String getJavaClassName(Definition definition, Mode mode) {

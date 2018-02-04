@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentMapper {
-    StudentReturn studentReturn;
+    private StudentReturn studentReturn;
 
     public StudentMapper(StudentReturn studentReturn) {
         this.studentReturn = studentReturn;
@@ -32,7 +32,7 @@ public class StudentMapper {
         studentReturn.setGroup(studentPojo.getIsgroup());
     }
 
-    public void addMatch(VolunteermatchPojo volunteermatchPojo, VolunteerMyDao volunteerMyDao) {
+    private void addMatch(VolunteermatchPojo volunteermatchPojo, VolunteerMyDao volunteerMyDao) {
         VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
         volunteerMatchReturn.setStudent(studentReturn);
         volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());

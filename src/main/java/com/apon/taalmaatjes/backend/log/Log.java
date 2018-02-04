@@ -12,7 +12,7 @@ public class Log {
         //deprecated: logger.log(Priority.ERROR, message);
     }
 
-    public static void error(String message, Exception e) {
+    public static void logError(String message, Exception e) {
         logger.error(message, e);
         //deprecated: logger.log(Priority.ERROR, message, e);
     }

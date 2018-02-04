@@ -5,7 +5,9 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.transition.Transition;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
+import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -13,7 +15,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
-public class AddStudent {
+import javax.annotation.Nullable;
+
+@SuppressWarnings("unused")
+public class AddStudent implements Screen {
 
     @FXML
     TextField inputFirstName, inputInsertion, inputLastName;
@@ -21,28 +26,25 @@ public class AddStudent {
     @FXML
     CheckBox checkIsGroup, checkIsLookingForVolunteer;
 
-    String studentExtId;
+    private String studentExtId;
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        if (studentExtId != null) {
-            // Tried to edit a volunteer, but cancelled. Hence we go back to the detail screen.
-            Transition.getInstance().studentDetail(studentExtId);
-
-        } else {
-            // Tried to add a volunteer, but cancelled. Hence we go back to the overview screen.
-            Transition.getInstance().studentOverview();
-        }
+        TransitionHandler.getInstance().goBack();
     }
 
     @FXML HBox hboxError; @FXML Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
@@ -77,8 +79,8 @@ public class AddStudent {
             }
         }
 
-        Transition.hasAddedStudent = true;
-        Transition.getInstance().studentDetail(studentExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, studentExtId,
+                false, false);
     }
 
     private StudentReturn convertControlsToPojo() {
@@ -92,10 +94,10 @@ public class AddStudent {
         return studentReturn;
     }
 
-    public void setStudentExtId(String studentExtId) {
-        this.studentExtId = studentExtId;
+    public void setObject(Object studentExtId) {
+        this.studentExtId = (String) studentExtId;
 
-        Result result = StudentAPI.getInstance().get(studentExtId);
+        Result result = StudentAPI.getInstance().get(this.studentExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

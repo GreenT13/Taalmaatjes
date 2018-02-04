@@ -25,12 +25,13 @@ import java.util.List;
 import static org.jooq.impl.DSL.using;
 
 public class VolunteerMyDao extends VolunteerDao {
-    public final static Integer STARTING_EXT_ID = Integer.valueOf(1001);
+    public final static Integer STARTING_EXT_ID = 1001;
 
     public VolunteerMyDao(Context context) {
         super(context.getConfiguration());
     }
 
+    @SuppressWarnings("Duplicates")
     public boolean generateIds(VolunteerPojo volunteerPojo) {
         if (volunteerPojo.getVolunteerid() == null) {
             Integer maxId = getMaxId();
@@ -50,14 +51,14 @@ public class VolunteerMyDao extends VolunteerDao {
         return true;
     }
 
-    public Integer getMaxId() {
+    private Integer getMaxId() {
         return using(configuration())
                 .select(Volunteer.VOLUNTEER.VOLUNTEERID.max())
                 .from(Volunteer.VOLUNTEER)
                 .fetchOne(0, Integer.class);
     }
 
-    public String getMaxExtId() {
+    private String getMaxExtId() {
         return using(configuration())
                 .select(Volunteer.VOLUNTEER.EXTERNALIDENTIFIER.cast(MySQLDataType.INT).max())
                 .from(Volunteer.VOLUNTEER)
@@ -72,20 +73,16 @@ public class VolunteerMyDao extends VolunteerDao {
                 .fetchOne(0, Integer.class);
     }
 
-    public VolunteerPojo getPojo(String externalIdentifier) {
-        return null;
-    }
-
     public boolean insertPojo(VolunteerPojo volunteerPojo) {
         if (!generateIds(volunteerPojo)) {
-            // Some kind of error message?
+            // Some kind of logError message?
             return false;
         }
 
         try {
             super.insert(volunteerPojo);
         } catch (Exception e) {
-            Log.error("Could not insert volunteer", e);
+            Log.logError("Could not insert volunteer", e);
             return false;
         }
 
@@ -241,21 +238,6 @@ public class VolunteerMyDao extends VolunteerDao {
                 .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
                 .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
                         .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())))
-                .fetchOne(0, int.class);
-
-        // Return if at least one row is found.
-        return (isActive >= 1);
-    }
-
-    public boolean isLastDayActive(int volunteerId) {
-        int isActive = using(configuration())
-                .selectCount()
-                .from(Volunteerinstance.VOLUNTEERINSTANCE)
-                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
-                // dateStart <= current_date and (dateEnd is null || current_date < dateEnd)
-                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
-                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
-                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.greaterThan(DSL.currentDate())))
                 .fetchOne(0, int.class);
 
         // Return if at least one row is found.

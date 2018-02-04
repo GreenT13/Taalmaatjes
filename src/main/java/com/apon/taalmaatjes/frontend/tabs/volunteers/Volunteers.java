@@ -5,8 +5,10 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Person;
+import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
-import com.apon.taalmaatjes.frontend.transition.Transition;
+import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
+import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -18,9 +20,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class Volunteers {
+@SuppressWarnings("unused")
+public class Volunteers implements Screen {
     private boolean isVisible = false;
 
     @FXML
@@ -37,15 +41,20 @@ public class Volunteers {
 
     @FXML HBox hboxError; @FXML Label labelError;
 
-    public void showError(Result result) {
+    private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
-        labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        if (result != null) {
+            labelError.setText(MessageResource.getInstance().getValue(result.getErrorMessage()));
+        } else {
+            labelError.setText("Something went horribly wrong.");
+        }
     }
 
-    public void hideError() {
+    private void hideError() {
         hboxError.setVisible(false);
     }
 
+    @SuppressWarnings("Duplicates")
     @FXML
     public void initialize() {
         hboxError.managedProperty().bind(hboxError.visibleProperty());
@@ -82,8 +91,9 @@ public class Volunteers {
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
-        // Transition to detail screen.
-        Transition.getInstance().volunteerDetail(person.getExtId());
+        // TransitionHandler to detail screen.
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, person.getExtId(),
+                true, true);
     }
 
     private void fillTable(List<VolunteerReturn> list) {
@@ -105,7 +115,7 @@ public class Volunteers {
     }
 
     @FXML
-    public void search() {
+    private void search() {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
         if (!isVisible) {
@@ -125,12 +135,11 @@ public class Volunteers {
         }
 
         fillTable((List<VolunteerReturn>) result.getResult());
-        return;
     }
 
     /**
      * Toggle the visibility of flowPaneAdvancedSearch.
-     * @param actionEvent
+     * @param actionEvent Unused.
      */
     @FXML
     public void toggleAdvancedSearch(ActionEvent actionEvent) {
@@ -140,6 +149,12 @@ public class Volunteers {
 
     @FXML
     public void addVolunteer(ActionEvent actionEvent) {
-        Transition.getInstance().volunteerAdd();
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD, null,
+                false, true);
+    }
+
+    @Override
+    public void setObject(Object o) {
+        // Do nothing.
     }
 }

@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 public class MessageResource {
     // Should overwrite this variable in Taalmaatjes.java if you want to change the language.
-    public static Locale locale = new Locale("nl");
+    private static Locale locale = new Locale("nl");
 
     private static MessageResource ourInstance = new MessageResource();
 
@@ -14,7 +14,7 @@ public class MessageResource {
         return ourInstance;
     }
 
-    ResourceBundle messageResource;
+    private ResourceBundle messageResource;
 
     private MessageResource() {
         messageResource = ResourceBundle.getBundle("MessageResources", locale);

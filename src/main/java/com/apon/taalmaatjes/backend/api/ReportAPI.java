@@ -20,13 +20,10 @@ public class ReportAPI {
 
     private ReportAPI() { }
 
-    // So I don't need to define it every time.
-    Context context;
-
     /**
      * Create report based on dateStart and dateEnd.
-     * @param dateStart
-     * @param dateEnd
+     * @param dateStart The start date.
+     * @param dateEnd The end date.
      * @return ReportReturn
      */
     public Result createReport(Date dateStart, Date dateEnd) {
@@ -38,9 +35,8 @@ public class ReportAPI {
             return ResultUtil.createError("ReportAPI.createReport.error.startBeforeEnd");
         }
 
-        try {
-            context = new Context();
-        } catch (SQLException e) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
 
@@ -59,8 +55,8 @@ public class ReportAPI {
         report.setNrOfNewGroups(studentMyDao.countNewStudents(dateStart, dateEnd, true));
         report.setNrOfActiveGroups(studentMyDao.countActiveInPeriod(dateStart, dateEnd, true));
 
+        // Close, log and return.
         context.close();
-
         Log.logDebug("End ReportAPI.createReport");
         return ResultUtil.createOk(report);
     }
