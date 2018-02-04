@@ -290,7 +290,22 @@ public class VolunteerAPI {
             return ResultUtil.createError("VolunteerAPI.addMatch.noStudent");
         }
 
+        // Check that it is actually possible to add a new match today. This is the case if holds:
+        // If there is a match with the student, it must not be active today.
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        for (VolunteermatchPojo volunteermatchPojo : volunteerMatchMyDao.getMatchForVolunteer(volunteerId, true)) {
+            if (volunteermatchPojo.getStudentid() != studentId) {
+                continue;
+            }
+
+            // If the match is active today, return an error.
+            if (volunteermatchPojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) < 0 &&
+                    (volunteermatchPojo.getDateend() == null ||
+                            volunteermatchPojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) > 0)) {
+                return ResultUtil.createError("VolunteerAPI.addMatch.alreadyExistsAndActive");
+            }
+        }
+
         VolunteermatchPojo volunteermatchPojo = new VolunteermatchPojo();
         volunteermatchPojo.setVolunteerid(volunteerId);
         volunteermatchPojo.setStudentid(studentId);
