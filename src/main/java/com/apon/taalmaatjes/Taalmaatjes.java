@@ -23,7 +23,7 @@ public class Taalmaatjes extends Application {
         // First update the database.
         try {
             Context context = new Context();
-            if (VersionManagement.getInstance().runUpdates(context)) {
+            if (!VersionManagement.getInstance().runUpdates(context)) {
                 hasErrors = true;
             }
             context.close();
