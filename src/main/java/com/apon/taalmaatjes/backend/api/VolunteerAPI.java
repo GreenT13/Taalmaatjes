@@ -299,9 +299,9 @@ public class VolunteerAPI {
             }
 
             // If the match is active today, return an error.
-            if (volunteermatchPojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) < 0 &&
+            if (volunteermatchPojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) <= 0 &&
                     (volunteermatchPojo.getDateend() == null ||
-                            volunteermatchPojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) > 0)) {
+                            volunteermatchPojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) >= 0)) {
                 return ResultUtil.createError("VolunteerAPI.addMatch.alreadyExistsAndActive");
             }
         }

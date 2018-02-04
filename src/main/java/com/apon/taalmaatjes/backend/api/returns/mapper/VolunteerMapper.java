@@ -60,9 +60,9 @@ public class VolunteerMapper {
             addInstance(volunteerinstancePojo);
 
             // If (dateStart <= current_date && (dateEnd == null || current_date <= dateEnd)), we fill values
-            if (volunteerinstancePojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) < 0 &&
+            if (volunteerinstancePojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) <= 0 &&
                     (volunteerinstancePojo.getDateend() == null ||
-                        volunteerinstancePojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) > 0)) {
+                        volunteerinstancePojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) >= 0)) {
                 volunteerReturn.setActiveToday(true);
                 volunteerReturn.setActiveUntil(volunteerinstancePojo.getDateend());
             }
