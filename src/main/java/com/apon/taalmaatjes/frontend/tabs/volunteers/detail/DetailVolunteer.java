@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.*;
+import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
@@ -13,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -146,10 +148,33 @@ public class DetailVolunteer {
         vboxActive.getChildren().add(label);
     }
 
+    /**
+     * Adds an hbox to vboxMatch, containing hyperlinks to stop/delete and showing the information from the match in a label.
+     * @param volunteerMatchReturn
+     */
     private void addMatchLine(VolunteerMatchReturn volunteerMatchReturn) {
-        String studentName = NameUtil.getStudentName(volunteerMatchReturn.getStudent());
-
+        // Initialize the frontend variables.
+        HBox hbox = new HBox();
+        Hyperlink hyperlink = new Hyperlink();
         Label label = new Label();
+        hbox.getChildren().addAll(hyperlink, label);
+        vboxMatch.getChildren().add(hbox);
+
+        // Determine whether the hyperlink should say "start" or "stop".
+        if (DateTimeUtil.isActiveTodayMinusOne(volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd())){
+            hyperlink.setText("(stop)");
+        } else {
+            hyperlink.setText("(start)");
+        }
+        // Request focus because whenever startStopMatch is called, it focuses labelName.
+        hyperlink.requestFocus();
+
+        // Add the action to the hyperlink.
+        hyperlink.setUserData(volunteerMatchReturn.getExternalIdentifier());
+        hyperlink.setOnAction(event -> startStopMatch(volunteerMatchReturn.getExternalIdentifier()));
+
+        // Create the label with the correct text.
+        String studentName = NameUtil.getStudentName(volunteerMatchReturn.getStudent());
         label.getStyleClass().add("labelMatch");
         String text = "Heeft van " + volunteerMatchReturn.getDateStart() + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
@@ -160,7 +185,6 @@ public class DetailVolunteer {
         text+= " " + studentName + " begeleid.";
 
         label.setText(text);
-        vboxMatch.getChildren().add(label);
     }
 
     @FXML
@@ -306,5 +330,27 @@ public class DetailVolunteer {
         // Fill the combobox.
         comboStudents.setItems(comboStudentObservableList);
         comboStudents.show();
+    }
+
+    public void startStopMatch(String volunteerMatchExtId) {
+        Result result = VolunteerAPI.getInstance().toggleMatch(volunteerExtId, volunteerMatchExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Correctly handled the adding. Now refresh the output.
+        vboxMatch.getChildren().clear();
+        result = VolunteerAPI.getInstance().get(volunteerExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
+        for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
+            addMatchLine(volunteerMatchReturn);
+        }
+
+        hideError();
     }
 }

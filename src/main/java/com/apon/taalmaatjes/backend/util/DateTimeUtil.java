@@ -49,4 +49,43 @@ public class DateTimeUtil {
     public static Integer determineAge(LocalDate dateOfBirth) {
         return Period.between(dateOfBirth, getCurrentDate().toLocalDate()).getYears();
     }
+
+    /**
+     * Determine whether dateStart lies between dateStart and dateEnd (where null is +-infinity).
+     * @param dateStart
+     * @param dateEnd
+     * @return
+     */
+    public static boolean isActiveToday(Date dateStart, Date dateEnd) {
+        Date currentDate = getCurrentDate();
+        if (dateStart != null && dateStart.compareTo(currentDate) > 0) {
+            return false;
+        }
+
+        if (dateEnd != null && dateEnd.compareTo(currentDate) < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine whether dateStart lies between dateStart and dateEnd (where null is +-infinity).
+     * However, when dateEnd equals today, it counts as not active.
+     * @param dateStart
+     * @param dateEnd
+     * @return
+     */
+    public static boolean isActiveTodayMinusOne(Date dateStart, Date dateEnd) {
+        if (!isActiveToday(dateStart, dateEnd)) {
+            return false;
+        }
+
+        // We already know that we are active, so only check if dateEnd is today.
+        if (dateEnd != null && dateEnd.compareTo(DateTimeUtil.getCurrentDate()) == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -18,4 +18,15 @@
     /* Move hyperlink slightly upwards to align with the name. */
     -fx-padding: -1px 0px 0px 0px;
     -fx-border-color: transparent;
+    -fx-text-fill: -blue;
+    -fx-font-style: none;
+}
+
+.hyperlink:hover {
+    -fx-underline: true !important;
+}
+
+.hyperlink:visited {
+    -fx-text-fill: -blue;
+    -fx-underline: false;
 }

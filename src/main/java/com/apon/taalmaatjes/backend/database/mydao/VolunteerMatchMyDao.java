@@ -65,6 +65,15 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
                 .fetchOne(0, String.class);
     }
 
+    public Integer getIdFromExtId(Integer volunteerId, String volunteerMatchExtId) {
+        return using(configuration())
+                .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID)
+                .from(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(volunteerId))
+                .and(Volunteermatch.VOLUNTEERMATCH.EXTERNALIDENTIFIER.eq(volunteerMatchExtId))
+                .fetchOne(0, Integer.class);
+    }
+
 
     public boolean insertPojo(VolunteermatchPojo volunteermatchPojo) {
         if (!generateIds(volunteermatchPojo)) {
@@ -103,5 +112,15 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         }
 
         return query.fetch().map(mapper());
+    }
+
+    public VolunteermatchPojo fetchById(int volunteerId, int volunteerMatchId) {
+        VolunteermatchRecord record = using(configuration())
+                .selectFrom(Volunteermatch.VOLUNTEERMATCH)
+                .where(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID.eq(volunteerId))
+                .and(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.eq(volunteerMatchId))
+                .fetchOne();
+
+        return mapper().map(record);
     }
 }

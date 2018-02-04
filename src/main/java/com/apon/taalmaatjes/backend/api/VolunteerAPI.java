@@ -299,9 +299,7 @@ public class VolunteerAPI {
             }
 
             // If the match is active today, return an error.
-            if (volunteermatchPojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) <= 0 &&
-                    (volunteermatchPojo.getDateend() == null ||
-                            volunteermatchPojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) >= 0)) {
+            if (DateTimeUtil.isActiveToday(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
                 return ResultUtil.createError("VolunteerAPI.addMatch.alreadyExistsAndActive");
             }
         }
@@ -323,5 +321,60 @@ public class VolunteerAPI {
         context.close();
         Log.logDebug("End VolunteerAPI.addMatch");
         return ResultUtil.createOk(volunteermatchPojo.getExternalidentifier());
+    }
+
+    /**
+     * Toggle the active state of a match.
+     * @param volunteerExtId
+     * @param volunteerMatchExtId
+     * @return
+     */
+    public Result toggleMatch(String volunteerExtId, String volunteerMatchExtId) {
+        try {
+            context = new Context();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.toggleMatch volunteerExtId " + volunteerExtId + " volunteerMatchExtId " + volunteerMatchExtId);
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+        }
+
+        // Get volunteerMatchId
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        Integer volunteerMatchId = volunteerMatchMyDao.getIdFromExtId(volunteerId, volunteerMatchExtId);
+        if (volunteerMatchId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFoundMatch");
+        }
+
+        VolunteermatchPojo volunteermatchPojo = volunteerMatchMyDao.fetchById(volunteerId, volunteerMatchId);
+        if (DateTimeUtil.isActiveTodayMinusOne(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
+            // It is active, so we stop it.
+            volunteermatchPojo.setDateend(DateTimeUtil.getCurrentDate());
+            // If it was only active for one day, we remove it.
+            if (volunteermatchPojo.getDatestart().compareTo(volunteermatchPojo.getDateend()) == 0) {
+                volunteerMatchMyDao.delete(volunteermatchPojo);
+            } else {
+                volunteerMatchMyDao.update(volunteermatchPojo);
+            }
+        } else {
+            // Activate it.
+            volunteermatchPojo.setDateend(null);
+            volunteerMatchMyDao.update(volunteermatchPojo);
+        }
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.toggleMatch");
+        return ResultUtil.createOk();
     }
 }
