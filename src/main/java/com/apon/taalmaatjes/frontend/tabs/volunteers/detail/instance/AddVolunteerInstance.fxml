@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--suppress ALL -->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<HBox stylesheets="@AddVolunteerInstance.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.instance.AddVolunteerInstance">
+    <children>
+        <VBox>
+            <children>
+                <HBox fx:id="hboxError">
+                    <children>
+                        <Label id="labelError" fx:id="labelError" text="Label" />
+                    </children>
+                </HBox>
+                <HBox>
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="124.0">
+                            <children>
+                                <HBox styleClass="hboxAlign">
+                                   <children>
+                                      <Label text="Begin datum" />
+                                   </children>
+                                </HBox>
+                                <HBox styleClass="hboxAlign">
+                                   <children>
+                                      <Label text="Eind datum" />
+                                   </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="384.0" prefWidth="291.0">
+                            <children>
+                                <HBox styleClass="hboxAlign">
+                                    <children>
+                                        <DatePicker fx:id="inputDateStart" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                                        <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="NEVER" />
+                                        <Label fx:id="labelAge" />
+                                    </children>
+                                </HBox>
+                                <HBox styleClass="hboxAlign">
+                                   <children>
+                                      <DatePicker fx:id="inputDateEnd" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                                      <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="NEVER" />
+                                      <Label fx:id="labelAge1" />
+                                   </children>
+                                </HBox>
+                                <HBox alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button mnemonicParsing="false" text="Opslaan" onAction="#save">
+                                            <HBox.margin>
+                                                <Insets right="5.0" />
+                                            </HBox.margin>
+                                        </Button>
+                                        <Button mnemonicParsing="false" text="Terug" onAction="#back" />
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets right="5.0" top="5.0" />
+                                    </padding>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+</HBox>

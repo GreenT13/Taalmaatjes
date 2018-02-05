@@ -18,9 +18,10 @@ public class FxmlLocation {
         // Initialize the map that goes from enum to fxml.
         mapEnumFxml = new HashMap();
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_OVERVIEW, VOLUNTEERS_OVERVIEW);
+        mapEnumFxml.put(ScreenEnum.VOLUNTEERS_DETAIL, VOLUNTEERS_DETAIL);
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD, VOLUNTEERS_ADD);
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD_MATCH, VOLUNTEERS_ADD_MATCH);
-        mapEnumFxml.put(ScreenEnum.VOLUNTEERS_DETAIL, VOLUNTEERS_DETAIL);
+        mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, VOLUNTEERS_ADD_INSTANCE);
 
         mapEnumFxml.put(ScreenEnum.STUDENTS_OVERVIEW, STUDENTS_OVERVIEW);
         mapEnumFxml.put(ScreenEnum.STUDENTS_ADD, STUDENTS_ADD);
@@ -35,9 +36,10 @@ public class FxmlLocation {
 
     // Volunteers
     private final static String VOLUNTEERS_OVERVIEW = "com/apon/taalmaatjes/frontend/tabs/volunteers/Volunteers";
+    private final static String VOLUNTEERS_DETAIL = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/DetailVolunteer";
     private final static String VOLUNTEERS_ADD = "com/apon/taalmaatjes/frontend/tabs/volunteers/add/AddVolunteer";
     private final static String VOLUNTEERS_ADD_MATCH = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/match/AddVolunteerMatch";
-    private final static String VOLUNTEERS_DETAIL = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/DetailVolunteer";
+    private final static String VOLUNTEERS_ADD_INSTANCE = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/instance/AddVolunteerInstance";
 
     // Students
     private final static String STUDENTS_OVERVIEW = "com/apon/taalmaatjes/frontend/tabs/students/Students";

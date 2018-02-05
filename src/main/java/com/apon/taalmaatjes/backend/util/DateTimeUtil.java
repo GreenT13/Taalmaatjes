@@ -89,7 +89,7 @@ public class DateTimeUtil {
      */
     public static boolean isBetween(Date d, Date r1, Date r2) {
         if (d == null) {
-            return false;
+            return (r2 == null);
         }
 
         if (r1 != null && r1.compareTo(d) > 0) {
@@ -97,6 +97,22 @@ public class DateTimeUtil {
         }
 
         if (r2 != null && r2.compareTo(d) < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isBetweenWithoutEndpoints(Date d, Date r1, Date r2) {
+        if (d == null) {
+            return (r2 == null);
+        }
+
+        if (r1 != null && r1.compareTo(d) >= 0) {
+            return false;
+        }
+
+        if (r2 != null && r2.compareTo(d) <= 0) {
             return false;
         }
 
@@ -129,5 +145,18 @@ public class DateTimeUtil {
         }
 
         return false;
+    }
+
+    /**
+     * Determine whether holds [d1, d2] \subset [e1, e2]. This is equivalent to
+     * d1 \in [e1, e2] and d2 \in [e1,e2].
+     * @param d1
+     * @param d2
+     * @param e1
+     * @param e2
+     * @return
+     */
+    public static boolean isContained(Date d1, Date d2, Date e1, Date e2) {
+        return isBetween(d1, e1, e2) && isBetween(d2, e1, e2);
     }
 }

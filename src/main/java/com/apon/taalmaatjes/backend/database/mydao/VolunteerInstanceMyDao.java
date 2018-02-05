@@ -11,6 +11,7 @@ import org.jooq.SelectConditionStep;
 import org.jooq.impl.DSL;
 import org.jooq.util.mysql.MySQLDataType;
 
+import java.sql.Date;
 import java.util.List;
 
 import static org.jooq.impl.DSL.using;
@@ -83,6 +84,10 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
         return true;
     }
 
+    public List<VolunteerinstancePojo> getInstanceForVolunteer(int volunteerId) {
+        return getInstanceForVolunteer(volunteerId, true);
+    }
+
     public List<VolunteerinstancePojo> getInstanceForVolunteer(int volunteerId, boolean sortAscending) {
         SelectConditionStep<VolunteerinstanceRecord> query = using(configuration())
                 .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
@@ -114,4 +119,15 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
 
         return mapper().map(record);
     }
+
+    public VolunteerinstancePojo fetchByIds(int volunteerId, int volunteerInstanceId) {
+        VolunteerinstanceRecord record =  using(configuration())
+                .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID.eq(volunteerInstanceId))
+                .fetchOne();
+
+        return mapper().map(record);
+    }
+
 }

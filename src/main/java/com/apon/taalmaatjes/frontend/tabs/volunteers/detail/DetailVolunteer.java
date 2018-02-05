@@ -39,8 +39,6 @@ public class DetailVolunteer implements Screen {
     @FXML
     ComboBox<String> comboStudents;
 
-    @FXML
-    Hyperlink hyperlinkChangeActive;
     boolean isActive;
 
     public void setObject(Object volunteerExtId) {
@@ -115,10 +113,6 @@ public class DetailVolunteer implements Screen {
         for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
             addMatchLine(volunteerMatchReturn);
         }
-
-        // Change hyperlink text according to active state of volunteer.
-        setTextHyperlink(volunteerReturn);
-
     }
 
     @FXML
@@ -200,37 +194,9 @@ public class DetailVolunteer implements Screen {
     }
 
     @FXML
-    public void changeActive(ActionEvent actionEvent) {
-        //volunteerFacade.changeActive(volunteerId);
-        Result result = VolunteerAPI.getInstance().toggleActive(volunteerExtId);
-        if (result == null || result.hasErrors()) {
-            showError(result);
-            return;
-        }
-
-        // Refresh output, but also needs to retrieve the volunteer again.
-        result = VolunteerAPI.getInstance().get(volunteerExtId);
-        if (result == null || result.hasErrors()) {
-            showError(result);
-            return;
-        }
-        vboxActive.getChildren().clear();
-        for (VolunteerInstanceReturn volunteerInstanceReturn : ((VolunteerReturn) result.getResult()).getListVolunteerInstance()) {
-            addActiveLine(volunteerInstanceReturn);
-        }
-
-        setTextHyperlink((VolunteerReturn) result.getResult());
-    }
-
-    private void setTextHyperlink(VolunteerReturn volunteerReturn) {
-        // Change hyperlink text according to active state of volunteer.
-        if (volunteerReturn.isActiveToday() &&
-                (volunteerReturn.getActiveUntil() == null ||
-                    volunteerReturn.getActiveUntil().compareTo(DateTimeUtil.getCurrentDate()) < 0)) {
-            hyperlinkChangeActive.setText("(stop)");
-        } else {
-            hyperlinkChangeActive.setText("(start)");
-        }
+    public void addNewInstance(ActionEvent actionEvent) {
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, volunteerExtId,
+                false, true);
     }
 
     @FXML

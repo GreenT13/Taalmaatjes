@@ -179,7 +179,7 @@
                   <HBox>
                      <children>
                               <Label styleClass="largeFont" text="Actief " />
-                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#changeActive" styleClass="largeFont" text="(start)" />
+                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#addNewInstance" styleClass="largeFont" text="(toevoegen)" />
                      </children>
                   </HBox>
                         <VBox fx:id="vboxActive" />

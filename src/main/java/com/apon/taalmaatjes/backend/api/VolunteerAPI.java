@@ -1,9 +1,6 @@
 package com.apon.taalmaatjes.backend.api;
 
-import com.apon.taalmaatjes.backend.api.returns.Result;
-import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.api.returns.*;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMatchMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
@@ -18,6 +15,7 @@ import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -425,6 +423,153 @@ public class VolunteerAPI {
         VolunteerMatchMapper volunteerMatchMapper = new VolunteerMatchMapper(volunteerMatchReturn);
         if (!volunteerMatchMyDao.insertPojo(volunteerMatchMapper.getPojo(volunteerId, studentId))) {
             return ResultUtil.createError("VolunteerAPI.addMatch.insert");
+        }
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.toggleMatch");
+        return ResultUtil.createOk();
+    }
+
+    /**
+     * Check if the line can be added to the database. Merge the line if needed. Returns true if added (possibly merged)
+     * and return false if some verification failed.
+     * @param context
+     * @param volunteerId
+     * @param dateStart
+     * @param dateEnd
+     * @return
+     */
+    private boolean isNewInstanceValidAndAdd(Context context, int volunteerId, Date dateStart, Date dateEnd) {
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        // if [A,B] can be merged into [dateStart,dateEnd] with B=dateStart then mergeAfterVolunteerInstanceId will be B.
+        Integer mergeAfterVolunteerInstanceId = null;
+
+        // if [dateStart,dateEnd] can be merged into [A,B] with A=dateEnd then mergeAfterVolunteerInstanceId will be A.
+        Integer mergeBeforeVolunteerInstanceId = null;
+        for (VolunteerinstancePojo volunteerinstancePojo : volunteerInstanceMyDao.getInstanceForVolunteer(volunteerId)) {
+            // If one of the following hold, return false:
+            // 1. dateStart is contained in (pojo.dateStart, pojo.dateEnd)
+            // 2. dateEnd is contained in (pojo.dateStart, pojo.dateEnd)
+            // 3. Range [pojo.dateStart, pojo.dateEnd] is contained within (dateStart, dateEnd).
+
+            // However, the above does not hold at all whenever pojo.dateStart = pojo.dateEnd (one day instance).
+            // So we only threat this case differently.
+            if (volunteerinstancePojo.getDateend() != null &&
+                    volunteerinstancePojo.getDatestart().compareTo(volunteerinstancePojo.getDateend()) == 0) {
+                // We have 3 possibilities:
+                // 1. pojo.date \in (dateStart, dateEnd) => overlap so false.
+                // 2. pojo.date == dateStart => merge
+                // 3. or pojoDate == dateEnd => merge
+                // 4. none of the above => we do nothing, we can ignore this line.
+
+                if (DateTimeUtil.isBetweenWithoutEndpoints(volunteerinstancePojo.getDatestart(), dateStart, dateEnd)) {
+                    return false;
+                }
+
+                // Merge before
+                if (volunteerinstancePojo.getDatestart().compareTo(dateStart) == 0) {
+                    mergeBeforeVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
+                }
+
+                // Merge after
+                if (dateEnd != null && volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0) {
+                    mergeAfterVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
+                }
+
+                // In any case we can just go on searching.
+                continue;
+            }
+
+            if (DateTimeUtil.isBetweenWithoutEndpoints(dateStart,
+                    volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend())) {
+                return false;
+            }
+
+            if (DateTimeUtil.isBetweenWithoutEndpoints(dateEnd,
+                    volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend())) {
+                return false;
+            }
+
+            if (DateTimeUtil.isContained(volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend(),
+                    dateStart, dateEnd)) {
+                return false;
+            }
+
+            // Determine whether we can actually merge with this line.
+            // Merge after: (note that if both dates are null, we can never merge.
+            if (dateEnd != null && volunteerinstancePojo.getDatestart() != null &&
+                    volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0) {
+                mergeAfterVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
+            }
+
+            // Merge before: (note that dateEnd must be non-null to merge. Also dateStart is never null).
+            if (volunteerinstancePojo.getDateend() != null && volunteerinstancePojo.getDateend().compareTo(dateStart) == 0) {
+                mergeBeforeVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
+            }
+        }
+
+        // If we actually reach this point, we know the line will be added to the database (merged or not).
+        VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
+        volunteerinstancePojo.setVolunteerid(volunteerId);
+
+        // Merge after if possible.
+        if (mergeAfterVolunteerInstanceId != null) {
+            VolunteerinstancePojo mergedVolunteerinstancePojo = volunteerInstanceMyDao.fetchByIds(volunteerId, mergeAfterVolunteerInstanceId);
+            volunteerinstancePojo.setDateend(mergedVolunteerinstancePojo.getDateend());
+            volunteerInstanceMyDao.delete(mergedVolunteerinstancePojo);
+        } else {
+            // Date start must still be set.
+            volunteerinstancePojo.setDateend(dateEnd);
+        }
+
+        // Merge before if possible.
+        if (mergeBeforeVolunteerInstanceId != null) {
+            VolunteerinstancePojo mergedVolunteerinstancePojo = volunteerInstanceMyDao.fetchByIds(volunteerId, mergeBeforeVolunteerInstanceId);
+            volunteerinstancePojo.setDatestart(mergedVolunteerinstancePojo.getDatestart());
+            volunteerInstanceMyDao.delete(mergedVolunteerinstancePojo);
+        } else {
+            // Date start must still be set.
+            volunteerinstancePojo.setDatestart(dateStart);
+        }
+
+        volunteerInstanceMyDao.insertPojo(volunteerinstancePojo);
+
+        return true;
+    }
+
+    public Result addInstance(VolunteerInstanceReturn volunteerInstanceReturn) {
+        if (volunteerInstanceReturn.getDateStart() == null) {
+            return ResultUtil.createError("VolunteerAPI.addInstance.noDateStart");
+        }
+
+        if (volunteerInstanceReturn.getDateEnd() != null &&
+                volunteerInstanceReturn.getDateStart().compareTo(volunteerInstanceReturn.getDateEnd()) > 0) {
+            return ResultUtil.createError("VolunteerAPI.addInstance.dateStartAfterDateEnd");
+        }
+
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.addInstance volunteerExtId " + volunteerInstanceReturn.getVolunteerExternalIdentifier());
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerInstanceReturn.getVolunteerExternalIdentifier());
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+        }
+
+        // Handle the complete adding / merging in another function.
+        if (!isNewInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd())) {
+            context.rollback();
+            return ResultUtil.createError("VolunteerAPI.addInstance.invalidInstance");
         }
 
         // Commit, close and return.
