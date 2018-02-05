@@ -25,11 +25,18 @@ public class TransitionHandler {
         mapBreadcrum.put(TabEnum.STUDENTS, new Stack());
         mapBreadcrum.put(TabEnum.REPORTS, new Stack());
 
+        // Initialize all starting screen.
+        mapCurrentScreen = new HashMap();
+        mapCurrentScreen.put(TabEnum.HOME, ScreenEnum.HOME);
+        mapCurrentScreen.put(TabEnum.VOLUNTEERS, ScreenEnum.VOLUNTEERS_OVERVIEW);
+        mapCurrentScreen.put(TabEnum.STUDENTS, ScreenEnum.STUDENTS_OVERVIEW);
+        mapCurrentScreen.put(TabEnum.REPORTS, ScreenEnum.REPORT);
+
         // Always start on the home screen.
         currentBreadcrum = mapBreadcrum.get(TabEnum.HOME);
         currentTab = TabEnum.HOME;
-        currentScreen = ScreenEnum.HOME;
 
+        // Initialize variable. It will be filled in Main.java using setters in this class.
         mapEnumTab = new HashMap();
     }
 
@@ -39,7 +46,7 @@ public class TransitionHandler {
     // Dynamically track the breadcrum.
     private Map<TabEnum, Stack<Transition>> mapBreadcrum;
     private Stack<Transition> currentBreadcrum;
-    private ScreenEnum currentScreen;
+    private Map<TabEnum, ScreenEnum> mapCurrentScreen;
     private TabEnum currentTab;
 
     /**
@@ -50,25 +57,6 @@ public class TransitionHandler {
         Log.logDebug("Start transitioned to tab " + tabEnum.toString());
         currentBreadcrum = mapBreadcrum.get(tabEnum);
         currentTab = tabEnum;
-        if (currentBreadcrum.empty()) {
-            // Set the default screen.
-            switch (tabEnum) {
-                case HOME:
-                    currentScreen = ScreenEnum.HOME;
-                    break;
-                case VOLUNTEERS:
-                    currentScreen = ScreenEnum.VOLUNTEERS_OVERVIEW;
-                    break;
-                case STUDENTS:
-                    currentScreen = ScreenEnum.STUDENTS_OVERVIEW;
-                    break;
-                case REPORTS:
-                    currentScreen = ScreenEnum.REPORT;
-                    break;
-            }
-        } else {
-            currentScreen = currentBreadcrum.peek().getScreenTo();
-        }
         Log.logDebug("End transitioned to tab " + tabEnum.toString());
     }
 
@@ -81,24 +69,30 @@ public class TransitionHandler {
      */
     public void goToScreen(ScreenEnum screenEnum, Object object, boolean rememberCurrentNode, boolean canGoBack) {
         Log.logDebug("Start transitioning to screen " + screenEnum.toString());
-        // Register the transition.
-        Transition transition = new Transition();
-        if (canGoBack) {
-            transition.setScreenFrom(currentScreen);
-        } else {
-            transition.setScreenFrom(null);
-        }
-        transition.setScreenTo(screenEnum);
-        if (rememberCurrentNode) {
-            transition.setNodeFrom(mapEnumTab.get(currentTab).getContent());
-        }
-        currentBreadcrum.push(transition);
-        currentScreen = screenEnum;
 
+        // Register the transition if it is actually part of the breadcrum path.
+        // Only add the transition if we actually have a new element to add.
+        // TODO: what if you didn't save node last time, but you want to now? Is this even desirable?
+        if (canGoBack && (currentBreadcrum.isEmpty() ||
+                !currentBreadcrum.peek().getScreen().equals(mapCurrentScreen.get(currentTab)))) {
+            Transition transition = new Transition();
+            transition.setScreen(mapCurrentScreen.get(currentTab));
+
+            // Only add a node if you can also go back.
+            if (rememberCurrentNode) {
+                transition.setNode(mapEnumTab.get(currentTab).getContent());
+            }
+
+            currentBreadcrum.push(transition);
+        }
+
+        // Transition to next screen.
         if (!loadScreen(screenEnum, object)) {
             // Something went wrong.
             return;
         }
+        mapCurrentScreen.put(currentTab, screenEnum);
+
         Log.logDebug("End transitioning to screen " + screenEnum.toString());
     }
 
@@ -112,24 +106,25 @@ public class TransitionHandler {
         Log.logDebug("Start going back.");
         do {
             Transition transition = currentBreadcrum.pop();
-            if (transition.getNodeFrom() != null && !transition.getScreenFrom().equals(currentScreen)) {
+            if (transition.getNode() != null && !transition.getScreen().equals(mapCurrentScreen.get(currentTab))) {
                 // Load the node.
-                Log.logDebug("Returning to already initialized tab " + transition.getScreenFrom().toString());
-                currentScreen = transition.getScreenFrom();
-                mapEnumTab.get(currentTab).setContent(transition.getNodeFrom());
+                Log.logDebug("Returning to already initialized tab " + transition.getScreen().toString());
+                mapCurrentScreen.put(currentTab, transition.getScreen());
+                mapEnumTab.get(currentTab).setContent(transition.getNode());
                 return;
             }
 
-            if (transition.getScreenFrom() != null && !transition.getScreenFrom().equals(currentScreen)) {
-                currentScreen = transition.getScreenFrom();
+            if (transition.getScreen() != null && !transition.getScreen().equals(mapCurrentScreen.get(currentTab))) {
+                mapCurrentScreen.put(currentTab, transition.getScreen());
                 // Load the screen.
-                Log.logDebug("Start returning to tab " + transition.getScreenFrom().toString());
-                loadScreen(transition.getScreenFrom(), object);
-                Log.logDebug("End returning to tab " + transition.getScreenFrom().toString());
+                Log.logDebug("Start returning to tab " + transition.getScreen().toString());
+                loadScreen(transition.getScreen(), object);
+                Log.logDebug("End returning to tab " + transition.getScreen().toString());
                 return;
             }
 
         } while (!currentBreadcrum.empty());
+        Log.logError("Something went wrong going back.");
     }
 
     private boolean loadScreen(ScreenEnum screenEnum, Object object) {

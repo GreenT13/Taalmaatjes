@@ -373,7 +373,7 @@ public class VolunteerAPI {
     /**
      * Add a new match to the database. However, we need to check that it is a valid match to add.
      * This means there is no other match for the same student that overlaps in date.
-     * @param volunteerMatchReturn
+     * @param volunteerMatchReturn The volunteerMatch.
      * @return
      */
     public Result addMatch(String volunteerExtId, VolunteerMatchReturn volunteerMatchReturn) {

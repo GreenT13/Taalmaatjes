@@ -3,33 +3,24 @@ package com.apon.taalmaatjes.frontend.transition;
 import javafx.scene.Node;
 
 public class Transition {
-    private ScreenEnum screenFrom;
-    private ScreenEnum screenTo;
-    private Node nodeFrom;
+    private ScreenEnum screen;
+    private Node node;
 
     public Transition() { }
 
-    public ScreenEnum getScreenFrom() {
-        return screenFrom;
+    public ScreenEnum getScreen() {
+        return screen;
     }
 
-    public void setScreenFrom(ScreenEnum screenFrom) {
-        this.screenFrom = screenFrom;
+    public void setScreen(ScreenEnum screen) {
+        this.screen = screen;
     }
 
-    public ScreenEnum getScreenTo() {
-        return screenTo;
+    public Node getNode() {
+        return node;
     }
 
-    public void setScreenTo(ScreenEnum screenTo) {
-        this.screenTo = screenTo;
-    }
-
-    public Node getNodeFrom() {
-        return nodeFrom;
-    }
-
-    public void setNodeFrom(Node nodeFrom) {
-        this.nodeFrom = nodeFrom;
+    public void setNode(Node node) {
+        this.node = node;
     }
 }
