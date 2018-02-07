@@ -66,7 +66,7 @@ public class AddVolunteer implements Screen {
     }
 
     @FXML
-    public void save(ActionEvent actionEvent) {
+    public void handleActionSave(ActionEvent actionEvent) {
         VolunteerReturn volunteerReturn = convertControlsToPojo();
         if (volunteerExtId == null) {
             // Add a new volunteer.
@@ -143,7 +143,7 @@ public class AddVolunteer implements Screen {
     }
 
     @FXML
-    public void fillAge(ActionEvent actionEvent) {
+    public void handleActionFillAgeOnEditDate(ActionEvent actionEvent) {
         // Fill the age if the value is valid.
         if (inputDateOfBirth.getValue() != null) {
             labelAge.setText(DateTimeUtil.determineAge(inputDateOfBirth.getValue()).toString());

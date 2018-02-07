@@ -47,11 +47,11 @@
                     <children>
                         <StackPane alignment="CENTER_LEFT" prefWidth="200.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#addStudent" text="Toevoegen cursist" />
+                                <Button mnemonicParsing="false" onAction="#goToScreenAddStudent" text="Toevoegen cursist" />
                             </children>
                         </StackPane>
-                        <TextField fx:id="textFieldSearch" onAction="#onEnter" />
-                        <Button id="btnAdvanced" mnemonicParsing="false" onAction="#toggleAdvancedSearch" text="▼" />
+                        <TextField fx:id="textFieldSearch" onAction="#handleActionPressEnter" />
+                        <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionToggleAdvancedSearch" text="▼" />
                     </children>
                 </HBox>
                 <FlowPane fx:id="flowPaneAdvancedSearch" alignment="CENTER_RIGHT">

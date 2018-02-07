@@ -48,12 +48,12 @@
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
-                                        <Button mnemonicParsing="false" text="Opslaan" onAction="#save">
+                                        <Button mnemonicParsing="false" text="Opslaan" onAction="#handleActionSave">
                                             <HBox.margin>
                                                 <Insets right="5.0" />
                                             </HBox.margin>
                                         </Button>
-                                        <Button mnemonicParsing="false" text="Terug" onAction="#back" />
+                                        <Button mnemonicParsing="false" text="Terug" onAction="#goBack" />
                                     </children>
                                     <VBox.margin>
                                         <Insets />

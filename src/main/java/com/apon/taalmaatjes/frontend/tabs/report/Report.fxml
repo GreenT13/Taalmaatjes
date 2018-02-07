@@ -48,7 +48,7 @@
                         </HBox>
                         <HBox style="-fx-alignment: center-right;" styleClass="hboxAlign">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#createReport" prefWidth="150.0" text="Maak rapportage" />
+                              <Button mnemonicParsing="false" onAction="#handleActionCreateReport" prefWidth="150.0" text="Maak rapportage" />
                            </children>
                         </HBox>
                      </children>

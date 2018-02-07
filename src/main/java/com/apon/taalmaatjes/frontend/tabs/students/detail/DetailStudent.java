@@ -90,7 +90,7 @@ public class DetailStudent implements Screen {
     }
 
     @FXML
-    public void back() {
+    public void goBack() {
         TransitionHandler.getInstance().goBack();
     }
 
@@ -123,7 +123,7 @@ public class DetailStudent implements Screen {
 
     @SuppressWarnings("unused")
     @FXML
-    public void edit(ActionEvent actionEvent) {
+    public void goToScreenEditStudent(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_ADD, studentExtId,
                 false, true);
     }

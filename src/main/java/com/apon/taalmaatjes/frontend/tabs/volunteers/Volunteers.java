@@ -110,11 +110,10 @@ public class Volunteers implements Screen {
     }
 
     @FXML
-    public void onEnter(ActionEvent actionEvent) {
+    public void handleActionOnPressedEnter(ActionEvent actionEvent) {
         search();
     }
 
-    @FXML
     private void search() {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
@@ -142,13 +141,13 @@ public class Volunteers implements Screen {
      * @param actionEvent Unused.
      */
     @FXML
-    public void toggleAdvancedSearch(ActionEvent actionEvent) {
+    public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
         isVisible = !isVisible;
         flowPaneAdvancedSearch.setVisible(isVisible);
     }
 
     @FXML
-    public void addVolunteer(ActionEvent actionEvent) {
+    public void goToScreenAddVolunteer(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD, null,
                 false, true);
     }

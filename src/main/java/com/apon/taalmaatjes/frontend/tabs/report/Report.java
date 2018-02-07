@@ -54,7 +54,7 @@ public class Report implements Screen {
     }
 
     @FXML
-    public void createReport(ActionEvent actionEvent) {
+    public void handleActionCreateReport(ActionEvent actionEvent) {
         // Retrieve the needed information.
         Result result = ReportAPI.getInstance().createReport(
                 DateTimeUtil.convertLocalDateToSqlDate(datePickerStart.getValue()),

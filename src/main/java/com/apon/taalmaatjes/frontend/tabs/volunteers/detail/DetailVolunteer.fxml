@@ -29,9 +29,9 @@
                               <String fx:value="copyable-label" />
                               <String fx:value="largeFont" />
                            </styleClass></TextField>
-                        <Hyperlink onAction="#edit" styleClass="largeFont" text="(bewerken)" />
+                        <Hyperlink onAction="#goToScreenEditVolunteer" styleClass="largeFont" text="(bewerken)" />
                                 <Region prefHeight="1.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
-                                <Button mnemonicParsing="false" onAction="#back" text="Terug" />
+                                <Button mnemonicParsing="false" onAction="#goBack" text="Terug" />
                             </children>
                         </HBox>
                         <HBox>
@@ -179,7 +179,7 @@
                   <HBox>
                      <children>
                               <Label styleClass="largeFont" text="Actief " />
-                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#addNewInstance" styleClass="largeFont" text="(toevoegen)" />
+                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#goToScreenAddInstance" styleClass="largeFont" text="(toevoegen)" />
                      </children>
                   </HBox>
                         <VBox fx:id="vboxActive" />
@@ -193,7 +193,7 @@
                   <HBox>
                      <children>
                             <Label styleClass="largeFont" text="Koppelingen " />
-                        <Hyperlink fx:id="hyperlinkChangeActive1" onAction="#addMatch" styleClass="largeFont" text="(toevoegen)" />
+                        <Hyperlink fx:id="hyperlinkChangeActive1" onAction="#goToScreenAddMatch" styleClass="largeFont" text="(toevoegen)" />
                      </children>
                   </HBox>
                       <VBox fx:id="vboxMatch" />

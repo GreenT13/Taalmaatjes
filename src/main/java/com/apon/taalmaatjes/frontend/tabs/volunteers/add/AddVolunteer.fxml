@@ -104,7 +104,7 @@
                         </HBox>
                         <HBox styleClass="hboxAlign">
                            <children>
-                              <DatePicker fx:id="inputDateOfBirth" onAction="#fillAge" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                              <DatePicker fx:id="inputDateOfBirth" onAction="#handleActionFillAgeOnEditDate" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                               <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="NEVER" />
                               <Label fx:id="labelAge" />
                            </children>
@@ -151,7 +151,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#save" text="Opslaan">
+                              <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>

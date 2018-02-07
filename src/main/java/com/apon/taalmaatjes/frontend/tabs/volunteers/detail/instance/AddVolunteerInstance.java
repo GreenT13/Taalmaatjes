@@ -51,7 +51,7 @@ public class AddVolunteerInstance implements Screen {
 
 
     @FXML
-    public void save(ActionEvent actionEvent) {
+    public void handleActionSave(ActionEvent actionEvent) {
         // Save the match.
         Result result = VolunteerAPI.getInstance().addInstance(getReturn());
         if (result == null || result.hasErrors()) {
@@ -65,7 +65,7 @@ public class AddVolunteerInstance implements Screen {
     }
 
     @FXML
-    public void back(ActionEvent actionEvent) {
+    public void goBack(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goBack(volunteerExtId);
     }
 

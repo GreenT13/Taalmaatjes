@@ -95,7 +95,7 @@ public class AddVolunteerMatch implements Screen {
     }
 
     @FXML
-    public void addMatch(KeyEvent keyEvent) {
+    public void handleActionSearchStudents(KeyEvent keyEvent) {
         if (keyEvent.getCode() != KeyCode.ENTER) {
             return;
         }
@@ -136,7 +136,7 @@ public class AddVolunteerMatch implements Screen {
     }
 
     @FXML
-    public void save(ActionEvent actionEvent) {
+    public void handleActionSearch(ActionEvent actionEvent) {
         // Save the match.
         Result result = VolunteerAPI.getInstance().addMatch(volunteerExtId, getReturn());
         if (result == null || result.hasErrors()) {
@@ -150,7 +150,7 @@ public class AddVolunteerMatch implements Screen {
     }
 
     @FXML
-    public void back(ActionEvent actionEvent) {
+    public void goBack(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goBack(volunteerExtId);
     }
 

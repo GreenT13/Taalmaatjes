@@ -116,7 +116,7 @@ public class DetailVolunteer implements Screen {
     }
 
     @FXML
-    public void back() {
+    public void goBack() {
         TransitionHandler.getInstance().goBack();
     }
 
@@ -188,19 +188,19 @@ public class DetailVolunteer implements Screen {
     }
 
     @FXML
-    public void edit(ActionEvent actionEvent) {
+    public void goToScreenEditVolunteer(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD, volunteerExtId,
                 false, true);
     }
 
     @FXML
-    public void addNewInstance(ActionEvent actionEvent) {
+    public void goToScreenAddInstance(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, volunteerExtId,
                 false, true);
     }
 
     @FXML
-    public void addMatch(ActionEvent actionEvent) {
+    public void goToScreenAddMatch(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_MATCH,
                 volunteerExtId, false, true);
     }

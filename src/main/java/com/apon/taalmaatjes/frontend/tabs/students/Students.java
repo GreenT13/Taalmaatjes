@@ -112,11 +112,10 @@ public class Students implements Screen {
     }
 
     @FXML
-    public void onEnter(ActionEvent actionEvent) {
+    public void handleActionPressEnter(ActionEvent actionEvent) {
         search();
     }
 
-    @FXML
     private void search() {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
@@ -143,13 +142,13 @@ public class Students implements Screen {
      * @param actionEvent Unused.
      */
     @FXML
-    public void toggleAdvancedSearch(ActionEvent actionEvent) {
+    public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
         isVisible = !isVisible;
         flowPaneAdvancedSearch.setVisible(isVisible);
     }
 
     @FXML
-    public void addStudent(ActionEvent actionEvent) {
+    public void goToScreenAddStudent(ActionEvent actionEvent) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_ADD, null,
                 false, true);
     }

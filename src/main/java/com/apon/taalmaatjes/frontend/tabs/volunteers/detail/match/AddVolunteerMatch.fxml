@@ -59,17 +59,17 @@
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                              <ComboBox fx:id="comboStudents" editable="true" onKeyPressed="#addMatch" prefHeight="31.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
+                              <ComboBox fx:id="comboStudents" editable="true" onKeyPressed="#handleActionSearchStudents" prefHeight="31.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
                                     </children>
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
-                                        <Button mnemonicParsing="false" text="Opslaan" onAction="#save">
+                                        <Button mnemonicParsing="false" text="Opslaan" onAction="#handleActionSearch">
                                             <HBox.margin>
                                                 <Insets right="5.0" />
                                             </HBox.margin>
                                         </Button>
-                                        <Button mnemonicParsing="false" text="Terug" onAction="#back" />
+                                        <Button mnemonicParsing="false" text="Terug" onAction="#goBack" />
                                     </children>
                                     <VBox.margin>
                                         <Insets />

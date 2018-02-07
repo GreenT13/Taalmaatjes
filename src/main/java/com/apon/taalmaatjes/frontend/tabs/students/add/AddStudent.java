@@ -55,7 +55,7 @@ public class AddStudent implements Screen {
     }
 
     @FXML
-    public void save(ActionEvent actionEvent) {
+    public void handleActionSave(ActionEvent actionEvent) {
         StudentReturn studentReturn = convertControlsToPojo();
         if (studentExtId == null) {
             // Add a new student.

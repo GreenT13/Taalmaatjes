@@ -29,9 +29,9 @@
                                         <String fx:value="copyable-label" />
                                         <String fx:value="largeFont" />
                                     </styleClass></TextField>
-                                <Hyperlink onAction="#edit" styleClass="largeFont" text="(bewerken)" />
+                                <Hyperlink onAction="#goToScreenEditStudent" styleClass="largeFont" text="(bewerken)" />
                                 <Region prefHeight="1.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
-                                <Button mnemonicParsing="false" onAction="#back" text="Terug" />
+                                <Button mnemonicParsing="false" onAction="#goBack" text="Terug" />
                             </children>
                         </HBox>
                         <HBox>

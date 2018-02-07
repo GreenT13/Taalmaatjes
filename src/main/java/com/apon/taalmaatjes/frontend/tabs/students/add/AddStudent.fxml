@@ -77,7 +77,7 @@
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
-                                        <Button mnemonicParsing="false" onAction="#save" text="Opslaan">
+                                        <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
                                             <HBox.margin>
                                                 <Insets right="5.0" />
                                             </HBox.margin>
