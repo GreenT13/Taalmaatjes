@@ -87,6 +87,10 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
         return true;
     }
 
+    public List<VolunteermatchPojo> getMatchForVolunteer(int volunteerId) {
+        return getMatchForVolunteer(volunteerId, true);
+    }
+
     public List<VolunteermatchPojo> getMatchForVolunteer(int volunteerId, boolean sortAscending) {
         SelectConditionStep<VolunteermatchRecord> query = using(configuration())
                 .selectFrom(Volunteermatch.VOLUNTEERMATCH)

@@ -3,9 +3,12 @@ package com.apon.taalmaatjes.backend.api;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerInstanceMapper;
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
+import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
@@ -13,6 +16,8 @@ import com.apon.taalmaatjes.backend.util.ResultUtil;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VolunteerInstanceAPI {
     private static VolunteerInstanceAPI ourInstance = new VolunteerInstanceAPI();
@@ -283,9 +288,72 @@ public class VolunteerInstanceAPI {
             volunteerInstanceMyDao.insertPojo(volunteerinstancePojo);
         } else {
             volunteerinstancePojo.setVolunteerinstanceid(volunteerInstanceId);
+
+            // Check that we can actually update.
+            List<Integer> merged = new ArrayList();
+            if (mergeAfterVolunteerInstanceId != null) {
+                merged.add(mergeAfterVolunteerInstanceId);
+            }
+            if (mergeBeforeVolunteerInstanceId != null) {
+                merged.add(mergeBeforeVolunteerInstanceId);
+            }
+            if (!allMatchesAreInsideInstance(context, volunteerinstancePojo, merged)) {
+                return false;
+            }
+
             volunteerInstanceMyDao.update(volunteerinstancePojo);
         }
 
         return true;
+    }
+
+    /**
+     * Check if all the matches are still inside instances when we edit this instance.
+     * @param context .
+     * @param volunteerinstancePojo The new pojo.
+     * @return
+     */
+    private boolean allMatchesAreInsideInstance(Context context, VolunteerinstancePojo volunteerinstancePojo, List<Integer> removeInstanceIds) {
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        List<VolunteerinstancePojo> volunteerinstancePojos = volunteerInstanceMyDao.getInstanceForVolunteer(volunteerinstancePojo.getVolunteerid());
+
+        // Remove the merged from the list.
+        List<VolunteerinstancePojo> removePojos = new ArrayList();
+        // Also remove the current pojo we are going to update, since we are going to "overwrite" this one.
+        removeInstanceIds.add(volunteerinstancePojo.getVolunteerinstanceid());
+        for (VolunteerinstancePojo v : volunteerinstancePojos) {
+            for (Integer i : removeInstanceIds) {
+                if (v.getVolunteerinstanceid().equals(i)) {
+                    removePojos.add(v);
+                }
+            }
+        }
+
+        for (VolunteerinstancePojo v : removePojos) {
+            volunteerinstancePojos.remove(v);
+        }
+        volunteerinstancePojos.add(volunteerinstancePojo);
+
+        // Just check that all the matches are completely inside any pojo.
+        for (VolunteermatchPojo volunteermatchPojo : volunteerMatchMyDao.getMatchForVolunteer(volunteerinstancePojo.getVolunteerid())) {
+            if (!isMatchCompletelyInsideInstance(volunteermatchPojo, volunteerinstancePojos)) {
+                // There is a match that does not fit completely inside an instance. Therefore we cannot edit.
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isMatchCompletelyInsideInstance(VolunteermatchPojo volunteermatchPojo, List<VolunteerinstancePojo> list) {
+        for (VolunteerinstancePojo v : list) {
+            if (DateTimeUtil.isContained(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend(),
+                    v.getDatestart(), v.getDateend())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

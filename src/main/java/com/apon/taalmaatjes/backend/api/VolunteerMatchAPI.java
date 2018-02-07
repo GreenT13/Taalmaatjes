@@ -3,14 +3,17 @@ package com.apon.taalmaatjes.backend.api;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMatchMapper;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
+import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
+import org.joda.time.DateTime;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -299,6 +302,11 @@ public class VolunteerMatchAPI {
             volunteermatchPojo.setDatestart(dateStart);
         }
 
+        // Check that the volunteer is active during this period.
+        if (!isVolunteerActiveDuringMatch(context, volunteermatchPojo)) {
+            return false;
+        }
+
         if (volunteerMatchId == null) {
             volunteerMatchMyDao.insertPojo(volunteermatchPojo);
         } else {
@@ -309,5 +317,22 @@ public class VolunteerMatchAPI {
         return true;
     }
 
+    /**
+     * Returns whether the volunteer is active during the [match.dateStart, match.dateEnd].
+     * @param context .
+     * @param volunteermatchPojo .
+     * @return boolean
+     */
+    private boolean isVolunteerActiveDuringMatch(Context context, VolunteermatchPojo volunteermatchPojo) {
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        for (VolunteerinstancePojo volunteerinstancePojo : volunteerInstanceMyDao.getInstanceForVolunteer(volunteermatchPojo.getVolunteerid())) {
+            if (DateTimeUtil.isContained(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend(),
+                    volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
