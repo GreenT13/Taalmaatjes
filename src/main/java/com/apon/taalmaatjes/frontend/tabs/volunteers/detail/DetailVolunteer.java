@@ -8,14 +8,23 @@ import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import netscape.javascript.JSException;
+import org.w3c.dom.Document;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +42,9 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     ComboBox<String> comboStudents;
+
+    @FXML
+    WebView webView;
 
     boolean isActive;
 
@@ -108,6 +120,9 @@ public class DetailVolunteer implements Screen {
         for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
             addMatchLine(volunteerMatchReturn);
         }
+
+        // Set the log field.
+        webView.getEngine().loadContent(volunteerReturn.getLog());
     }
 
     @FXML
@@ -191,6 +206,21 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     public void initialize() {
+        // Webview stuff.
+        webView.setBlendMode(BlendMode.DARKEN);
+        webView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
+
+//        // Adjust height based on loaded test when content changes.
+//        webView.getEngine().documentProperty().addListener((prop, oldDoc, newDoc) -> {
+//            String heightText = webView.getEngine().executeScript(
+//                    "window.getComputedStyle(document.body, null).getPropertyValue('height')").toString();
+//
+//            webView.setPrefHeight(Double.valueOf(heightText.replace("px", "")));
+//        });
+        // It doesnt matter how large the box becomes, since it is the last element.
+        // If it is needed, above the possible solution for dynamic sizing.
+        webView.setPrefHeight(10000);
+
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
 
@@ -229,6 +259,12 @@ public class DetailVolunteer implements Screen {
 
     private void goToScreenEditMatch(VolunteerMatchKey volunteerMatchKey) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_MATCH, volunteerMatchKey,
+                false, true);
+    }
+
+    @FXML
+    private void goToScreenEditLog() {
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_EDIT_LOG, volunteerExtId,
                 false, true);
     }
 }

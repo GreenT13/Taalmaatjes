@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteer extends TableImpl<VolunteerRecord> {
 
-    private static final long serialVersionUID = 990138406;
+    private static final long serialVersionUID = -1912819164;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEER</code>
@@ -123,6 +123,11 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.HOUSENR</code>.
      */
     public final TableField<VolunteerRecord, String> HOUSENR = createField("HOUSENR", org.jooq.impl.SQLDataType.VARCHAR(10), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.LOG</code>.
+     */
+    public final TableField<VolunteerRecord, String> LOG = createField("LOG", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>PUBLIC.VOLUNTEER</code> table reference

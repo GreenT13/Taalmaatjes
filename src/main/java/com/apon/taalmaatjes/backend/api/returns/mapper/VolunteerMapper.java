@@ -40,6 +40,7 @@ public class VolunteerMapper {
         volunteerReturn.setPostalCode(volunteerPojo.getPostalcode());
         volunteerReturn.setStreetname(volunteerPojo.getStreetname());
         volunteerReturn.setHouseNr(volunteerPojo.getHousenr());
+        volunteerReturn.setLog(volunteerPojo.getLog());
     }
 
     private void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
@@ -111,6 +112,7 @@ public class VolunteerMapper {
         volunteerPojo.setCity(volunteerReturn.getCity());
         volunteerPojo.setStreetname(volunteerReturn.getStreetname());
         volunteerPojo.setHousenr(volunteerReturn.getHouseNr());
+        volunteerPojo.setLog(volunteerReturn.getLog());
 
         return volunteerPojo;
     }

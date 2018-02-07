@@ -24,6 +24,7 @@ create table Volunteer (
   city varchar(100),
   streetName varchar(100),
   houseNr varchar(10),
+  log clob,
   constraint "Volu_PK" primary key (volunteerId),
   constraint "Volu_ExtId" unique (externalIdentifier)
 );

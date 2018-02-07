@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteerPojo implements Serializable {
 
-    private static final long serialVersionUID = 1421748776;
+    private static final long serialVersionUID = -1801888296;
 
     private Integer volunteerid;
     private String  externalidentifier;
@@ -39,6 +39,7 @@ public class VolunteerPojo implements Serializable {
     private String  city;
     private String  streetname;
     private String  housenr;
+    private String  log;
 
     public VolunteerPojo() {}
 
@@ -57,6 +58,7 @@ public class VolunteerPojo implements Serializable {
         this.city = value.city;
         this.streetname = value.streetname;
         this.housenr = value.housenr;
+        this.log = value.log;
     }
 
     public VolunteerPojo(
@@ -73,7 +75,8 @@ public class VolunteerPojo implements Serializable {
         String  postalcode,
         String  city,
         String  streetname,
-        String  housenr
+        String  housenr,
+        String  log
     ) {
         this.volunteerid = volunteerid;
         this.externalidentifier = externalidentifier;
@@ -89,6 +92,7 @@ public class VolunteerPojo implements Serializable {
         this.city = city;
         this.streetname = streetname;
         this.housenr = housenr;
+        this.log = log;
     }
 
     public Integer getVolunteerid() {
@@ -203,6 +207,14 @@ public class VolunteerPojo implements Serializable {
         this.housenr = housenr;
     }
 
+    public String getLog() {
+        return this.log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("VolunteerPojo (");
@@ -221,6 +233,7 @@ public class VolunteerPojo implements Serializable {
         sb.append(", ").append(city);
         sb.append(", ").append(streetname);
         sb.append(", ").append(housenr);
+        sb.append(", ").append(log);
 
         sb.append(")");
         return sb.toString();

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
 
 <HBox stylesheets="@DetailVolunteer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer">
     <children>
@@ -179,7 +180,7 @@
                   <HBox>
                      <children>
                               <Label styleClass="largeFont" text="Actief " />
-                        <Hyperlink fx:id="hyperlinkChangeActive" onAction="#goToScreenAddInstance" styleClass="largeFont" text="(toevoegen)" />
+                        <Hyperlink onAction="#goToScreenAddInstance" styleClass="largeFont" text="(toevoegen)" />
                      </children>
                   </HBox>
                         <VBox fx:id="vboxActive" />
@@ -193,7 +194,7 @@
                   <HBox>
                      <children>
                             <Label styleClass="largeFont" text="Koppelingen " />
-                        <Hyperlink fx:id="hyperlinkChangeActive1" onAction="#goToScreenAddMatch" styleClass="largeFont" text="(toevoegen)" />
+                        <Hyperlink onAction="#goToScreenAddMatch" styleClass="largeFont" text="(toevoegen)" />
                      </children>
                   </HBox>
                       <VBox fx:id="vboxMatch" />
@@ -202,6 +203,20 @@
                       <Insets top="10.0" />
                    </padding>
                 </VBox>
+            <VBox>
+               <children>
+                  <HBox>
+                     <children>
+                        <Label styleClass="largeFont" text="Logboek " />
+                        <Hyperlink onAction="#goToScreenEditLog" styleClass="largeFont" text="(wijzigen)" />
+                     </children>
+                  </HBox>
+                  <WebView fx:id="webView" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
             </children>
         </VBox>
     </children>

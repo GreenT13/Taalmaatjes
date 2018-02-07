@@ -163,4 +163,11 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
     public List<VolunteerPojo> fetchByHousenr(String... values) {
         return fetch(Volunteer.VOLUNTEER.HOUSENR, values);
     }
+
+    /**
+     * Fetch records that have <code>LOG IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByLog(String... values) {
+        return fetch(Volunteer.VOLUNTEER.LOG, values);
+    }
 }

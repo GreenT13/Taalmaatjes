@@ -19,6 +19,7 @@ public class VolunteerReturn {
     private String city;
     private String streetname;
     private String houseNr;
+    private String log;
 
     // Variables determined by logic.
     private Date activeUntil;
@@ -166,5 +167,13 @@ public class VolunteerReturn {
 
     public void setListVolunteerMatch(List<VolunteerMatchReturn> listVolunteerMatch) {
         this.listVolunteerMatch = listVolunteerMatch;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 }

@@ -22,6 +22,7 @@ public class FxmlLocation {
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD, VOLUNTEERS_ADD);
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD_MATCH, VOLUNTEERS_ADD_MATCH);
         mapEnumFxml.put(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, VOLUNTEERS_ADD_INSTANCE);
+        mapEnumFxml.put(ScreenEnum.VOLUNTEERS_EDIT_LOG, VOLUNTEERS_EDIT_LOG);
 
         mapEnumFxml.put(ScreenEnum.STUDENTS_OVERVIEW, STUDENTS_OVERVIEW);
         mapEnumFxml.put(ScreenEnum.STUDENTS_ADD, STUDENTS_ADD);
@@ -40,6 +41,7 @@ public class FxmlLocation {
     private final static String VOLUNTEERS_ADD = "com/apon/taalmaatjes/frontend/tabs/volunteers/add/AddVolunteer";
     private final static String VOLUNTEERS_ADD_MATCH = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/match/AddVolunteerMatch";
     private final static String VOLUNTEERS_ADD_INSTANCE = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/instance/AddVolunteerInstance";
+    private final static String VOLUNTEERS_EDIT_LOG = "com/apon/taalmaatjes/frontend/tabs/volunteers/detail/log/EditLog";
 
     // Students
     private final static String STUDENTS_OVERVIEW = "com/apon/taalmaatjes/frontend/tabs/students/Students";

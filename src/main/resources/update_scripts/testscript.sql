@@ -3,7 +3,13 @@ insert into Volunteer (VOLUNTEERID, EXTERNALIDENTIFIER, FIRSTNAME, INSERTION, LA
   (2, '1002', 'Alain', 'van', 'Schijndel', '0001-01-01', 'geknummer', 'emailzonderapenstaartje', false);
 
 insert into volunteerinstance (VOLUNTEERID, VOLUNTEERINSTANCEID, EXTERNALIDENTIFIER, DATESTART, DATEEND) values
-  (1, 1, '1', '2018-01-01', null);
+  (1, 1, '1', '2018-01-01', null),
+  (1, 2, '2', '2018-01-01', null),
+(1, 3, '3', '2018-01-01', null),
+(1, 4, '4', '2018-01-01', null),
+(1, 5, '5', '2018-01-01', null),
+(1, 6, '6', '2018-01-01', null),
+(1, 7, '7', '2018-01-01', null);
 
 insert into STUDENT (STUDENTID, EXTERNALIDENTIFIER, FIRSTNAME, LASTNAME, ISGROUP, ISLOOKINGFORVOLUNTEER) VALUES
   (1, '4001', 'Cursie', 'Taal', false, true),
