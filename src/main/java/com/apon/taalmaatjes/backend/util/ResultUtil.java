@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.backend.util;
 
 import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.log.Log;
 
 public class ResultUtil {
 
@@ -14,6 +15,8 @@ public class ResultUtil {
         result.setErrorMessage(errorCode);
         result.setE(e);
 
+        // Log the error so we can see what the user has done.
+        Log.logError(errorCode, e);
         return result;
     }
 

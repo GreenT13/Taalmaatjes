@@ -134,7 +134,7 @@ public class AddVolunteerMatch implements Screen {
             showError(ResultUtil.createError("DetailVolunteer.addMatch.wrongStudent"));
         }
 
-        Result result = StudentAPI.getInstance().get(externalIdentifier);
+        Result result = StudentAPI.getInstance().getStudent(externalIdentifier);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
@@ -194,7 +194,7 @@ public class AddVolunteerMatch implements Screen {
             inputDateEnd.setValue(volunteerMatchReturn.getDateEnd().toLocalDate());
         }
 
-        Result result = StudentAPI.getInstance().get(volunteerMatchReturn.getStudentExtId());
+        Result result = StudentAPI.getInstance().getStudent(volunteerMatchReturn.getStudentExtId());
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

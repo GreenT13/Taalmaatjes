@@ -59,7 +59,7 @@ public class DetailStudent implements Screen {
      * Controller is initialized before volunteerId is set, therefore we don't use @FXML here.
      */
     private void initializeValues() {
-        Result result = StudentAPI.getInstance().get(studentExtId);
+        Result result = StudentAPI.getInstance().getStudent(studentExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

@@ -3,5 +3,11 @@ insert into Volunteer (VOLUNTEERID, EXTERNALIDENTIFIER, FIRSTNAME, INSERTION, LA
   (2, '1002', 'Alain', 'van', 'Schijndel', '0001-01-01', 'geknummer', 'emailzonderapenstaartje', false);
 
 insert into volunteerinstance (VOLUNTEERID, VOLUNTEERINSTANCEID, EXTERNALIDENTIFIER, DATESTART, DATEEND) values
-  (1, 0, '2001', '2017-01-01', '2017-05-04'),
-  (1, 1, '2002', '2018-01-01', null);
+  (1, 1, '1', '2018-01-01', null);
+
+insert into STUDENT (STUDENTID, EXTERNALIDENTIFIER, FIRSTNAME, LASTNAME, ISGROUP, ISLOOKINGFORVOLUNTEER) VALUES
+  (1, '4001', 'Cursie', 'Taal', false, true),
+  (2, '4002', null, 'Groep 5A', true, false);
+
+insert into VOLUNTEERMATCH (VOLUNTEERID, VOLUNTEERMATCHID, EXTERNALIDENTIFIER, STUDENTID, DATESTART, DATEEND) values
+  (1, 1, '3001', 1, '2018-01-01', null);

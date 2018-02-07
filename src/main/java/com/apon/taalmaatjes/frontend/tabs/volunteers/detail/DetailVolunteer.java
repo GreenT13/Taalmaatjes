@@ -2,7 +2,6 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
 import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
-import com.apon.taalmaatjes.backend.api.VolunteerMatchAPI;
 import com.apon.taalmaatjes.backend.api.returns.*;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
@@ -171,7 +170,7 @@ public class DetailVolunteer implements Screen {
         hyperlink.setOnAction(event -> goToScreenEditMatch(volunteerMatchKey));
 
         // Create the label with the correct text.
-        Result result = StudentAPI.getInstance().get(volunteerMatchReturn.getStudentExtId());
+        Result result = StudentAPI.getInstance().getStudent(volunteerMatchReturn.getStudentExtId());
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

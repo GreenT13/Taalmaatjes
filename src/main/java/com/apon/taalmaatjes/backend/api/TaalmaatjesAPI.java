@@ -6,7 +6,7 @@ import com.apon.taalmaatjes.backend.util.ResultUtil;
 public class TaalmaatjesAPI {
     private static TaalmaatjesAPI ourInstance = new TaalmaatjesAPI();
     private final static String VERSION_NUMBER = "v0.1";
-    private final static String RELEASE_DATE = "2018-02-04";
+    private final static String RELEASE_DATE = "2018-02-07";
 
     public static TaalmaatjesAPI getInstance() {
         return ourInstance;

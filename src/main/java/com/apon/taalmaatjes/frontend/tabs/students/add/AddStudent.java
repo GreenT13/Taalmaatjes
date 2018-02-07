@@ -59,7 +59,7 @@ public class AddStudent implements Screen {
         StudentReturn studentReturn = convertControlsToPojo();
         if (studentExtId == null) {
             // Add a new student.
-            Result result = StudentAPI.getInstance().add(studentReturn);
+            Result result = StudentAPI.getInstance().addStudent(studentReturn);
 
             if (result == null || result.hasErrors()) {
                 showError(result);
@@ -71,7 +71,7 @@ public class AddStudent implements Screen {
             studentReturn.setExternalIdentifier(studentExtId);
 
             // Update the volunteer.
-            Result result = StudentAPI.getInstance().update(studentReturn);
+            Result result = StudentAPI.getInstance().updateStudent(studentReturn);
 
             if (result == null || result.hasErrors()) {
                 showError(result);
@@ -97,7 +97,7 @@ public class AddStudent implements Screen {
     public void setObject(Object studentExtId) {
         this.studentExtId = (String) studentExtId;
 
-        Result result = StudentAPI.getInstance().get(this.studentExtId);
+        Result result = StudentAPI.getInstance().getStudent(this.studentExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

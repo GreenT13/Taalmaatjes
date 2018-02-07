@@ -30,8 +30,7 @@ public class VersionManagement {
 
     private final static List<String> ALL_SCRIPT_NAMES = Arrays.asList(
             // Remove this testscript when done testing!
-            "testscript",
-            "testscript2");
+            "testscript");
     private final static String CREATE_TABLE_SCRIPT = "20180105_CreateTables";
     private final static String LOCATION = "/update_scripts";
 

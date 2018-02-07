@@ -1,12 +1,10 @@
 package com.apon.taalmaatjes.backend.api;
 
-import com.apon.taalmaatjes.backend.api.returns.*;
-import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerInstanceMapper;
+import com.apon.taalmaatjes.backend.api.returns.Result;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
-import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMatchMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
-import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
 import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
@@ -16,7 +14,6 @@ import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +45,7 @@ public class VolunteerAPI {
         // First check if the externalIdentifier is valid.
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerAPI.error.noVolunteerExtIdFound");
         }
 
         // Mapper to create the output.
@@ -85,10 +82,10 @@ public class VolunteerAPI {
 
         // Check if it is a valid volunteer.
         if (volunteerReturn.getDateOfBirth() == null) {
-            return ResultUtil.createError("VolunteerAPI.update.error.fillDateOfBirth");
+            return ResultUtil.createError("VolunteerAPI.error.fillDateOfBirth");
         }
         if (volunteerReturn.getLastName() == null) {
-            return ResultUtil.createError("VolunteerAPI.update.error.fillLastName");
+            return ResultUtil.createError("VolunteerAPI.error.fillLastName");
         }
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
@@ -98,7 +95,7 @@ public class VolunteerAPI {
         VolunteerPojo volunteerPojo = volunteerMapper.getPojo(null);
         if (!volunteerMyDao.insertPojo(volunteerPojo)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.add.error.insertVolunteer");
+            return ResultUtil.createError("VolunteerAPI.addVolunteer.error.insertVolunteer");
         }
 
         // Volunteer is active from today.
@@ -108,7 +105,7 @@ public class VolunteerAPI {
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
         if (!volunteerInstanceMyDao.insertPojo(volunteerinstancePojo)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.add.error.insertVolunteerInstance");
+            return ResultUtil.createError("VolunteerAPI.addVolunteer.error.insertVolunteerInstance");
         }
 
         // Commit, close and return.
@@ -136,19 +133,19 @@ public class VolunteerAPI {
 
         // Check if it is a valid volunteer.
         if (volunteerReturn.getDateOfBirth() == null) {
-            return ResultUtil.createError("VolunteerAPI.update.error.fillDateOfBirth");
+            return ResultUtil.createError("VolunteerAPI.error.fillDateOfBirth");
         }
         if (volunteerReturn.getExternalIdentifier() == null) {
-            return ResultUtil.createError("VolunteerAPI.update.error.fillExtId");
+            return ResultUtil.createError("VolunteerAPI.error.fillVolunteerExtId");
         }
         if (volunteerReturn.getLastName() == null) {
-            return ResultUtil.createError("VolunteerAPI.update.error.fillLastName");
+            return ResultUtil.createError("VolunteerAPI.error.fillLastName");
         }
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerReturn.getExternalIdentifier());
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerAPI.error.noVolunteerExtIdFound");
         }
 
         // Volunteer is valid, so we map return to pojo.

@@ -26,23 +26,23 @@ public class StudentAPI {
 
     /**
      * Get a student based on the external identifier.
-     * @param externalIdentifier The external identifier from a student.
-     * @return StudentReturn
+     * @param studentExtId The external identifier from a student.
+     * @return VolunteerReturn
      */
-    public Result get(String externalIdentifier) {
+    public Result getStudent(String studentExtId) {
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
 
-        Log.logDebug("Start StudentAPI.getVolunteer for externalIdentifier " + externalIdentifier);
+        Log.logDebug("Start StudentAPI.getStudent for studentExtId " + studentExtId);
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
 
-        // First check if the externalIdentifier is valid.
-        Integer studentId = studentMyDao.getIdFromExtId(externalIdentifier);
+        // First check if the studentExtId is valid.
+        Integer studentId = studentMyDao.getIdFromExtId(studentExtId);
         if (studentId == null) {
-            return ResultUtil.createError("StudentAPI.error.noExtIdFound");
+            return ResultUtil.createError("StudentAPI.error.noStudentExtIdFound");
         }
 
         // Mapper to create the output.
@@ -57,54 +57,8 @@ public class StudentAPI {
 
         // Close and return.
         context.close();
-        Log.logDebug("End StudentAPI.getVolunteer");
+        Log.logDebug("End StudentAPI.getStudent");
         return ResultUtil.createOk(studentMapper.getStudentReturn());
-    }
-
-    /**
-     * Update a student based on frontend object.
-     * @param studentReturn The student.
-     * @return nothing
-     */
-    public Result update(StudentReturn studentReturn) {
-        Context context;
-        try {context = new Context();} catch (SQLException e) {
-            return ResultUtil.createError("Context.error.create", e);
-        }
-        Log.logDebug("Start StudentAPI.updateVolunteer for externalIdentifier " + studentReturn.getExternalIdentifier());
-
-        // Check if it is a valid volunteer.
-        if (studentReturn.getLookingForVolunteer() == null) {
-            return ResultUtil.createError("StudentAPI.update.error.fillIsLookingForVolunteer");
-        }
-        if (studentReturn.getExternalIdentifier() == null) {
-            return ResultUtil.createError("StudentAPI.update.error.fillExtId");
-        }
-        if (studentReturn.getLastName() == null) {
-            return ResultUtil.createError("StudentAPI.update.error.fillLastName");
-        }
-
-        StudentMyDao studentMyDao = new StudentMyDao(context);
-        Integer studentId = studentMyDao.getIdFromExtId(studentReturn.getExternalIdentifier());
-        if (studentId == null) {
-            return ResultUtil.createError("StudentAPI.error.noExtIdFound");
-        }
-
-        // Volunteer is valid, so we map return to pojo.
-        StudentMapper studentMapper = new StudentMapper(studentReturn);
-        StudentPojo studentPojo = studentMapper.getPojo(studentId);
-
-        studentMyDao.update(studentPojo);
-
-        // Commit, close and return.
-        try {
-            context.getConnection().commit();
-        } catch (SQLException e) {
-            return ResultUtil.createError("Context.error.commit", e);
-        }
-        context.close();
-        Log.logDebug("End StudentAPI.updateVolunteer");
-        return ResultUtil.createOk();
     }
 
     /**
@@ -112,7 +66,7 @@ public class StudentAPI {
      * @param studentReturn The student.
      * @return external identifier from the added student.
      */
-    public Result add(StudentReturn studentReturn) {
+    public Result addStudent(StudentReturn studentReturn) {
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
@@ -121,10 +75,10 @@ public class StudentAPI {
 
         // Check if it is a valid volunteer.
         if (studentReturn.getLookingForVolunteer() == null) {
-            return ResultUtil.createError("StudentAPI.add.error.fillIsLookingForVolunteer");
+            return ResultUtil.createError("StudentAPI.error.fillIsLookingForVolunteer");
         }
         if (studentReturn.getLastName() == null) {
-            return ResultUtil.createError("StudentAPI.add.error.fillLastName");
+            return ResultUtil.createError("StudentAPI.error.fillLastName");
         }
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
@@ -144,8 +98,54 @@ public class StudentAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End StudentAPI.addVolunteer");
+        Log.logDebug("End StudentAPI.addStudent");
         return ResultUtil.createOk(studentPojo.getExternalidentifier());
+    }
+
+    /**
+     * Update a student based on frontend object.
+     * @param studentReturn The student.
+     * @return nothing
+     */
+    public Result updateStudent(StudentReturn studentReturn) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start StudentAPI.updateStudent for studentExtId " + studentReturn.getExternalIdentifier());
+
+        // Check if it is a valid volunteer.
+        if (studentReturn.getLookingForVolunteer() == null) {
+            return ResultUtil.createError("StudentAPI.error.fillIsLookingForVolunteer");
+        }
+        if (studentReturn.getExternalIdentifier() == null) {
+            return ResultUtil.createError("StudentAPI.error.fillStudentExtId");
+        }
+        if (studentReturn.getLastName() == null) {
+            return ResultUtil.createError("StudentAPI.error.fillLastName");
+        }
+
+        StudentMyDao studentMyDao = new StudentMyDao(context);
+        Integer studentId = studentMyDao.getIdFromExtId(studentReturn.getExternalIdentifier());
+        if (studentId == null) {
+            return ResultUtil.createError("StudentAPI.error.noStudentExtIdFound");
+        }
+
+        // Volunteer is valid, so we map return to pojo.
+        StudentMapper studentMapper = new StudentMapper(studentReturn);
+        StudentPojo studentPojo = studentMapper.getPojo(studentId);
+
+        studentMyDao.update(studentPojo);
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End StudentAPI.updateStudent");
+        return ResultUtil.createOk();
     }
 
     /**
@@ -180,7 +180,7 @@ public class StudentAPI {
         }
 
         // Return the list.
-        Log.logDebug("End StudentAPI.searchByInput");
+        Log.logDebug("End StudentAPI.advancedSearch");
         return ResultUtil.createOk(studentReturns);
     }
 }

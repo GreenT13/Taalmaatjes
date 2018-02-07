@@ -13,7 +13,6 @@ import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
-import org.joda.time.DateTime;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -44,14 +43,14 @@ public class VolunteerMatchAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerExtIdFound");
         }
 
         // Get volunteerMatchId.
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
         Integer volunteerMatchId = volunteerMatchMyDao.getIdFromExtId(volunteerId, volunteerMatchExtId);
         if (volunteerMatchId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noVolunteerMatchExtIdFound");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerMatchExtIdFound");
         }
 
         // Get the volunteerInstancePojo
@@ -64,36 +63,36 @@ public class VolunteerMatchAPI {
         volunteerMatchMapper.setStudent(studentMyDao.getExtIdFromid(volunteermatchPojo.getStudentid()));
 
         context.close();
-        Log.logDebug("End VolunteerAPI.getVolunteerMatch");
+        Log.logDebug("End VolunteerMatchAPI.getVolunteerMatch");
         return ResultUtil.createOk(volunteerMatchMapper.getVolunteerMatchReturn());
     }
 
     /**
      * Add a new volunteer instance.
-     * @param volunteerMatchReturn The instance to add.
+     * @param volunteerMatchReturn The instance to addStudent.
      * @return Nothing.
      */
     public Result addVolunteerMatch(VolunteerMatchReturn volunteerMatchReturn) {
         if (volunteerMatchReturn.getDateStart() == null) {
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.noDateStart");
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillDateStart");
         }
 
         if (volunteerMatchReturn.getDateEnd() != null &&
                 volunteerMatchReturn.getDateStart().compareTo(volunteerMatchReturn.getDateEnd()) > 0) {
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.dateStartAfterDateEnd");
+            return ResultUtil.createError("VolunteerMatchAPI.error.dateStartAfterDateEnd");
         }
 
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
-        Log.logDebug("Start VolunteerAPI.addVolunteerMatch volunteerExtId " + volunteerMatchReturn.getVolunteerExtId());
+        Log.logDebug("Start VolunteerMatchAPI.addVolunteerMatch volunteerExtId " + volunteerMatchReturn.getVolunteerExtId());
 
         // Get volunteerId.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerMatchReturn.getVolunteerExtId());
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerExtIdFound");
         }
 
         // Get studentId.
@@ -106,7 +105,7 @@ public class VolunteerMatchAPI {
         // Handle the complete adding / merging in another function.
         if (!isVolunteerMatchValidAndAdd(context, volunteerId, studentId, volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd(), null)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.invalidMatch");
+            return ResultUtil.createError("VolunteerMatchAPI.addVolunteerMatch.error.invalidMatch");
         }
 
         // Commit, close and return.
@@ -116,7 +115,7 @@ public class VolunteerMatchAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End VolunteerAPI.toggleMatch");
+        Log.logDebug("End VolunteerMatchAPI.addVolunteerMatch");
         return ResultUtil.createOk();
     }
 
@@ -127,20 +126,24 @@ public class VolunteerMatchAPI {
      */
     public Result updateVolunteerMatch(VolunteerMatchReturn volunteerMatchReturn) {
         if (volunteerMatchReturn.getDateStart() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerMatch.noDateStart");
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillDateStart");
         }
 
         if (volunteerMatchReturn.getDateEnd() != null &&
                 volunteerMatchReturn.getDateStart().compareTo(volunteerMatchReturn.getDateEnd()) > 0) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerMatch.dateStartAfterDateEnd");
+            return ResultUtil.createError("VolunteerMatchAPI.error.dateStartAfterDateEnd");
         }
 
         if (volunteerMatchReturn.getVolunteerExtId() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerMatch.noVolunteerExtId");
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillVolunteerExtId");
         }
 
         if (volunteerMatchReturn.getExternalIdentifier() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerMatch.noVolunteerMatchExtId");
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillVolunteerMatchExtId");
+        }
+
+        if (volunteerMatchReturn.getStudentExtId() == null) {
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillStudentExtId");
         }
 
         Context context;
@@ -153,14 +156,14 @@ public class VolunteerMatchAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerMatchReturn.getVolunteerExtId());
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerExtIdFound");
         }
 
         // Get volunteerMatchId.
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
         Integer volunteerMatchId = volunteerMatchMyDao.getIdFromExtId(volunteerId, volunteerMatchReturn.getExternalIdentifier());
         if (volunteerMatchId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noVolunteerMatchExtIdFound.");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerMatchExtIdFound.");
         }
 
         // Get studentId.
@@ -173,7 +176,7 @@ public class VolunteerMatchAPI {
         // Handle the complete adding / merging in another function.
         if (!isVolunteerMatchValidAndAdd(context, volunteerId, studentId, volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd(), volunteerMatchId)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerMatch.invalidInstance");
+            return ResultUtil.createError("VolunteerMatchAPI.updateVolunteerMatch.error.invalidMatch");
         }
 
         // Commit, close and return.
@@ -183,7 +186,7 @@ public class VolunteerMatchAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End VolunteerAPI.toggleMatch");
+        Log.logDebug("End VolunteerAPI.updateVolunteerMatch");
         return ResultUtil.createOk();
     }
 
@@ -196,7 +199,7 @@ public class VolunteerMatchAPI {
      * @param studentId .
      * @param dateStart .
      * @param dateEnd .
-     * @param volunteerMatchId If this value is non-null, algorithm assumes it is an update instead of insert.
+     * @param volunteerMatchId If this value is non-null, algorithm assumes it is an updateStudent instead of insert.
      * @return boolean
      */
     private boolean isVolunteerMatchValidAndAdd(Context context, int volunteerId, int studentId, Date dateStart, Date dateEnd, Integer volunteerMatchId) {
@@ -207,7 +210,7 @@ public class VolunteerMatchAPI {
         // if [dateStart,dateEnd] can be merged into [A,B] with A=dateEnd then mergeAfterVolunteerMatchId will be A.
         Integer mergeBeforeVolunteerMatchId = null;
         for (VolunteermatchPojo volunteermatchPojo : volunteerMatchMyDao.getMatchForVolunteerAndStudent(volunteerId, studentId)) {
-            // If we update instead of insert, we want to 'exclude' the to-be-updated volunteer match from the search.
+            // If we updateStudent instead of insert, we want to 'exclude' the to-be-updated volunteer match from the search.
             if (volunteerMatchId != null && volunteermatchPojo.getVolunteermatchid().equals(volunteerMatchId)) {
                 continue;
             }

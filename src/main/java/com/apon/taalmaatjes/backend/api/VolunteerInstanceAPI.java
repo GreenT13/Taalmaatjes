@@ -3,7 +3,6 @@ package com.apon.taalmaatjes.backend.api;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerInstanceMapper;
-import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
@@ -46,14 +45,14 @@ public class VolunteerInstanceAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerExtIdFound");
         }
 
         // Get volunteerInstanceId.
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
         Integer volunteerInstanceId = volunteerInstanceMyDao.getIdFromExtId(volunteerId, volunteerInstanceExtId);
         if (volunteerInstanceId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noVolunteerInstanceExtIdFound");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerInstanceExtIdFound");
         }
 
         // Get the volunteerInstancePojo
@@ -62,23 +61,23 @@ public class VolunteerInstanceAPI {
         volunteerInstanceMapper.setVolunteerInstance(volunteerinstancePojo);
 
         context.close();
-        Log.logDebug("End VolunteerAPI.updateVolunteer");
+        Log.logDebug("End VolunteerAPI.getVolunteerInstance");
         return ResultUtil.createOk(volunteerInstanceMapper.getVolunteerInstanceReturn());
     }
 
     /**
      * Add a new volunteer instance.
-     * @param volunteerInstanceReturn The instance to add.
+     * @param volunteerInstanceReturn The instance to addStudent.
      * @return Nothing.
      */
     public Result addVolunteerInstance(VolunteerInstanceReturn volunteerInstanceReturn) {
         if (volunteerInstanceReturn.getDateStart() == null) {
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.noDateStart");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillDateStart");
         }
 
         if (volunteerInstanceReturn.getDateEnd() != null &&
                 volunteerInstanceReturn.getDateStart().compareTo(volunteerInstanceReturn.getDateEnd()) > 0) {
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.dateStartAfterDateEnd");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.dateStartAfterDateEnd");
         }
 
         Context context;
@@ -91,13 +90,13 @@ public class VolunteerInstanceAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerInstanceReturn.getVolunteerExtId());
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerExtIdFound");
         }
 
         // Handle the complete adding / merging in another function.
         if (!isVolunteerInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), null)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.addVolunteerMatch.invalidInstance");
+            return ResultUtil.createError("VolunteerInstanceAPI.addVolunteerInstance.error.invalidInstance");
         }
 
         // Commit, close and return.
@@ -118,20 +117,20 @@ public class VolunteerInstanceAPI {
      */
     public Result updateVolunteerInstance(VolunteerInstanceReturn volunteerInstanceReturn) {
         if (volunteerInstanceReturn.getDateStart() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerInstance.noDateStart");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillDateStart");
         }
 
         if (volunteerInstanceReturn.getDateEnd() != null &&
                 volunteerInstanceReturn.getDateStart().compareTo(volunteerInstanceReturn.getDateEnd()) > 0) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerInstance.dateStartAfterDateEnd");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.dateStartAfterDateEnd");
         }
 
         if (volunteerInstanceReturn.getVolunteerExtId() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerInstance.noVolunteerExtId");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillVolunteerExtId");
         }
 
         if (volunteerInstanceReturn.getExternalIdentifier() == null) {
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerInstance.noVolunteerInstanceExtId");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillVolunteerInstanceExtId");
         }
 
         Context context;
@@ -144,20 +143,20 @@ public class VolunteerInstanceAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerInstanceReturn.getVolunteerExtId());
         if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerExtIdFound");
         }
 
         // Get volunteerInstanceId
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
         Integer volunteerInstanceId = volunteerInstanceMyDao.getIdFromExtId(volunteerId, volunteerInstanceReturn.getExternalIdentifier());
         if (volunteerInstanceId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noVolunteerInstanceExtIdFound.");
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerInstanceExtIdFound.");
         }
 
         // Handle the complete adding / merging in another function.
         if (!isVolunteerInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), volunteerInstanceId)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerAPI.updateVolunteerInstance.invalidInstance");
+            return ResultUtil.createError("VolunteerInstanceAPI.updateVolunteerInstance.error.invalidInstance");
         }
 
         // Commit, close and return.
@@ -167,7 +166,7 @@ public class VolunteerInstanceAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End VolunteerAPI.toggleMatch");
+        Log.logDebug("End VolunteerAPI.updateVolunteerInstance");
         return ResultUtil.createOk();
     }
 
@@ -289,7 +288,7 @@ public class VolunteerInstanceAPI {
         } else {
             volunteerinstancePojo.setVolunteerinstanceid(volunteerInstanceId);
 
-            // Check that we can actually update.
+            // Check that we can actually updateStudent.
             List<Integer> merged = new ArrayList();
             if (mergeAfterVolunteerInstanceId != null) {
                 merged.add(mergeAfterVolunteerInstanceId);
@@ -311,7 +310,7 @@ public class VolunteerInstanceAPI {
      * Check if all the matches are still inside instances when we edit this instance.
      * @param context .
      * @param volunteerinstancePojo The new pojo.
-     * @return
+     * @return boolean
      */
     private boolean allMatchesAreInsideInstance(Context context, VolunteerinstancePojo volunteerinstancePojo, List<Integer> removeInstanceIds) {
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
@@ -320,7 +319,7 @@ public class VolunteerInstanceAPI {
 
         // Remove the merged from the list.
         List<VolunteerinstancePojo> removePojos = new ArrayList();
-        // Also remove the current pojo we are going to update, since we are going to "overwrite" this one.
+        // Also remove the current pojo we are going to updateStudent, since we are going to "overwrite" this one.
         removeInstanceIds.add(volunteerinstancePojo.getVolunteerinstanceid());
         for (VolunteerinstancePojo v : volunteerinstancePojos) {
             for (Integer i : removeInstanceIds) {
