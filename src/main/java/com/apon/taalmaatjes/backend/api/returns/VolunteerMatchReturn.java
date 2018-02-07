@@ -3,19 +3,11 @@ package com.apon.taalmaatjes.backend.api.returns;
 import java.sql.Date;
 
 public class VolunteerMatchReturn {
-    private VolunteerReturn volunteerReturn;
+    private String volunteerExtId;
     private String externalIdentifier;
-    private StudentReturn student;
+    private String studentExtId;
     private Date dateStart;
     private Date dateEnd;
-
-    public VolunteerReturn getVolunteerReturn() {
-        return volunteerReturn;
-    }
-
-    public void setVolunteerReturn(VolunteerReturn volunteerReturn) {
-        this.volunteerReturn = volunteerReturn;
-    }
 
     public String getExternalIdentifier() {
         return externalIdentifier;
@@ -23,14 +15,6 @@ public class VolunteerMatchReturn {
 
     public void setExternalIdentifier(String externalIdentifier) {
         this.externalIdentifier = externalIdentifier;
-    }
-
-    public StudentReturn getStudent() {
-        return student;
-    }
-
-    public void setStudent(StudentReturn student) {
-        this.student = student;
     }
 
     public Date getDateStart() {
@@ -47,5 +31,21 @@ public class VolunteerMatchReturn {
 
     public void setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
+    }
+
+    public String getVolunteerExtId() {
+        return volunteerExtId;
+    }
+
+    public void setVolunteerExtId(String volunteerExtId) {
+        this.volunteerExtId = volunteerExtId;
+    }
+
+    public String getStudentExtId() {
+        return studentExtId;
+    }
+
+    public void setStudentExtId(String studentExtId) {
+        this.studentExtId = studentExtId;
     }
 }

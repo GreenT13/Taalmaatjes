@@ -71,14 +71,14 @@ public class TransitionHandler {
         Log.logDebug("Start transitioning to screen " + screenEnum.toString());
 
         // Register the transition if it is actually part of the breadcrum path.
-        // Only add the transition if we actually have a new element to add.
+        // Only addVolunteer the transition if we actually have a new element to addVolunteer.
         // TODO: what if you didn't save node last time, but you want to now? Is this even desirable?
         if (canGoBack && (currentBreadcrum.isEmpty() ||
                 !currentBreadcrum.peek().getScreen().equals(mapCurrentScreen.get(currentTab)))) {
             Transition transition = new Transition();
             transition.setScreen(mapCurrentScreen.get(currentTab));
 
-            // Only add a node if you can also go back.
+            // Only addVolunteer a node if you can also go back.
             if (rememberCurrentNode) {
                 transition.setNode(mapEnumTab.get(currentTab).getContent());
             }

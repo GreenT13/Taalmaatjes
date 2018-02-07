@@ -1,9 +1,11 @@
 package com.apon.taalmaatjes.frontend.tabs.students.detail;
 
 import com.apon.taalmaatjes.backend.api.StudentAPI;
+import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.NameUtil;
@@ -95,7 +97,13 @@ public class DetailStudent implements Screen {
     }
 
     private void addMatchLine(VolunteerMatchReturn volunteerMatchReturn) {
-        String volunteerName = NameUtil.getVolunteerName(volunteerMatchReturn.getVolunteerReturn());
+        Result result = VolunteerAPI.getInstance().getVolunteer(volunteerMatchReturn.getVolunteerExtId());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        String volunteerName = NameUtil.getVolunteerName((VolunteerReturn) result.getResult());
 
         Label label = new Label();
         label.getStyleClass().add("labelMatch");

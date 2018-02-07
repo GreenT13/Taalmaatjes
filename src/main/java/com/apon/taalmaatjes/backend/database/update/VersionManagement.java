@@ -128,7 +128,7 @@ public class VersionManagement {
      * @return {@code true} if all steps succeed, else {@code false}.
      */
     private boolean runScript(String scriptName) {
-        // First add line to scriptlog
+        // First addVolunteer line to scriptlog
         ScriptlogPojo scriptlog = new ScriptlogPojo();
         scriptlog.setScriptname(scriptName);
         scriptlog.setTsstarted(DateTimeUtil.getCurrentTimestamp());

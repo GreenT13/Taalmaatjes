@@ -20,7 +20,7 @@ public class Taalmaatjes extends Application {
     private static boolean hasErrors = false;
 
     public static void main(String[] args) {
-        // First update the database.
+        // First updateVolunteer the database.
         try {
             Context context = new Context();
             if (!VersionManagement.getInstance().runUpdates(context)) {
@@ -28,7 +28,7 @@ public class Taalmaatjes extends Application {
             }
             context.close();
         } catch (Exception e) {
-            Log.logError("Could not update the database.", e);
+            Log.logError("Could not updateVolunteer the database.", e);
             return;
         }
 
@@ -64,7 +64,7 @@ public class Taalmaatjes extends Application {
         primaryStage.show();
 
         // This next line is probably not needed (in comments in case I need it later).
-        //sceneRoot.getStylesheets().add(getClass().getResource("Taalmaatjes.css").toExternalForm());
+        //sceneRoot.getStylesheets().addVolunteer(getClass().getResource("Taalmaatjes.css").toExternalForm());
     }
 
 }

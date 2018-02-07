@@ -44,7 +44,7 @@ public class VolunteerMapper {
 
     private void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
         VolunteerInstanceReturn volunteerInstanceReturn = new VolunteerInstanceReturn();
-        volunteerInstanceReturn.setVolunteerExternalIdentifier(volunteerReturn.getExternalIdentifier());
+        volunteerInstanceReturn.setVolunteerExtId(volunteerReturn.getExternalIdentifier());
         volunteerInstanceReturn.setExternalIdentifier(volunteerinstancePojo.getExternalidentifier());
         volunteerInstanceReturn.setDateStart(volunteerinstancePojo.getDatestart());
         volunteerInstanceReturn.setDateEnd(volunteerinstancePojo.getDateend());
@@ -72,7 +72,6 @@ public class VolunteerMapper {
 
     private void addMatch(VolunteermatchPojo volunteermatchPojo, StudentMyDao studentMyDao) {
         VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
-        volunteerMatchReturn.setVolunteerReturn(volunteerReturn);
         volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());
         volunteerMatchReturn.setDateStart(volunteermatchPojo.getDatestart());
         volunteerMatchReturn.setDateEnd(volunteermatchPojo.getDateend());
@@ -80,7 +79,7 @@ public class VolunteerMapper {
         // Set the student.
         StudentMapper studentMapper = new StudentMapper();
         studentMapper.setStudent(studentMyDao.fetchOneByStudentid(volunteermatchPojo.getStudentid()));
-        volunteerMatchReturn.setStudent(studentMapper.getStudentReturn());
+        volunteerMatchReturn.setStudentExtId(studentMapper.getStudentReturn().getExternalIdentifier());
 
         volunteerReturn.getListVolunteerMatch().add(volunteerMatchReturn);
     }

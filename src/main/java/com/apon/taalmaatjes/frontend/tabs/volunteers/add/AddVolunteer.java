@@ -70,7 +70,7 @@ public class AddVolunteer implements Screen {
         VolunteerReturn volunteerReturn = convertControlsToPojo();
         if (volunteerExtId == null) {
             // Add a new volunteer.
-            Result result = VolunteerAPI.getInstance().add(volunteerReturn);
+            Result result = VolunteerAPI.getInstance().addVolunteer(volunteerReturn);
 
             if (result == null || result.hasErrors()) {
                 showError(result);
@@ -82,7 +82,7 @@ public class AddVolunteer implements Screen {
             volunteerReturn.setExternalIdentifier(volunteerExtId);
 
             // Update the volunteer.
-            Result result = VolunteerAPI.getInstance().update(volunteerReturn);
+            Result result = VolunteerAPI.getInstance().updateVolunteer(volunteerReturn);
 
             if (result == null || result.hasErrors()) {
                 showError(result);

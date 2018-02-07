@@ -89,7 +89,7 @@ public class Students implements Screen {
     }
 
     private void clickedOnRow(Person person) {
-        // Clear selection model when out of the ChangeListener (so add runLater).
+        // Clear selection model when out of the ChangeListener (so addVolunteer runLater).
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 

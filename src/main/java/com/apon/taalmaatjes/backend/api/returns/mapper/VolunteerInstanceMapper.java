@@ -18,10 +18,6 @@ public class VolunteerInstanceMapper {
         return volunteerInstanceReturn;
     }
 
-    public void setVolunteerInstanceReturn(VolunteerInstanceReturn volunteerInstanceReturn) {
-        this.volunteerInstanceReturn = volunteerInstanceReturn;
-    }
-
     public VolunteerinstancePojo getPojo(Integer volunteerId, Integer volunteerInstanceId) {
         VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
         volunteerinstancePojo.setVolunteerid(volunteerId);

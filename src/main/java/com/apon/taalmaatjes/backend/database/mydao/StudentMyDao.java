@@ -73,6 +73,14 @@ public class StudentMyDao extends StudentDao {
                 .fetchOne(0, Integer.class);
     }
 
+    public String getExtIdFromid(int studentId) {
+        return using(configuration())
+                .select(Student.STUDENT.EXTERNALIDENTIFIER)
+                .from(Student.STUDENT)
+                .where(Student.STUDENT.STUDENTID.eq(studentId))
+                .fetchOne(0, String.class);
+    }
+
     public boolean insertPojo(StudentPojo studentPojo) {
         if (!generateIds(studentPojo)) {
             // Some kind of logError message?
@@ -91,7 +99,7 @@ public class StudentMyDao extends StudentDao {
 
     /**
      * Count how many students have their first dateStart from a match between minimumDate and maximumDate.
-     * If isGroup is non-null, add criteria that it must match.
+     * If isGroup is non-null, addVolunteer criteria that it must match.
      * @param minimumDate Minimum start date.
      * @param maximumDate Maximum start date.
      * @param isGroup Whether Student.isGroup is true or false.
@@ -117,7 +125,7 @@ public class StudentMyDao extends StudentDao {
 
     /**
      * Count how many students are active for at least one day in the period minimumDate-maximumDate.
-     * If isGroup is non-null, add criteria that it must match.
+     * If isGroup is non-null, addVolunteer criteria that it must match.
      * A student is considered active on date X if there is some volunteerMatch for which holds:
      * 1. dateStart <= x
      * 2. dateEnd is null or x <= dateEnd

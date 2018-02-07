@@ -1,6 +1,6 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail.instance;
 
-import com.apon.taalmaatjes.backend.api.VolunteerAPI;
+import com.apon.taalmaatjes.backend.api.VolunteerInstanceAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
@@ -53,7 +53,7 @@ public class AddVolunteerInstance implements Screen {
         }
 
         // We are in edit mode. So retrieve information and prefill screen.
-        Result result = VolunteerAPI.getInstance().getVolunteerInstance(this.volunteerInstanceKey.getVolunteerExtId(), this.volunteerInstanceKey.getVolunteerInstanceExtId());
+        Result result = VolunteerInstanceAPI.getInstance().getVolunteerInstance(this.volunteerInstanceKey.getVolunteerExtId(), this.volunteerInstanceKey.getVolunteerInstanceExtId());
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
@@ -62,15 +62,14 @@ public class AddVolunteerInstance implements Screen {
         prefill((VolunteerInstanceReturn) result.getResult());
     }
 
-
     @FXML
     public void handleActionSave(ActionEvent actionEvent) {
         // Save or edit the match.
         Result result;
         if (volunteerInstanceKey.getVolunteerInstanceExtId() == null) {
-            result = VolunteerAPI.getInstance().addInstance(getReturn());
+            result = VolunteerInstanceAPI.getInstance().addVolunteerInstance(getReturn());
         } else {
-            result = VolunteerAPI.getInstance().editInstance(getReturn());
+            result = VolunteerInstanceAPI.getInstance().updateVolunteerInstance(getReturn());
         }
         if (result == null || result.hasErrors()) {
             showError(result);
@@ -89,7 +88,7 @@ public class AddVolunteerInstance implements Screen {
 
     private VolunteerInstanceReturn getReturn() {
         VolunteerInstanceReturn volunteerInstanceReturn = new VolunteerInstanceReturn();
-        volunteerInstanceReturn.setVolunteerExternalIdentifier(volunteerInstanceKey.getVolunteerExtId());
+        volunteerInstanceReturn.setVolunteerExtId(volunteerInstanceKey.getVolunteerExtId());
         volunteerInstanceReturn.setExternalIdentifier(volunteerInstanceKey.getVolunteerInstanceExtId());
         volunteerInstanceReturn.setDateStart(DateTimeUtil.convertLocalDateToSqlDate(inputDateStart.getValue()));
         volunteerInstanceReturn.setDateEnd(DateTimeUtil.convertLocalDateToSqlDate(inputDateEnd.getValue()));

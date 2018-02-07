@@ -1,10 +1,9 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail;
 
+import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
-import com.apon.taalmaatjes.backend.api.returns.Result;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
-import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.api.VolunteerMatchAPI;
+import com.apon.taalmaatjes.backend.api.returns.*;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.*;
@@ -163,21 +162,24 @@ public class DetailVolunteer implements Screen {
         hbox.getChildren().addAll(hyperlink, label);
         vboxMatch.getChildren().add(hbox);
 
-        // Determine whether the hyperlink should say "start" or "stop".
-        if (DateTimeUtil.isActiveTodayMinusOne(volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd())){
-            hyperlink.setText("(stop)");
-        } else {
-            hyperlink.setText("(start)");
-        }
+        VolunteerMatchKey volunteerMatchKey = new VolunteerMatchKey();
+        volunteerMatchKey.setVolunteerExtId(volunteerExtId);
+        volunteerMatchKey.setVolunteerMatchExtId(volunteerMatchReturn.getExternalIdentifier());
 
-        // Add the action to the hyperlink.
-        hyperlink.setUserData(volunteerMatchReturn.getExternalIdentifier());
-        hyperlink.setOnAction(event -> startStopMatch(volunteerMatchReturn.getExternalIdentifier()));
+        // Fix hyperlink
+        hyperlink.setText("(Wijzigen)");
+        hyperlink.setOnAction(event -> goToScreenEditMatch(volunteerMatchKey));
 
         // Create the label with the correct text.
-        String studentName = NameUtil.getStudentName(volunteerMatchReturn.getStudent());
+        Result result = StudentAPI.getInstance().get(volunteerMatchReturn.getStudentExtId());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        String studentName = NameUtil.getStudentName((StudentReturn) result.getResult());
         label.getStyleClass().add("labelMatch");
-        String text = "Heeft van " + volunteerMatchReturn.getDateStart() + " tot ";
+        String text = " Heeft van " + volunteerMatchReturn.getDateStart() + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu";
         } else {
@@ -220,30 +222,14 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     public void goToScreenAddMatch(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_MATCH,
-                volunteerExtId, false, true);
+        VolunteerMatchKey volunteerMatchKey = new VolunteerMatchKey();
+        volunteerMatchKey.setVolunteerExtId(volunteerExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_MATCH, volunteerMatchKey,
+                false, true);
     }
 
-
-    private void startStopMatch(String volunteerMatchExtId) {
-        Result result = VolunteerAPI.getInstance().toggleMatch(volunteerExtId, volunteerMatchExtId);
-        if (result == null || result.hasErrors()) {
-            showError(result);
-            return;
-        }
-
-        // Correctly handled the adding. Now refresh the output.
-        vboxMatch.getChildren().clear();
-        result = VolunteerAPI.getInstance().getVolunteer(volunteerExtId);
-        if (result == null || result.hasErrors()) {
-            showError(result);
-            return;
-        }
-        VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
-        for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
-            addMatchLine(volunteerMatchReturn);
-        }
-
-        hideError();
+    private void goToScreenEditMatch(VolunteerMatchKey volunteerMatchKey) {
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_MATCH, volunteerMatchKey,
+                false, true);
     }
 }

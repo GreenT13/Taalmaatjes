@@ -1,7 +1,7 @@
 package com.apon.taalmaatjes.frontend.tabs.volunteers.detail.match;
 
 import com.apon.taalmaatjes.backend.api.StudentAPI;
-import com.apon.taalmaatjes.backend.api.VolunteerAPI;
+import com.apon.taalmaatjes.backend.api.VolunteerMatchAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
@@ -10,6 +10,7 @@ import com.apon.taalmaatjes.backend.util.ResultUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.NameUtil;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.presentation.VolunteerMatchKey;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +28,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class AddVolunteerMatch implements Screen {
-    private String volunteerExtId;
+    private VolunteerMatchKey volunteerMatchKey;
 
     @FXML
     DatePicker inputDateStart, inputDateEnd;
@@ -60,8 +61,21 @@ public class AddVolunteerMatch implements Screen {
 
 
     @Override
-    public void setObject(Object volunteerExtId) {
-        this.volunteerExtId = (String) volunteerExtId;
+    public void setObject(Object volunteerMatchKey) {
+        this.volunteerMatchKey = (VolunteerMatchKey) volunteerMatchKey;
+
+        if (this.volunteerMatchKey.getVolunteerMatchExtId() == null) {
+            return;
+        }
+
+        // We are in edit mode. So retrieve information and prefill screen.
+        Result result = VolunteerMatchAPI.getInstance().getVolunteerMatch(this.volunteerMatchKey.getVolunteerExtId(), this.volunteerMatchKey.getVolunteerMatchExtId());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        prefill((VolunteerMatchReturn) result.getResult());
     }
 
     private void changeList(String oldValue, String newValue) {
@@ -136,9 +150,15 @@ public class AddVolunteerMatch implements Screen {
     }
 
     @FXML
-    public void handleActionSearch(ActionEvent actionEvent) {
+    public void handleActionSave(ActionEvent actionEvent) {
         // Save the match.
-        Result result = VolunteerAPI.getInstance().addMatch(volunteerExtId, getReturn());
+        Result result;
+        if (volunteerMatchKey.getVolunteerMatchExtId() == null) {
+            result = VolunteerMatchAPI.getInstance().addVolunteerMatch(getReturn());
+        }  else {
+            result = VolunteerMatchAPI.getInstance().updateVolunteerMatch(getReturn());
+        }
+
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
@@ -146,25 +166,42 @@ public class AddVolunteerMatch implements Screen {
 
         // Go back to the detail screen (only place we could've come from).
         // Could just insert a transition, but there is not real need to at this point.
-        TransitionHandler.getInstance().goBack(volunteerExtId);
+        TransitionHandler.getInstance().goBack(volunteerMatchKey.getVolunteerExtId());
     }
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goBack(volunteerExtId);
+        TransitionHandler.getInstance().goBack(volunteerMatchKey.getVolunteerExtId());
     }
 
     private VolunteerMatchReturn getReturn() {
         VolunteerMatchReturn volunteerMatchReturn = new VolunteerMatchReturn();
+        volunteerMatchReturn.setVolunteerExtId(volunteerMatchKey.getVolunteerExtId());
+        volunteerMatchReturn.setExternalIdentifier(volunteerMatchKey.getVolunteerMatchExtId());
         volunteerMatchReturn.setDateStart(DateTimeUtil.convertLocalDateToSqlDate(inputDateStart.getValue()));
         volunteerMatchReturn.setDateEnd(DateTimeUtil.convertLocalDateToSqlDate(inputDateEnd.getValue()));
 
-        StudentReturn studentReturn = new StudentReturn();
         if (comboStudents.getValue() != null) {
-            studentReturn.setExternalIdentifier(comboStudents.getValue().substring(0, comboStudents.getValue().indexOf(':')));
+            volunteerMatchReturn.setStudentExtId(comboStudents.getValue().substring(0, comboStudents.getValue().indexOf(':')));
         }
-        volunteerMatchReturn.setStudent(studentReturn);
 
         return volunteerMatchReturn;
     }
+
+    private void prefill(VolunteerMatchReturn volunteerMatchReturn) {
+        inputDateStart.setValue(volunteerMatchReturn.getDateStart().toLocalDate());
+        if (volunteerMatchReturn.getDateEnd() != null){
+            inputDateEnd.setValue(volunteerMatchReturn.getDateEnd().toLocalDate());
+        }
+
+        Result result = StudentAPI.getInstance().get(volunteerMatchReturn.getStudentExtId());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        StudentReturn studentReturn = (StudentReturn) result.getResult();
+        comboStudents.setValue(studentReturn.getExternalIdentifier() + ": " + NameUtil.getStudentName(studentReturn));
+    }
+
 }

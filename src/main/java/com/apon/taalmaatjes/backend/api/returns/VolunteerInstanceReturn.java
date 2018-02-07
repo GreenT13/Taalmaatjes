@@ -3,17 +3,17 @@ package com.apon.taalmaatjes.backend.api.returns;
 import java.sql.Date;
 
 public class VolunteerInstanceReturn {
-    private String volunteerExternalIdentifier;
+    private String volunteerExtId;
     private String externalIdentifier;
     private Date dateStart;
     private Date dateEnd;
 
-    public String getVolunteerExternalIdentifier() {
-        return volunteerExternalIdentifier;
+    public String getVolunteerExtId() {
+        return volunteerExtId;
     }
 
-    public void setVolunteerExternalIdentifier(String volunteerExternalIdentifier) {
-        this.volunteerExternalIdentifier = volunteerExternalIdentifier;
+    public void setVolunteerExtId(String volunteerExtId) {
+        this.volunteerExtId = volunteerExtId;
     }
 
     public String getExternalIdentifier() {

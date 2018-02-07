@@ -91,7 +91,7 @@ public class VolunteerMyDao extends VolunteerDao {
 
     /**
      * Count how many volunteers there are in the database with a VolunteerInstance.dateStart
-     * between minimumDate and maximumDate. If hasTraining is non-null, add criteria that it must match.
+     * between minimumDate and maximumDate. If hasTraining is non-null, addVolunteer criteria that it must match.
      * @param minimumDate
      * @param maximumDate
      * @param hasTraining
@@ -118,7 +118,7 @@ public class VolunteerMyDao extends VolunteerDao {
 
     /**
      * Count how many volunteers are active for at least one day in the period minimumDate-maximumDate.
-     * If hasTraining is non-null, add criteria that it must match.
+     * If hasTraining is non-null, addVolunteer criteria that it must match.
      * A volunteer is considered active on date X if there is some volunteerInstance for which holds:
      * 1. dateStart <= x
      * 2. dateEnd is null or x <= dateEnd

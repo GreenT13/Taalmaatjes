@@ -27,7 +27,7 @@ public class StudentAPI {
     /**
      * Get a student based on the external identifier.
      * @param externalIdentifier The external identifier from a student.
-     * @return VolunteerReturn
+     * @return StudentReturn
      */
     public Result get(String externalIdentifier) {
         Context context;
@@ -71,7 +71,7 @@ public class StudentAPI {
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
-        Log.logDebug("Start StudentAPI.update for externalIdentifier " + studentReturn.getExternalIdentifier());
+        Log.logDebug("Start StudentAPI.updateVolunteer for externalIdentifier " + studentReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
         if (studentReturn.getLookingForVolunteer() == null) {
@@ -103,7 +103,7 @@ public class StudentAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End StudentAPI.update");
+        Log.logDebug("End StudentAPI.updateVolunteer");
         return ResultUtil.createOk();
     }
 
@@ -117,7 +117,7 @@ public class StudentAPI {
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
-        Log.logDebug("Start StudentAPI.add for externalIdentifier " + studentReturn.getExternalIdentifier());
+        Log.logDebug("Start StudentAPI.addVolunteer for externalIdentifier " + studentReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
         if (studentReturn.getLookingForVolunteer() == null) {
@@ -144,7 +144,7 @@ public class StudentAPI {
             return ResultUtil.createError("Context.error.commit", e);
         }
         context.close();
-        Log.logDebug("End StudentAPI.add");
+        Log.logDebug("End StudentAPI.addVolunteer");
         return ResultUtil.createOk(studentPojo.getExternalidentifier());
     }
 
