@@ -1,11 +1,15 @@
 package com.apon.taalmaatjes.backend.util;
 
+import org.joda.time.Days;
+import org.joda.time.Interval;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.concurrent.TimeUnit;
 
 public class DateTimeUtil {
 
@@ -158,5 +162,10 @@ public class DateTimeUtil {
      */
     public static boolean isContained(Date d1, Date d2, Date e1, Date e2) {
         return isBetween(d1, e1, e2) && isBetween(d2, e1, e2);
+    }
+
+    public static long nrOfDaysInBetween(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 }

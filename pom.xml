@@ -51,6 +51,12 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
+        <!-- Time stuff -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
 
         <!-- Test dependency -->
         <dependency>

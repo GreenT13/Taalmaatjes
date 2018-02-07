@@ -462,10 +462,10 @@ public class VolunteerAPI {
             // So we only threat this case differently.
             if (volunteerinstancePojo.getDateend() != null &&
                     volunteerinstancePojo.getDatestart().compareTo(volunteerinstancePojo.getDateend()) == 0) {
-                // We have 3 possibilities:
+                // We have 4 possibilities:
                 // 1. pojo.date \in (dateStart, dateEnd) => overlap so false.
-                // 2. pojo.date == dateStart => merge
-                // 3. or pojoDate == dateEnd => merge
+                // 2. pojo.date == dateStart || pojo.date + 1 DAY = dateStart => merge
+                // 3. pojo.date == dateEnd || pojo.date + 1 DAY = dateEnd => merge
                 // 4. none of the above => we do nothing, we can ignore this line.
 
                 if (DateTimeUtil.isBetweenWithoutEndpoints(volunteerinstancePojo.getDatestart(), dateStart, dateEnd)) {
@@ -473,12 +473,14 @@ public class VolunteerAPI {
                 }
 
                 // Merge before
-                if (volunteerinstancePojo.getDatestart().compareTo(dateStart) == 0) {
+                if (volunteerinstancePojo.getDateend().compareTo(dateStart) == 0 ||
+                        DateTimeUtil.nrOfDaysInBetween(volunteerinstancePojo.getDateend(), dateStart) == 1) {
                     mergeBeforeVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
                 }
 
                 // Merge after
-                if (dateEnd != null && volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0) {
+                if (dateEnd != null && volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0 ||
+                        DateTimeUtil.nrOfDaysInBetween(dateEnd, volunteerinstancePojo.getDatestart()) == 1) {
                     mergeAfterVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
                 }
 
@@ -504,12 +506,15 @@ public class VolunteerAPI {
             // Determine whether we can actually merge with this line.
             // Merge after: (note that if both dates are null, we can never merge.
             if (dateEnd != null && volunteerinstancePojo.getDatestart() != null &&
-                    volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0) {
+                    (volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0 ||
+                    DateTimeUtil.nrOfDaysInBetween(dateEnd, volunteerinstancePojo.getDatestart()) == 1)) {
                 mergeAfterVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
             }
 
             // Merge before: (note that dateEnd must be non-null to merge. Also dateStart is never null).
-            if (volunteerinstancePojo.getDateend() != null && volunteerinstancePojo.getDateend().compareTo(dateStart) == 0) {
+            if (volunteerinstancePojo.getDateend() != null &&
+                    (volunteerinstancePojo.getDateend().compareTo(dateStart) == 0 ||
+                    DateTimeUtil.nrOfDaysInBetween(volunteerinstancePojo.getDateend(), dateStart) == 1)) {
                 mergeBeforeVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
             }
         }
