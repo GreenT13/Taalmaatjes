@@ -115,7 +115,7 @@ public class AddVolunteer implements Screen {
     public void setObject(Object volunteerExtId) {
         this.volunteerExtId = (String) volunteerExtId;
 
-        Result result = VolunteerAPI.getInstance().get(this.volunteerExtId);
+        Result result = VolunteerAPI.getInstance().getVolunteer(this.volunteerExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

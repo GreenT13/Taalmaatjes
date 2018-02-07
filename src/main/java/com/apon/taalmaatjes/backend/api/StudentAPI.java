@@ -35,7 +35,7 @@ public class StudentAPI {
             return ResultUtil.createError("Context.error.create", e);
         }
 
-        Log.logDebug("Start StudentAPI.get for externalIdentifier " + externalIdentifier);
+        Log.logDebug("Start StudentAPI.getVolunteer for externalIdentifier " + externalIdentifier);
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
 
@@ -57,7 +57,7 @@ public class StudentAPI {
 
         // Close and return.
         context.close();
-        Log.logDebug("End StudentAPI.get");
+        Log.logDebug("End StudentAPI.getVolunteer");
         return ResultUtil.createOk(studentMapper.getStudentReturn());
     }
 

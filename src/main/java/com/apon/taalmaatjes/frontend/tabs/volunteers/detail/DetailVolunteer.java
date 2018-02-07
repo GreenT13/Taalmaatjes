@@ -7,10 +7,7 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
-import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.NameUtil;
-import com.apon.taalmaatjes.frontend.presentation.Screen;
-import com.apon.taalmaatjes.frontend.presentation.TextUtils;
+import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
@@ -65,7 +62,7 @@ public class DetailVolunteer implements Screen {
      * Controller is initialized before volunteerId is set, therefore we don't use @FXML here.
      */
     private void initializeValues() {
-        Result result = VolunteerAPI.getInstance().get(volunteerExtId);
+        Result result = VolunteerAPI.getInstance().getVolunteer(volunteerExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
@@ -121,9 +118,25 @@ public class DetailVolunteer implements Screen {
     }
 
     private void addActiveLine(VolunteerInstanceReturn volunteerInstanceReturn) {
+        // Initialize the frontend variables.
+        HBox hbox = new HBox();
+        Hyperlink hyperlink = new Hyperlink();
         Label label = new Label();
+        hbox.getChildren().addAll(hyperlink, label);
+        vboxActive.getChildren().add(hbox);
+
+        VolunteerInstanceKey volunteerInstanceKey = new VolunteerInstanceKey();
+        volunteerInstanceKey.setVolunteerExtId(volunteerExtId);
+        volunteerInstanceKey.setVolunteerInstanceExtId(volunteerInstanceReturn.getExternalIdentifier());
+
+        // Fix hyperlink
+        hyperlink.setText("(Wijzigen)");
+        hyperlink.setUserData(volunteerInstanceKey);
+        hyperlink.setOnAction(event -> goToScreenEditInstance(volunteerInstanceKey));
+
+        // Fix the label
         label.getStyleClass().add("labelActive");
-        String text = "Actief vanaf " + volunteerInstanceReturn.getDateStart() + " tot ";
+        String text = " Actief van " + volunteerInstanceReturn.getDateStart() + " tot ";
         if (volunteerInstanceReturn.getDateEnd() == null) {
             text += "nu.";
         } else {
@@ -131,7 +144,11 @@ public class DetailVolunteer implements Screen {
         }
 
         label.setText(text);
-        vboxActive.getChildren().add(label);
+    }
+
+    private void goToScreenEditInstance(VolunteerInstanceKey volunteerInstanceKey) {
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, volunteerInstanceKey,
+                false, true);
     }
 
     /**
@@ -195,7 +212,9 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     public void goToScreenAddInstance(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, volunteerExtId,
+        VolunteerInstanceKey volunteerInstanceKey = new VolunteerInstanceKey();
+        volunteerInstanceKey.setVolunteerExtId(volunteerExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_ADD_INSTANCE, volunteerInstanceKey,
                 false, true);
     }
 
@@ -215,7 +234,7 @@ public class DetailVolunteer implements Screen {
 
         // Correctly handled the adding. Now refresh the output.
         vboxMatch.getChildren().clear();
-        result = VolunteerAPI.getInstance().get(volunteerExtId);
+        result = VolunteerAPI.getInstance().getVolunteer(volunteerExtId);
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

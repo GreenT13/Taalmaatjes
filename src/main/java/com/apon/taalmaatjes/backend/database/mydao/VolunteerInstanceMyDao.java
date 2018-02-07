@@ -68,6 +68,16 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
                 .fetchOne(0, String.class);
     }
 
+    public Integer getIdFromExtId(int volunteerId, String volunteerInstanceExtId) {
+        return using(configuration())
+                .select(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID)
+                .from(Volunteerinstance.VOLUNTEERINSTANCE)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.EXTERNALIDENTIFIER.eq(volunteerInstanceExtId))
+                .fetchOne(0, Integer.class);
+    }
+
+
     public boolean insertPojo(VolunteerinstancePojo volunteerinstancePojo) {
         if (!generateIds(volunteerinstancePojo)) {
             // Some kind of logError message?

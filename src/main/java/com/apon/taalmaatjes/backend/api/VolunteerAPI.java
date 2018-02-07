@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.backend.api;
 
 import com.apon.taalmaatjes.backend.api.returns.*;
+import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerInstanceMapper;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMatchMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
@@ -34,13 +35,13 @@ public class VolunteerAPI {
      * @param externalIdentifier The external identifier.
      * @return VolunteerReturn
      */
-    public Result get(String externalIdentifier) {
+    public Result getVolunteer(String externalIdentifier) {
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
 
-        Log.logDebug("Start VolunteerApi.get for externalIdentifier " + externalIdentifier);
+        Log.logDebug("Start VolunteerApi.getVolunteer for externalIdentifier " + externalIdentifier);
 
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
 
@@ -66,8 +67,47 @@ public class VolunteerAPI {
 
         // Close and return.
         context.close();
-        Log.logDebug("End VolunteerApi.get");
+        Log.logDebug("End VolunteerApi.getVolunteer");
         return ResultUtil.createOk(volunteerMapper.getVolunteerReturn());
+    }
+
+    /**
+     * Get a volunteerinstance based on the external identifiers.
+     * @param volunteerExtId The external identifier from the volunteer.
+     * @param volunteerInstanceExtId The external identifier from the instance.
+     * @return VolunteerInstanceReturn.
+     */
+    public Result getVolunteerInstance(String volunteerExtId, String volunteerInstanceExtId) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.getVolunteerInstance for volunteerExtId " + volunteerExtId + " and " + volunteerInstanceExtId);
+
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerExtId);
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+        }
+
+        // Get volunteerInstanceId.
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        Integer volunteerInstanceId = volunteerInstanceMyDao.getIdFromExtId(volunteerId, volunteerInstanceExtId);
+        if (volunteerInstanceId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noVolunteerInstanceExtIdFound");
+        }
+
+        // Get the volunteerInstancePojo
+        VolunteerinstancePojo volunteerinstancePojo = volunteerInstanceMyDao.fetchByIds(volunteerId, volunteerInstanceId);
+        VolunteerInstanceMapper volunteerInstanceMapper = new VolunteerInstanceMapper();
+        volunteerInstanceMapper.setVolunteerInstance(volunteerinstancePojo);
+
+        context.close();
+        context.close();
+        Log.logDebug("End VolunteerAPI.update");
+        return ResultUtil.createOk(volunteerInstanceMapper.getVolunteerInstanceReturn());
     }
 
     /**
@@ -205,60 +245,6 @@ public class VolunteerAPI {
     }
 
     /**
-     * Toggle active state of a volunteer.
-     * @param externalIdentifier The external identifier of the volunteer.
-     * @return Nothing.
-     */
-    public Result toggleActive(String externalIdentifier) {
-        Context context;
-        try {context = new Context();} catch (SQLException e) {
-            return ResultUtil.createError("Context.error.create", e);
-        }
-        Log.logDebug("Start VolunteerAPI.toggleActive for externalIdentifier " + externalIdentifier);
-
-        // Get volunteerId.
-        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
-        Integer volunteerId = volunteerMyDao.getIdFromExtId(externalIdentifier);
-        if (volunteerId == null) {
-            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
-        }
-
-        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
-        boolean currentlyActive = volunteerMyDao.isActive(volunteerId);
-
-        if (!currentlyActive) {
-            // Just add a new line to volunteerinstance.
-            VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
-            volunteerinstancePojo.setVolunteerid(volunteerId);
-            volunteerinstancePojo.setDatestart(DateTimeUtil.getCurrentDate());
-            volunteerInstanceMyDao.insertPojo(volunteerinstancePojo);
-        } else {
-            // Set dateEnd of the latest line to today. If the dateStart is also today, we just remove the line.
-            VolunteerinstancePojo volunteerinstancePojo = volunteerInstanceMyDao.getInstanceToday(volunteerId);
-            if (volunteerinstancePojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) == 0) {
-                volunteerInstanceMyDao.delete(volunteerinstancePojo);
-            } else if (volunteerinstancePojo.getDateend() != null &&
-                    volunteerinstancePojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) == 0) {
-                volunteerinstancePojo.setDateend(null);
-                volunteerInstanceMyDao.update(volunteerinstancePojo);
-            } else {
-                volunteerinstancePojo.setDateend(DateTimeUtil.getCurrentDate());
-                volunteerInstanceMyDao.update(volunteerinstancePojo);
-            }
-        }
-
-        // Commit, close and return.
-        try {
-            context.getConnection().commit();
-        } catch (SQLException e) {
-            return ResultUtil.createError("Context.error.commit", e);
-        }
-        context.close();
-        Log.logDebug("End VolunteerAPI.toggleActive");
-        return ResultUtil.createOk();
-    }
-
-    /**
      * Add a new match line, starting today, for given student.
      * @param studentReturn The student.
      * @return VolunteerMatch.externalIdentifier
@@ -372,7 +358,7 @@ public class VolunteerAPI {
      * Add a new match to the database. However, we need to check that it is a valid match to add.
      * This means there is no other match for the same student that overlaps in date.
      * @param volunteerMatchReturn The volunteerMatch.
-     * @return
+     * @return Nothing.
      */
     public Result addMatch(String volunteerExtId, VolunteerMatchReturn volunteerMatchReturn) {
         if (volunteerMatchReturn.getDateStart() == null) {
@@ -443,9 +429,10 @@ public class VolunteerAPI {
      * @param volunteerId
      * @param dateStart
      * @param dateEnd
+     * @param volunteerInstanceId If this value is non-null, algorithm assumes it is an update instead of insert.
      * @return
      */
-    private boolean isNewInstanceValidAndAdd(Context context, int volunteerId, Date dateStart, Date dateEnd) {
+    private boolean isNewInstanceValidAndAdd(Context context, int volunteerId, Date dateStart, Date dateEnd, Integer volunteerInstanceId) {
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
         // if [A,B] can be merged into [dateStart,dateEnd] with B=dateStart then mergeAfterVolunteerInstanceId will be B.
         Integer mergeAfterVolunteerInstanceId = null;
@@ -453,6 +440,10 @@ public class VolunteerAPI {
         // if [dateStart,dateEnd] can be merged into [A,B] with A=dateEnd then mergeAfterVolunteerInstanceId will be A.
         Integer mergeBeforeVolunteerInstanceId = null;
         for (VolunteerinstancePojo volunteerinstancePojo : volunteerInstanceMyDao.getInstanceForVolunteer(volunteerId)) {
+            // If we update instead of insert, we want to 'exclude' the to-be-updated volunteerinstance from the search.
+            if (volunteerInstanceId != null && volunteerinstancePojo.getVolunteerinstanceid().equals(volunteerInstanceId)) {
+                continue;
+            }
             // If one of the following hold, return false:
             // 1. dateStart is contained in (pojo.dateStart, pojo.dateEnd)
             // 2. dateEnd is contained in (pojo.dateStart, pojo.dateEnd)
@@ -479,8 +470,8 @@ public class VolunteerAPI {
                 }
 
                 // Merge after
-                if (dateEnd != null && volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0 ||
-                        DateTimeUtil.nrOfDaysInBetween(dateEnd, volunteerinstancePojo.getDatestart()) == 1) {
+                if (dateEnd != null && (volunteerinstancePojo.getDatestart().compareTo(dateEnd) == 0 ||
+                        DateTimeUtil.nrOfDaysInBetween(dateEnd, volunteerinstancePojo.getDatestart()) == 1)) {
                     mergeAfterVolunteerInstanceId = volunteerinstancePojo.getVolunteerinstanceid();
                 }
 
@@ -543,7 +534,12 @@ public class VolunteerAPI {
             volunteerinstancePojo.setDatestart(dateStart);
         }
 
-        volunteerInstanceMyDao.insertPojo(volunteerinstancePojo);
+        if (volunteerInstanceId == null) {
+            volunteerInstanceMyDao.insertPojo(volunteerinstancePojo);
+        } else {
+            volunteerinstancePojo.setVolunteerinstanceid(volunteerInstanceId);
+            volunteerInstanceMyDao.update(volunteerinstancePojo);
+        }
 
         return true;
     }
@@ -572,7 +568,54 @@ public class VolunteerAPI {
         }
 
         // Handle the complete adding / merging in another function.
-        if (!isNewInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd())) {
+        if (!isNewInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), null)) {
+            context.rollback();
+            return ResultUtil.createError("VolunteerAPI.addInstance.invalidInstance");
+        }
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.toggleMatch");
+        return ResultUtil.createOk();
+    }
+
+    public Result editInstance(VolunteerInstanceReturn volunteerInstanceReturn) {
+        if (volunteerInstanceReturn.getDateStart() == null) {
+            return ResultUtil.createError("VolunteerAPI.addInstance.noDateStart");
+        }
+
+        if (volunteerInstanceReturn.getDateEnd() != null &&
+                volunteerInstanceReturn.getDateStart().compareTo(volunteerInstanceReturn.getDateEnd()) > 0) {
+            return ResultUtil.createError("VolunteerAPI.addInstance.dateStartAfterDateEnd");
+        }
+
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.addInstance volunteerExtId " + volunteerInstanceReturn.getVolunteerExternalIdentifier());
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerInstanceReturn.getVolunteerExternalIdentifier());
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noExtIdFound");
+        }
+
+        // Get volunteerInstanceId
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        Integer volunteerInstanceId = volunteerInstanceMyDao.getIdFromExtId(volunteerId, volunteerInstanceReturn.getExternalIdentifier());
+        if (volunteerInstanceId == null) {
+            return ResultUtil.createError("VolunteerAPI.error.noVolunteerInstanceExtIdFound.");
+        }
+
+        // Handle the complete adding / merging in another function.
+        if (!isNewInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), volunteerInstanceId)) {
             context.rollback();
             return ResultUtil.createError("VolunteerAPI.addInstance.invalidInstance");
         }

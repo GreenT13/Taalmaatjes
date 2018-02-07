@@ -6,6 +6,7 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.presentation.VolunteerInstanceKey;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public class AddVolunteerInstance implements Screen {
-    private String volunteerExtId;
+    private VolunteerInstanceKey volunteerInstanceKey;
 
     @FXML
     DatePicker inputDateStart, inputDateEnd;
@@ -43,17 +44,34 @@ public class AddVolunteerInstance implements Screen {
         hboxError.setVisible(false);
     }
 
-
     @Override
-    public void setObject(Object volunteerExtId) {
-        this.volunteerExtId = (String) volunteerExtId;
+    public void setObject(Object volunteerInstanceKey) {
+        this.volunteerInstanceKey = (VolunteerInstanceKey) volunteerInstanceKey;
+
+        if (this.volunteerInstanceKey.getVolunteerInstanceExtId() == null) {
+            return;
+        }
+
+        // We are in edit mode. So retrieve information and prefill screen.
+        Result result = VolunteerAPI.getInstance().getVolunteerInstance(this.volunteerInstanceKey.getVolunteerExtId(), this.volunteerInstanceKey.getVolunteerInstanceExtId());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        prefill((VolunteerInstanceReturn) result.getResult());
     }
 
 
     @FXML
     public void handleActionSave(ActionEvent actionEvent) {
-        // Save the match.
-        Result result = VolunteerAPI.getInstance().addInstance(getReturn());
+        // Save or edit the match.
+        Result result;
+        if (volunteerInstanceKey.getVolunteerInstanceExtId() == null) {
+            result = VolunteerAPI.getInstance().addInstance(getReturn());
+        } else {
+            result = VolunteerAPI.getInstance().editInstance(getReturn());
+        }
         if (result == null || result.hasErrors()) {
             showError(result);
             return;
@@ -61,20 +79,28 @@ public class AddVolunteerInstance implements Screen {
 
         // Go back to the detail screen (only place we could've come from).
         // Could just insert a transition, but there is not real need to at this point.
-        TransitionHandler.getInstance().goBack(volunteerExtId);
+        TransitionHandler.getInstance().goBack(volunteerInstanceKey.getVolunteerExtId());
     }
 
     @FXML
     public void goBack(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goBack(volunteerExtId);
+        TransitionHandler.getInstance().goBack(volunteerInstanceKey.getVolunteerExtId());
     }
 
     private VolunteerInstanceReturn getReturn() {
         VolunteerInstanceReturn volunteerInstanceReturn = new VolunteerInstanceReturn();
-        volunteerInstanceReturn.setVolunteerExternalIdentifier(volunteerExtId);
+        volunteerInstanceReturn.setVolunteerExternalIdentifier(volunteerInstanceKey.getVolunteerExtId());
+        volunteerInstanceReturn.setExternalIdentifier(volunteerInstanceKey.getVolunteerInstanceExtId());
         volunteerInstanceReturn.setDateStart(DateTimeUtil.convertLocalDateToSqlDate(inputDateStart.getValue()));
         volunteerInstanceReturn.setDateEnd(DateTimeUtil.convertLocalDateToSqlDate(inputDateEnd.getValue()));
 
         return volunteerInstanceReturn;
+    }
+
+    private void prefill(VolunteerInstanceReturn volunteerInstanceReturn) {
+        inputDateStart.setValue(volunteerInstanceReturn.getDateStart().toLocalDate());
+        if (volunteerInstanceReturn.getDateEnd() != null){
+            inputDateEnd.setValue(volunteerInstanceReturn.getDateEnd().toLocalDate());
+        }
     }
 }
