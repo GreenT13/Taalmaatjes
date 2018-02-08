@@ -23,6 +23,9 @@ import javax.annotation.Nullable;
 public class AddVolunteer implements Screen {
 
     @FXML
+    Label labelTitle;
+
+    @FXML
     TextField inputFirstName, inputInsertion, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail, inputPostalCode;
 
     @FXML
@@ -120,6 +123,8 @@ public class AddVolunteer implements Screen {
             showError(result);
             return;
         }
+
+        labelTitle.setText("Bewerken vrijwilliger");
 
         prefillVolunteer((VolunteerReturn) result.getResult());
     }

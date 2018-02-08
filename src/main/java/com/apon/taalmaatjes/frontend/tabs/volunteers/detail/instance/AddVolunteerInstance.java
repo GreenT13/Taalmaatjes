@@ -23,6 +23,9 @@ public class AddVolunteerInstance implements Screen {
     @FXML
     DatePicker inputDateStart, inputDateEnd;
 
+    @FXML
+    Label labelTitle;
+
     @FXML HBox hboxError; @FXML Label labelError;
 
     @FXML
@@ -58,6 +61,7 @@ public class AddVolunteerInstance implements Screen {
             showError(result);
             return;
         }
+        labelTitle.setText("Bewerken activiteit");
 
         prefill((VolunteerInstanceReturn) result.getResult());
     }

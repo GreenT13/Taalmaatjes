@@ -21,6 +21,9 @@ import javax.annotation.Nullable;
 public class AddStudent implements Screen {
 
     @FXML
+    Label labelTitle;
+
+    @FXML
     TextField inputFirstName, inputInsertion, inputLastName;
 
     @FXML
@@ -102,6 +105,8 @@ public class AddStudent implements Screen {
             showError(result);
             return;
         }
+
+        labelTitle.setText("Bewerken student");
 
         prefillStudent((StudentReturn) result.getResult());
     }

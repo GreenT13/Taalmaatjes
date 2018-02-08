@@ -31,6 +31,9 @@ public class AddVolunteerMatch implements Screen {
     private VolunteerMatchKey volunteerMatchKey;
 
     @FXML
+    Label labelTitle;
+
+    @FXML
     DatePicker inputDateStart, inputDateEnd;
 
     @FXML
@@ -74,6 +77,8 @@ public class AddVolunteerMatch implements Screen {
             showError(result);
             return;
         }
+
+        labelTitle.setText("Bewerken koppeling");
 
         prefill((VolunteerMatchReturn) result.getResult());
     }
