@@ -73,7 +73,7 @@ public class Volunteers implements Screen {
         flowPaneAdvancedSearch.setVisible(isVisible);
 
         // Fill the table.
-        search();
+        handleActionSearch(null);
 
         // Add listener to when an item is clicked.
         tableViewResult.getSelectionModel().selectedItemProperty().addListener(
@@ -110,11 +110,7 @@ public class Volunteers implements Screen {
     }
 
     @FXML
-    public void handleActionOnPressedEnter(ActionEvent actionEvent) {
-        search();
-    }
-
-    private void search() {
+    private void handleActionSearch(ActionEvent actionEvent) {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
         if (!isVisible) {
