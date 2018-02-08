@@ -27,6 +27,8 @@ public class VolunteerInstanceAPI {
 
     private VolunteerInstanceAPI() { }
 
+    private Result result;
+
     /**
      * Get a volunteer instance based on the external identifiers.
      * @param volunteerExtId The external identifier from the volunteer.
@@ -96,7 +98,7 @@ public class VolunteerInstanceAPI {
         // Handle the complete adding / merging in another function.
         if (!isVolunteerInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), null)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerInstanceAPI.addVolunteerInstance.error.invalidInstance");
+            return result;
         }
 
         // Commit, close and return.
@@ -156,7 +158,7 @@ public class VolunteerInstanceAPI {
         // Handle the complete adding / merging in another function.
         if (!isVolunteerInstanceValidAndAdd(context, volunteerId, volunteerInstanceReturn.getDateStart(), volunteerInstanceReturn.getDateEnd(), volunteerInstanceId)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerInstanceAPI.updateVolunteerInstance.error.invalidInstance");
+            return result;
         }
 
         // Commit, close and return.
@@ -209,6 +211,7 @@ public class VolunteerInstanceAPI {
                 // 4. none of the above => we do nothing, we can ignore this line.
 
                 if (DateTimeUtil.isBetweenWithoutEndpoints(volunteerinstancePojo.getDatestart(), dateStart, dateEnd)) {
+                    result = ResultUtil.createError("VolunteerInstanceAPI.error.overlap");
                     return false;
                 }
 
@@ -230,16 +233,19 @@ public class VolunteerInstanceAPI {
 
             if (DateTimeUtil.isBetweenWithoutEndpoints(dateStart,
                     volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend())) {
+                result = ResultUtil.createError("VolunteerInstanceAPI.error.overlap");
                 return false;
             }
 
             if (DateTimeUtil.isBetweenWithoutEndpoints(dateEnd,
                     volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend())) {
+                result = ResultUtil.createError("VolunteerInstanceAPI.error.overlap");
                 return false;
             }
 
             if (DateTimeUtil.isContained(volunteerinstancePojo.getDatestart(), volunteerinstancePojo.getDateend(),
                     dateStart, dateEnd)) {
+                result = ResultUtil.createError("VolunteerInstanceAPI.error.completeOverlap");
                 return false;
             }
 
@@ -297,6 +303,7 @@ public class VolunteerInstanceAPI {
                 merged.add(mergeBeforeVolunteerInstanceId);
             }
             if (!allMatchesAreInsideInstance(context, volunteerinstancePojo, merged)) {
+                result = ResultUtil.createError("VolunteerInstanceAPI.error.matchWithoutInstance");
                 return false;
             }
 

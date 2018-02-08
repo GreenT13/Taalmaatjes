@@ -26,6 +26,8 @@ public class VolunteerMatchAPI {
 
     private VolunteerMatchAPI() { }
 
+    private Result result;
+
     /**
      * Get volunteer match.
      * @param volunteerExtId The external identifier from the volunteer.
@@ -99,13 +101,13 @@ public class VolunteerMatchAPI {
         StudentMyDao studentMyDao = new StudentMyDao(context);
         Integer studentId = studentMyDao.getIdFromExtId(volunteerMatchReturn.getStudentExtId());
         if (studentId == null) {
-            return ResultUtil.createError("VolunteerMatchAPI.error.noStudentExtIdFound.");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noStudentExtIdFound");
         }
 
         // Handle the complete adding / merging in another function.
         if (!isVolunteerMatchValidAndAdd(context, volunteerId, studentId, volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd(), null)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerMatchAPI.addVolunteerMatch.error.invalidMatch");
+            return result;
         }
 
         // Commit, close and return.
@@ -170,13 +172,13 @@ public class VolunteerMatchAPI {
         StudentMyDao studentMyDao = new StudentMyDao(context);
         Integer studentId = studentMyDao.getIdFromExtId(volunteerMatchReturn.getStudentExtId());
         if (studentId == null) {
-            return ResultUtil.createError("VolunteerMatchAPI.error.noStudentExtIdFound.");
+            return ResultUtil.createError("VolunteerMatchAPI.error.noStudentExtIdFound");
         }
 
         // Handle the complete adding / merging in another function.
         if (!isVolunteerMatchValidAndAdd(context, volunteerId, studentId, volunteerMatchReturn.getDateStart(), volunteerMatchReturn.getDateEnd(), volunteerMatchId)) {
             context.rollback();
-            return ResultUtil.createError("VolunteerMatchAPI.updateVolunteerMatch.error.invalidMatch");
+            return result;
         }
 
         // Commit, close and return.
@@ -230,6 +232,7 @@ public class VolunteerMatchAPI {
                 // 4. none of the above => we do nothing, we can ignore this line.
 
                 if (DateTimeUtil.isBetweenWithoutEndpoints(volunteermatchPojo.getDatestart(), dateStart, dateEnd)) {
+                    result = ResultUtil.createError("VolunteerMatchAPI.error.overlap");
                     return false;
                 }
 
@@ -251,16 +254,19 @@ public class VolunteerMatchAPI {
 
             if (DateTimeUtil.isBetweenWithoutEndpoints(dateStart,
                     volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
+                result = ResultUtil.createError("VolunteerMatchAPI.error.overlap");
                 return false;
             }
 
             if (DateTimeUtil.isBetweenWithoutEndpoints(dateEnd,
                     volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
+                result = ResultUtil.createError("VolunteerMatchAPI.error.overlap");
                 return false;
             }
 
             if (DateTimeUtil.isContained(volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend(),
                     dateStart, dateEnd)) {
+                result = ResultUtil.createError("VolunteerMatchAPI.error.completeOverlap");
                 return false;
             }
 
@@ -307,6 +313,7 @@ public class VolunteerMatchAPI {
 
         // Check that the volunteer is active during this period.
         if (!isVolunteerActiveDuringMatch(context, volunteermatchPojo)) {
+            result = ResultUtil.createError("VolunteerMatchAPI.error.matchWithoutInstance");
             return false;
         }
 
