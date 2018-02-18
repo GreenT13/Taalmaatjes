@@ -18,36 +18,35 @@ public class TransitionHandler {
         return ourInstance;
     }
 
-    private TransitionHandler() {
-        mapBreadcrum = new HashMap();
-        mapBreadcrum.put(TabEnum.TASKS, new Stack());
-        mapBreadcrum.put(TabEnum.VOLUNTEERS, new Stack());
-        mapBreadcrum.put(TabEnum.STUDENTS, new Stack());
-        mapBreadcrum.put(TabEnum.REPORTS, new Stack());
+    private Map<TabEnum, ScreenEnum> tabStartScreen;
 
-        // Initialize all starting screen.
-        mapCurrentScreen = new HashMap();
-        mapCurrentScreen.put(TabEnum.VOLUNTEERS, ScreenEnum.VOLUNTEERS_OVERVIEW);
-        mapCurrentScreen.put(TabEnum.STUDENTS, ScreenEnum.STUDENTS_OVERVIEW);
-        mapCurrentScreen.put(TabEnum.TASKS, ScreenEnum.TASKS_OVERVIEW);
-        mapCurrentScreen.put(TabEnum.REPORTS, ScreenEnum.REPORT);
-
-        // Always start on the home screen.
-        currentBreadcrum = mapBreadcrum.get(TabEnum.VOLUNTEERS);
-        currentTab = TabEnum.VOLUNTEERS;
-
-        // Initialize variable. It will be filled in Main.java using setters in this class.
-        mapEnumTab = new HashMap();
-    }
-
-    // Map for retrieving tab from enum.
+    // Store the frontend tabs in this map, so we can set content.
     private Map<TabEnum, Tab> mapEnumTab;
 
-    // Dynamically track the breadcrum.
-    private Map<TabEnum, Stack<Transition>> mapBreadcrum;
+    // Track screens using breadcrum.
     private Stack<Transition> currentBreadcrum;
-    private Map<TabEnum, ScreenEnum> mapCurrentScreen;
     private TabEnum currentTab;
+    private ScreenEnum currentScreen;
+
+    private TransitionHandler() {
+        tabStartScreen = new HashMap();
+        tabStartScreen.put(TabEnum.VOLUNTEERS, ScreenEnum.VOLUNTEERS_OVERVIEW);
+        tabStartScreen.put(TabEnum.STUDENTS, ScreenEnum.STUDENTS_OVERVIEW);
+        tabStartScreen.put(TabEnum.TASKS, ScreenEnum.TASKS_OVERVIEW);
+        tabStartScreen.put(TabEnum.REPORTS, ScreenEnum.REPORT);
+
+        mapEnumTab = new HashMap();
+        currentBreadcrum = new Stack();
+        currentTab = TabEnum.VOLUNTEERS;
+        currentScreen = tabStartScreen.get(currentTab);
+    }
+
+    private void initializeTab(TabEnum tabEnum) {
+        currentBreadcrum = new Stack();
+        currentTab = tabEnum;
+        currentScreen = tabStartScreen.get(tabEnum);
+        loadScreen(currentScreen, null);
+    }
 
     /**
      * Change to the breadcrum from a different tab.
@@ -55,8 +54,8 @@ public class TransitionHandler {
      */
     public void goToTab(TabEnum tabEnum) {
         Log.logDebug("Start transitioned to tab " + tabEnum.toString());
-        currentBreadcrum = mapBreadcrum.get(tabEnum);
-        currentTab = tabEnum;
+        // Reset the complete breadcrum
+        initializeTab(tabEnum);
         Log.logDebug("End transitioned to tab " + tabEnum.toString());
     }
 
@@ -74,9 +73,9 @@ public class TransitionHandler {
         // Only addVolunteer the transition if we actually have a new element to addVolunteer.
         // TODO: what if you didn't save node last time, but you want to now? Is this even desirable?
         if (canGoBack && (currentBreadcrum.isEmpty() ||
-                !currentBreadcrum.peek().getScreen().equals(mapCurrentScreen.get(currentTab)))) {
+                !currentBreadcrum.peek().getScreen().equals(currentScreen))) {
             Transition transition = new Transition();
-            transition.setScreen(mapCurrentScreen.get(currentTab));
+            transition.setScreen(currentScreen);
 
             // Only addVolunteer a node if you can also go back.
             if (rememberCurrentNode) {
@@ -91,7 +90,7 @@ public class TransitionHandler {
             // Something went wrong.
             return;
         }
-        mapCurrentScreen.put(currentTab, screenEnum);
+        currentScreen =  screenEnum;
 
         Log.logDebug("End transitioning to screen " + screenEnum.toString());
     }
@@ -106,16 +105,16 @@ public class TransitionHandler {
         Log.logDebug("Start going back.");
         do {
             Transition transition = currentBreadcrum.pop();
-            if (transition.getNode() != null && !transition.getScreen().equals(mapCurrentScreen.get(currentTab))) {
+            if (transition.getNode() != null && !transition.getScreen().equals(currentScreen)) {
                 // Load the node.
                 Log.logDebug("Returning to already initialized tab " + transition.getScreen().toString());
-                mapCurrentScreen.put(currentTab, transition.getScreen());
+                currentScreen = transition.getScreen();
                 mapEnumTab.get(currentTab).setContent(transition.getNode());
                 return;
             }
 
-            if (transition.getScreen() != null && !transition.getScreen().equals(mapCurrentScreen.get(currentTab))) {
-                mapCurrentScreen.put(currentTab, transition.getScreen());
+            if (transition.getScreen() != null && !transition.getScreen().equals(currentScreen)) {
+                currentScreen =  transition.getScreen();
                 // Load the screen.
                 Log.logDebug("Start returning to tab " + transition.getScreen().toString());
                 loadScreen(transition.getScreen(), object);

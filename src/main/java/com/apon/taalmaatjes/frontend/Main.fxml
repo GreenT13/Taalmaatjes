@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
 
+<!--suppress ALL -->
 <TabPane fx:id="tabPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" side="LEFT" stylesheets="@Main.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.Main">
     <tabs>
         <Tab fx:id="tabVolunteer" text="Vrijwilligers">
@@ -26,6 +26,5 @@
                 <fx:include source="tabs/report/Report.fxml" />
             </content>
         </Tab>
-
     </tabs>
 </TabPane>
