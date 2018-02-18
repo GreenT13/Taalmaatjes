@@ -19,12 +19,13 @@ create table Volunteer (
   phoneNumber varchar(100),
   mobilePhoneNumber varchar(100),
   email varchar(100),
-  hasTraining boolean,
   postalCode varchar(6),
   city varchar(100),
   streetName varchar(100),
   houseNr varchar(10),
   log clob,
+  job varchar(100),
+  dateTraining date,
   constraint "Volu_PK" primary key (volunteerId),
   constraint "Volu_ExtId" unique (externalIdentifier)
 );

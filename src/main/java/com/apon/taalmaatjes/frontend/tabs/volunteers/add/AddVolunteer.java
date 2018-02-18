@@ -11,7 +11,6 @@ import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -29,16 +28,13 @@ public class AddVolunteer implements Screen {
     TextField inputFirstName, inputInsertion, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail, inputPostalCode;
 
     @FXML
-    TextField inputCity, inputStreetName, inputHouseNr;
+    TextField inputCity, inputStreetName, inputHouseNr, inputJob;
 
     @FXML
     Label labelAge;
 
     @FXML
-    CheckBox checkTraining;
-
-    @FXML
-    DatePicker inputDateOfBirth;
+    DatePicker inputDateOfBirth, inputDateTraining;
 
     private String volunteerExtId;
 
@@ -110,7 +106,8 @@ public class AddVolunteer implements Screen {
         volunteerReturn.setHouseNr(StringUtil.getDatabaseString(inputHouseNr.getText()));
         volunteerReturn.setPostalCode(StringUtil.getDatabaseString(inputPostalCode.getText()));
         volunteerReturn.setCity(StringUtil.getDatabaseString(inputCity.getText()));
-        volunteerReturn.setHasTraining(checkTraining.isSelected());
+        volunteerReturn.setDateTraining(DateTimeUtil.convertLocalDateToSqlDate(inputDateTraining.getValue()));
+        volunteerReturn.setJob(StringUtil.getDatabaseString(inputJob.getText()));
 
         return volunteerReturn;
     }
@@ -144,7 +141,10 @@ public class AddVolunteer implements Screen {
         inputHouseNr.setText(volunteerReturn.getHouseNr());
         inputPostalCode.setText(volunteerReturn.getPostalCode());
         inputCity.setText(volunteerReturn.getCity());
-        checkTraining.setSelected(volunteerReturn.getHasTraining());
+        if (volunteerReturn.getDateTraining() != null) {
+            inputDateTraining.setValue(volunteerReturn.getDateTraining().toLocalDate());
+        }
+        inputJob.setText(volunteerReturn.getJob());
     }
 
     @FXML

@@ -130,13 +130,6 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
     }
 
     /**
-     * Fetch records that have <code>HASTRAINING IN (values)</code>
-     */
-    public List<VolunteerPojo> fetchByHastraining(Boolean... values) {
-        return fetch(Volunteer.VOLUNTEER.HASTRAINING, values);
-    }
-
-    /**
      * Fetch records that have <code>POSTALCODE IN (values)</code>
      */
     public List<VolunteerPojo> fetchByPostalcode(String... values) {
@@ -169,5 +162,19 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
      */
     public List<VolunteerPojo> fetchByLog(String... values) {
         return fetch(Volunteer.VOLUNTEER.LOG, values);
+    }
+
+    /**
+     * Fetch records that have <code>JOB IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByJob(String... values) {
+        return fetch(Volunteer.VOLUNTEER.JOB, values);
+    }
+
+    /**
+     * Fetch records that have <code>DATETRAINING IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByDatetraining(Date... values) {
+        return fetch(Volunteer.VOLUNTEER.DATETRAINING, values);
     }
 }

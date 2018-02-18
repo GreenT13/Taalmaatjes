@@ -24,6 +24,7 @@ import java.util.List;
 
 import static org.jooq.impl.DSL.using;
 
+@SuppressWarnings("ALL")
 public class VolunteerMyDao extends VolunteerDao {
     public final static Integer STARTING_EXT_ID = 1001;
 
@@ -109,7 +110,7 @@ public class VolunteerMyDao extends VolunteerDao {
                         .asField().between(minimumDate, maximumDate));
 
         if (hasTraining != null) {
-            query.and(Volunteer.VOLUNTEER.HASTRAINING.eq(hasTraining));
+            query.and(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
         }
 
         // Return the single row integer.
@@ -154,7 +155,7 @@ public class VolunteerMyDao extends VolunteerDao {
                 );
 
         if (hasTraining != null) {
-            query.and(Volunteer.VOLUNTEER.HASTRAINING.eq(hasTraining));
+            query.and(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
         }
 
         // Return the single row integer.
@@ -204,7 +205,7 @@ public class VolunteerMyDao extends VolunteerDao {
         }
 
         if (hasTraining != null) {
-            query.where(Volunteer.VOLUNTEER.HASTRAINING.eq(hasTraining));
+            query.where(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
         }
 
         if (hasMatch != null) {

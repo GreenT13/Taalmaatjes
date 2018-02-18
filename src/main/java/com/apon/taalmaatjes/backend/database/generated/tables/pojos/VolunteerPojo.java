@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteerPojo implements Serializable {
 
-    private static final long serialVersionUID = -1801888296;
+    private static final long serialVersionUID = -38009073;
 
     private Integer volunteerid;
     private String  externalidentifier;
@@ -34,12 +34,13 @@ public class VolunteerPojo implements Serializable {
     private String  phonenumber;
     private String  mobilephonenumber;
     private String  email;
-    private Boolean hastraining;
     private String  postalcode;
     private String  city;
     private String  streetname;
     private String  housenr;
     private String  log;
+    private String  job;
+    private Date    datetraining;
 
     public VolunteerPojo() {}
 
@@ -53,12 +54,13 @@ public class VolunteerPojo implements Serializable {
         this.phonenumber = value.phonenumber;
         this.mobilephonenumber = value.mobilephonenumber;
         this.email = value.email;
-        this.hastraining = value.hastraining;
         this.postalcode = value.postalcode;
         this.city = value.city;
         this.streetname = value.streetname;
         this.housenr = value.housenr;
         this.log = value.log;
+        this.job = value.job;
+        this.datetraining = value.datetraining;
     }
 
     public VolunteerPojo(
@@ -71,12 +73,13 @@ public class VolunteerPojo implements Serializable {
         String  phonenumber,
         String  mobilephonenumber,
         String  email,
-        Boolean hastraining,
         String  postalcode,
         String  city,
         String  streetname,
         String  housenr,
-        String  log
+        String  log,
+        String  job,
+        Date    datetraining
     ) {
         this.volunteerid = volunteerid;
         this.externalidentifier = externalidentifier;
@@ -87,12 +90,13 @@ public class VolunteerPojo implements Serializable {
         this.phonenumber = phonenumber;
         this.mobilephonenumber = mobilephonenumber;
         this.email = email;
-        this.hastraining = hastraining;
         this.postalcode = postalcode;
         this.city = city;
         this.streetname = streetname;
         this.housenr = housenr;
         this.log = log;
+        this.job = job;
+        this.datetraining = datetraining;
     }
 
     public Integer getVolunteerid() {
@@ -167,14 +171,6 @@ public class VolunteerPojo implements Serializable {
         this.email = email;
     }
 
-    public Boolean getHastraining() {
-        return this.hastraining;
-    }
-
-    public void setHastraining(Boolean hastraining) {
-        this.hastraining = hastraining;
-    }
-
     public String getPostalcode() {
         return this.postalcode;
     }
@@ -215,6 +211,22 @@ public class VolunteerPojo implements Serializable {
         this.log = log;
     }
 
+    public String getJob() {
+        return this.job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public Date getDatetraining() {
+        return this.datetraining;
+    }
+
+    public void setDatetraining(Date datetraining) {
+        this.datetraining = datetraining;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("VolunteerPojo (");
@@ -228,12 +240,13 @@ public class VolunteerPojo implements Serializable {
         sb.append(", ").append(phonenumber);
         sb.append(", ").append(mobilephonenumber);
         sb.append(", ").append(email);
-        sb.append(", ").append(hastraining);
         sb.append(", ").append(postalcode);
         sb.append(", ").append(city);
         sb.append(", ").append(streetname);
         sb.append(", ").append(housenr);
         sb.append(", ").append(log);
+        sb.append(", ").append(job);
+        sb.append(", ").append(datetraining);
 
         sb.append(")");
         return sb.toString();

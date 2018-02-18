@@ -35,7 +35,7 @@ public class DetailVolunteer implements Screen {
     @FXML
     TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr;
     @FXML
-    TextField labelPostalCode, labelCity, labelHasTraining, labelAge;
+    TextField labelPostalCode, labelCity, labelDateTraining, labelAge, labelJob;
 
     @FXML
     VBox vboxActive, vboxMatch, vboxTask;
@@ -110,7 +110,10 @@ public class DetailVolunteer implements Screen {
         labelCity.setText(StringUtil.getOutputString(volunteerReturn.getCity()));
 
         // Set training
-        labelHasTraining.setText(StringUtil.getOutputString(volunteerReturn.getHasTraining()));
+        labelDateTraining.setText(StringUtil.getOutputString(volunteerReturn.getDateTraining()));
+
+        // Set job
+        labelJob.setText(StringUtil.getOutputString(volunteerReturn.getJob()));
 
         // Add all volunteerInstance lines (in order!).
         for (VolunteerInstanceReturn volunteerInstanceReturn : volunteerReturn.getListVolunteerInstance()) {
@@ -154,7 +157,7 @@ public class DetailVolunteer implements Screen {
 
         // Fix the label
         label.getStyleClass().add("labelActive");
-        String text = " Actief van " + volunteerInstanceReturn.getDateStart() + " tot ";
+        String text = " Actief van " + StringUtil.getOutputString(volunteerInstanceReturn.getDateStart()) + " tot ";
         if (volunteerInstanceReturn.getDateEnd() == null) {
             text += "nu.";
         } else {
@@ -198,7 +201,7 @@ public class DetailVolunteer implements Screen {
 
         String studentName = NameUtil.getStudentName((StudentReturn) result.getResult());
         label.getStyleClass().add("labelMatch");
-        String text = " Heeft van " + volunteerMatchReturn.getDateStart() + " tot ";
+        String text = " Heeft van " + StringUtil.getOutputString(volunteerMatchReturn.getDateStart()) + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu";
         } else {
@@ -253,7 +256,8 @@ public class DetailVolunteer implements Screen {
         TextUtils.setWidthToContent(labelStreetNameAndHouseNr);
         TextUtils.setWidthToContent(labelPostalCode);
         TextUtils.setWidthToContent(labelCity);
-        TextUtils.setWidthToContent(labelHasTraining);
+        TextUtils.setWidthToContent(labelDateTraining);
+        TextUtils.setWidthToContent(labelJob);
     }
 
     @FXML

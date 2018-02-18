@@ -39,11 +39,12 @@ public class VolunteerMapper {
         volunteerReturn.setPhoneNumber(volunteerPojo.getPhonenumber());
         volunteerReturn.setMobilePhoneNumber(volunteerPojo.getMobilephonenumber());
         volunteerReturn.setEmail(volunteerPojo.getEmail());
-        volunteerReturn.setHasTraining(volunteerPojo.getHastraining());
+        volunteerReturn.setDateTraining(volunteerPojo.getDatetraining());
         volunteerReturn.setPostalCode(volunteerPojo.getPostalcode());
         volunteerReturn.setStreetname(volunteerPojo.getStreetname());
         volunteerReturn.setHouseNr(volunteerPojo.getHousenr());
         volunteerReturn.setLog(volunteerPojo.getLog());
+        volunteerReturn.setJob(volunteerPojo.getJob());
     }
 
     private void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
@@ -121,12 +122,13 @@ public class VolunteerMapper {
         volunteerPojo.setPhonenumber(volunteerReturn.getPhoneNumber());
         volunteerPojo.setMobilephonenumber(volunteerReturn.getMobilePhoneNumber());
         volunteerPojo.setEmail(volunteerReturn.getEmail());
-        volunteerPojo.setHastraining(volunteerReturn.getHasTraining());
+        volunteerPojo.setDatetraining(volunteerReturn.getDateTraining());
         volunteerPojo.setPostalcode(volunteerReturn.getPostalCode());
         volunteerPojo.setCity(volunteerReturn.getCity());
         volunteerPojo.setStreetname(volunteerReturn.getStreetname());
         volunteerPojo.setHousenr(volunteerReturn.getHouseNr());
         volunteerPojo.setLog(volunteerReturn.getLog());
+        volunteerPojo.setJob(volunteerReturn.getJob());
 
         return volunteerPojo;
     }

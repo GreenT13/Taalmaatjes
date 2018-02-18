@@ -1,6 +1,7 @@
 package com.apon.taalmaatjes.backend.util;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 public class StringUtil {
 
@@ -38,7 +39,7 @@ public class StringUtil {
 
     public static String getOutputString(Boolean b) {
         if (b == null) {
-            return "<Niet gevuld>";
+            return getOutputString((String) null);
         } else if (b) {
             return "Ja";
         } else {
@@ -51,6 +52,9 @@ public class StringUtil {
             return getOutputString((String) null);
         }
 
-        return getOutputString(date.toString());
+        // Format date to dd-MM-yyyy.
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+
+        return getOutputString(format.format(date));
     }
 }

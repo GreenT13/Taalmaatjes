@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteer extends TableImpl<VolunteerRecord> {
 
-    private static final long serialVersionUID = -1912819164;
+    private static final long serialVersionUID = -690040210;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEER</code>
@@ -100,11 +100,6 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
     public final TableField<VolunteerRecord, String> EMAIL = createField("EMAIL", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
 
     /**
-     * The column <code>PUBLIC.VOLUNTEER.HASTRAINING</code>.
-     */
-    public final TableField<VolunteerRecord, Boolean> HASTRAINING = createField("HASTRAINING", org.jooq.impl.SQLDataType.BOOLEAN, this, "");
-
-    /**
      * The column <code>PUBLIC.VOLUNTEER.POSTALCODE</code>.
      */
     public final TableField<VolunteerRecord, String> POSTALCODE = createField("POSTALCODE", org.jooq.impl.SQLDataType.VARCHAR(6), this, "");
@@ -128,6 +123,16 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.LOG</code>.
      */
     public final TableField<VolunteerRecord, String> LOG = createField("LOG", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.JOB</code>.
+     */
+    public final TableField<VolunteerRecord, String> JOB = createField("JOB", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.DATETRAINING</code>.
+     */
+    public final TableField<VolunteerRecord, Date> DATETRAINING = createField("DATETRAINING", org.jooq.impl.SQLDataType.DATE, this, "");
 
     /**
      * Create a <code>PUBLIC.VOLUNTEER</code> table reference

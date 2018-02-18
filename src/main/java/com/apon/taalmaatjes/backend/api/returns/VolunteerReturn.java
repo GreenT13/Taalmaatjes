@@ -14,12 +14,13 @@ public class VolunteerReturn {
     private String phoneNumber;
     private String mobilePhoneNumber;
     private String email;
-    private Boolean hasTraining;
+    private Date dateTraining;
     private String postalCode;
     private String city;
     private String streetname;
     private String houseNr;
     private String log;
+    private String job;
 
     // Variables determined by logic.
     private Date activeUntil;
@@ -98,12 +99,12 @@ public class VolunteerReturn {
         this.email = email;
     }
 
-    public Boolean getHasTraining() {
-        return hasTraining;
+    public Date getDateTraining() {
+        return dateTraining;
     }
 
-    public void setHasTraining(Boolean hasTraining) {
-        this.hasTraining = hasTraining;
+    public void setDateTraining(Date dateTraining) {
+        this.dateTraining = dateTraining;
     }
 
     public String getPostalCode() {
@@ -184,5 +185,13 @@ public class VolunteerReturn {
 
     public void setListTaskReturn(List<TaskReturn> listTaskReturn) {
         this.listTaskReturn = listTaskReturn;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 }

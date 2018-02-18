@@ -107,7 +107,7 @@ public class DetailStudent implements Screen {
 
         Label label = new Label();
         label.getStyleClass().add("labelMatch");
-        String text = "Is begeleid van " + volunteerMatchReturn.getDateStart() + " tot ";
+        String text = "Is begeleid van " + StringUtil.getOutputString(volunteerMatchReturn.getDateStart()) + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu";
         } else {
