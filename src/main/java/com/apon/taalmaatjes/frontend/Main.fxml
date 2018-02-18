@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<TabPane fx:id="tabPaneMain"
-         maxHeight="-Infinity"
-         maxWidth="-Infinity"
-         minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" side="LEFT"
-         stylesheets="@Main.css" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141"
-         fx:controller="com.apon.taalmaatjes.frontend.Main">
+<TabPane fx:id="tabPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" side="LEFT" stylesheets="@Main.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.Main">
     <tabs>
-        <Tab text="Home" fx:id="tabHome">
+        <Tab fx:id="tabVolunteer" text="Vrijwilligers">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <fx:include source="tabs/volunteers/Volunteers.fxml" />
             </content>
         </Tab>
-        <Tab text="Vrijwilligers" fx:id="tabVolunteer">
+        <Tab fx:id="tabStudent" text="Cursisten">
             <content>
-                <fx:include source="tabs/volunteers/Volunteers.fxml"/>
+                <fx:include source="tabs/students/Students.fxml" />
             </content>
         </Tab>
-        <Tab text="Cursisten" fx:id="tabStudent">
+        <Tab fx:id="tabTask" text="Taken">
             <content>
-                <fx:include source="tabs/students/Students.fxml"/>
+                <fx:include source="tabs/task/Tasks.fxml" />
             </content>
         </Tab>
-        <Tab text="Rapportage" fx:id="tabReport">
+        <Tab fx:id="tabReport" text="Rapportage">
             <content>
-                <fx:include source="tabs/report/Report.fxml"/>
+                <fx:include source="tabs/report/Report.fxml" />
             </content>
         </Tab>
 

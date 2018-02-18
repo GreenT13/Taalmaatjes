@@ -6,11 +6,13 @@ package com.apon.taalmaatjes.backend.database.generated;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Scriptlog;
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Task;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.ScriptlogRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.StudentRecord;
+import com.apon.taalmaatjes.backend.database.generated.tables.records.TaskRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteerinstanceRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
@@ -48,6 +50,8 @@ public class Keys {
     public static final UniqueKey<ScriptlogRecord> SCLO_PK = UniqueKeys0.SCLO_PK;
     public static final UniqueKey<StudentRecord> STUD_PK = UniqueKeys0.STUD_PK;
     public static final UniqueKey<StudentRecord> STUD_EXTID = UniqueKeys0.STUD_EXTID;
+    public static final UniqueKey<TaskRecord> TASK_PK = UniqueKeys0.TASK_PK;
+    public static final UniqueKey<TaskRecord> TASK_EXTID = UniqueKeys0.TASK_EXTID;
     public static final UniqueKey<VolunteerRecord> VOLU_PK = UniqueKeys0.VOLU_PK;
     public static final UniqueKey<VolunteerRecord> VOLU_EXTID = UniqueKeys0.VOLU_EXTID;
     public static final UniqueKey<VolunteerinstanceRecord> VOIN_PK = UniqueKeys0.VOIN_PK;
@@ -59,6 +63,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<TaskRecord, VolunteerRecord> TASK_VOLU_FK = ForeignKeys0.TASK_VOLU_FK;
     public static final ForeignKey<VolunteerinstanceRecord, VolunteerRecord> VOIN_VOLU_FK = ForeignKeys0.VOIN_VOLU_FK;
     public static final ForeignKey<VolunteermatchRecord, VolunteerRecord> VOMA_VOLU_FK = ForeignKeys0.VOMA_VOLU_FK;
     public static final ForeignKey<VolunteermatchRecord, StudentRecord> VOMA_STUD_FK = ForeignKeys0.VOMA_STUD_FK;
@@ -71,6 +76,8 @@ public class Keys {
         public static final UniqueKey<ScriptlogRecord> SCLO_PK = createUniqueKey(Scriptlog.SCRIPTLOG, "ScLo_PK", Scriptlog.SCRIPTLOG.SCRIPTNAME);
         public static final UniqueKey<StudentRecord> STUD_PK = createUniqueKey(Student.STUDENT, "Stud_PK", Student.STUDENT.STUDENTID);
         public static final UniqueKey<StudentRecord> STUD_EXTID = createUniqueKey(Student.STUDENT, "Stud_ExtId", Student.STUDENT.EXTERNALIDENTIFIER);
+        public static final UniqueKey<TaskRecord> TASK_PK = createUniqueKey(Task.TASK, "Task_PK", Task.TASK.TASKID);
+        public static final UniqueKey<TaskRecord> TASK_EXTID = createUniqueKey(Task.TASK, "Task_ExtId", Task.TASK.EXTERNALIDENTIFIER);
         public static final UniqueKey<VolunteerRecord> VOLU_PK = createUniqueKey(Volunteer.VOLUNTEER, "Volu_PK", Volunteer.VOLUNTEER.VOLUNTEERID);
         public static final UniqueKey<VolunteerRecord> VOLU_EXTID = createUniqueKey(Volunteer.VOLUNTEER, "Volu_ExtId", Volunteer.VOLUNTEER.EXTERNALIDENTIFIER);
         public static final UniqueKey<VolunteerinstanceRecord> VOIN_PK = createUniqueKey(Volunteerinstance.VOLUNTEERINSTANCE, "VoIn_PK", Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID);
@@ -80,6 +87,7 @@ public class Keys {
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
+        public static final ForeignKey<TaskRecord, VolunteerRecord> TASK_VOLU_FK = createForeignKey(com.apon.taalmaatjes.backend.database.generated.Keys.VOLU_PK, Task.TASK, "Task_Volu_FK", Task.TASK.VOLUNTEERID);
         public static final ForeignKey<VolunteerinstanceRecord, VolunteerRecord> VOIN_VOLU_FK = createForeignKey(com.apon.taalmaatjes.backend.database.generated.Keys.VOLU_PK, Volunteerinstance.VOLUNTEERINSTANCE, "VoIn_Volu_FK", Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID);
         public static final ForeignKey<VolunteermatchRecord, VolunteerRecord> VOMA_VOLU_FK = createForeignKey(com.apon.taalmaatjes.backend.database.generated.Keys.VOLU_PK, Volunteermatch.VOLUNTEERMATCH, "VoMa_Volu_FK", Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID);
         public static final ForeignKey<VolunteermatchRecord, StudentRecord> VOMA_STUD_FK = createForeignKey(com.apon.taalmaatjes.backend.database.generated.Keys.STUD_PK, Volunteermatch.VOLUNTEERMATCH, "VoMa_Stud_FK", Volunteermatch.VOLUNTEERMATCH.STUDENTID);

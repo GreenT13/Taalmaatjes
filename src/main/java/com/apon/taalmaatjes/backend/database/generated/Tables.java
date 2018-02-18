@@ -6,6 +6,7 @@ package com.apon.taalmaatjes.backend.database.generated;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Scriptlog;
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Task;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
@@ -35,6 +36,11 @@ public class Tables {
      * The table <code>PUBLIC.STUDENT</code>.
      */
     public static final Student STUDENT = com.apon.taalmaatjes.backend.database.generated.tables.Student.STUDENT;
+
+    /**
+     * The table <code>PUBLIC.TASK</code>.
+     */
+    public static final Task TASK = com.apon.taalmaatjes.backend.database.generated.tables.Task.TASK;
 
     /**
      * The table <code>PUBLIC.VOLUNTEER</code>.

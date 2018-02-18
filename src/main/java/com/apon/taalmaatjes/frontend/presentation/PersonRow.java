@@ -3,14 +3,14 @@ package com.apon.taalmaatjes.frontend.presentation;
 import javafx.beans.property.SimpleStringProperty;
 
 @SuppressWarnings("unused")
-public class Person {
+public class PersonRow {
     // TODO: rewrite this class so it is "normal".
     private final SimpleStringProperty extId;
     private final SimpleStringProperty firstName;
     private final SimpleStringProperty lastName;
     private final SimpleStringProperty email;
 
-    public Person(String extId, String fName, String lName, String email) {
+    public PersonRow(String extId, String fName, String lName, String email) {
         this.extId = new SimpleStringProperty(extId);
         this.firstName = new SimpleStringProperty(fName);
         this.lastName = new SimpleStringProperty(lName);

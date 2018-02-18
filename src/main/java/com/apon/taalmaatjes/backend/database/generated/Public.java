@@ -6,6 +6,7 @@ package com.apon.taalmaatjes.backend.database.generated;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Scriptlog;
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Task;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
@@ -34,7 +35,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 1435632912;
+    private static final long serialVersionUID = 2061779216;
 
     /**
      * The reference instance of <code>PUBLIC</code>
@@ -50,6 +51,11 @@ public class Public extends SchemaImpl {
      * The table <code>PUBLIC.STUDENT</code>.
      */
     public final Student STUDENT = com.apon.taalmaatjes.backend.database.generated.tables.Student.STUDENT;
+
+    /**
+     * The table <code>PUBLIC.TASK</code>.
+     */
+    public final Task TASK = com.apon.taalmaatjes.backend.database.generated.tables.Task.TASK;
 
     /**
      * The table <code>PUBLIC.VOLUNTEER</code>.
@@ -93,6 +99,7 @@ public class Public extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Scriptlog.SCRIPTLOG,
             Student.STUDENT,
+            Task.TASK,
             Volunteer.VOLUNTEER,
             Volunteerinstance.VOLUNTEERINSTANCE,
             Volunteermatch.VOLUNTEERMATCH);

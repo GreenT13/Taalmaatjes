@@ -1,0 +1,75 @@
+.button {
+    -fx-background-color: rgb(0, 184, 222);
+}
+
+/* Why cant I just use .flow-pane ?? */
+#flowPaneAdvancedSearch {
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+    -fx-padding: 5px 0px 0px 0px;
+}
+
+/* Apparently this does not work???? */
+.hbox {
+    -fx-pref-width: 310px;
+    -fx-pref-heigh: 43px;
+    -fx-background-color: green;
+}
+
+.table-view, .table-view:focused, .table-view .column-header-background .label,
+.table-view .column-header,.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-alignment: center-left;
+}
+
+/* Hide selection view*/
+.table-row-cell:filled:selected {
+    -fx-background: -fx-control-inner-background ;
+    -fx-background-color: -fx-table-cell-border-color, -fx-background ;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-table-cell-border-color: derive(-fx-color, 5%);
+}
+/* Hide selection view*/
+.table-row-cell:odd:filled:selected {
+    -fx-background: -fx-control-inner-background-alt ;
+}
+
+.table-row-cell{
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: transparent;
+}
+
+.grayColumnText, .grayColumnText:focused {
+    -fx-text-fill: -darkgray;
+    -columnWidth: 250px;
+    -fx-max-width: -columnWidth;
+    -fx-min-width: -columnWidth;
+    -fx-pref-width: -columnWidth;
+}
+
+.grayColumnTextId {
+    -fx-text-fill: -darkgray;
+    -columnWidth: 50px;
+    -fx-max-width: -columnWidth;
+    -fx-min-width: -columnWidth;
+    -fx-pref-width: -columnWidth;
+}
+
+.grayColumnTextDouble {
+    -fx-text-fill: -darkgray;
+    -columnWidth: 500px;
+    -fx-max-width: -columnWidth;
+    -fx-min-width: -columnWidth;
+    -fx-pref-width: -columnWidth;
+}
+
+
+.yes-no-combo {
+    -fx-pref-width: 100px;
+}

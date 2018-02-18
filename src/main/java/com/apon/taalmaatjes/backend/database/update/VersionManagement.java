@@ -39,7 +39,7 @@ public class VersionManagement {
     private static Context context;
 
     /**
-     * Execute the following steps:
+     * execute the following steps:
      * 1. If the table Scriptlog does not exist, we run CREATE_TABLE_SCRIPT.
      * 2. Run any SQL scrit from ALL_SCRIPT_NAMES that did not run yet.
      * @param context The context used.
@@ -119,9 +119,9 @@ public class VersionManagement {
     }
 
     /**
-     * Execute the following three steps:
+     * execute the following three steps:
      * 1. Insert a new Scriptlog indicating we start the script.
-     * 2. Execute the script with name scriptName, using #runFile(..).
+     * 2. execute the script with name scriptName, using #runFile(..).
      * 3. Update the Scriptlog indicating we finished the script.
      * @param scriptName The name of the script to run.
      * @return {@code true} if all steps succeed, else {@code false}.
@@ -146,7 +146,7 @@ public class VersionManagement {
     }
 
     /**
-     * Execute the SQL script with name scriptName.
+     * execute the SQL script with name scriptName.
      * @param scriptName Name of the script.
      * @return {@code true} if all steps succeed, else {@code false}.
      */

@@ -38,7 +38,7 @@ public class DetailVolunteer implements Screen {
     TextField labelPostalCode, labelCity, labelHasTraining, labelAge;
 
     @FXML
-    VBox vboxActive, vboxMatch;
+    VBox vboxActive, vboxMatch, vboxTask;
 
     @FXML
     ComboBox<String> comboStudents;
@@ -119,6 +119,11 @@ public class DetailVolunteer implements Screen {
 
         for (VolunteerMatchReturn volunteerMatchReturn : volunteerReturn.getListVolunteerMatch()) {
             addMatchLine(volunteerMatchReturn);
+        }
+
+        // Add tasks
+        for (TaskReturn taskReturn : volunteerReturn.getListTaskReturn()) {
+            addTaskLine(taskReturn);
         }
 
         // Set the log field.
@@ -204,6 +209,22 @@ public class DetailVolunteer implements Screen {
         label.setText(text);
     }
 
+    private void addTaskLine(TaskReturn taskReturn) {
+        // Initialize the frontend variables.
+        HBox hbox = new HBox();
+        Hyperlink hyperlink = new Hyperlink();
+        Label label = new Label();
+        hbox.getChildren().addAll(hyperlink, label);
+        vboxTask.getChildren().add(hbox);
+
+        // Fix hyperlink
+        hyperlink.setText("(Wijzigen)");
+        hyperlink.setOnAction(event -> goToScreenEditTask(taskReturn.getTaskExtId()));
+
+        label.getStyleClass().add("labelMatch");
+        label.setText(" " + taskReturn.getTaskExtId() + ": " + taskReturn.getTitle());
+    }
+
     @FXML
     public void initialize() {
         // Webview stuff.
@@ -265,6 +286,23 @@ public class DetailVolunteer implements Screen {
     @FXML
     private void goToScreenEditLog() {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_EDIT_LOG, volunteerExtId,
+                false, true);
+    }
+
+    @FXML
+    private void goToScreenAddTask() {
+        AddTaskObject addTaskObject = new AddTaskObject();
+        addTaskObject.setVolunteerExtId(volunteerExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_ADD, addTaskObject,
+                false, true);
+    }
+
+    @FXML
+    private void goToScreenEditTask(String taskExtId) {
+        AddTaskObject addTaskObject = new AddTaskObject();
+        addTaskObject.setVolunteerExtId(volunteerExtId);
+        addTaskObject.setTaskExtId(taskExtId);
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_ADD, addTaskObject,
                 false, true);
     }
 }

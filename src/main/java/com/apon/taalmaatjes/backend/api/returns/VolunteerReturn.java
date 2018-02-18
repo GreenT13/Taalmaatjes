@@ -27,6 +27,7 @@ public class VolunteerReturn {
 
     private List<VolunteerInstanceReturn> listVolunteerInstance;
     private List<VolunteerMatchReturn> listVolunteerMatch;
+    private List<TaskReturn> listTaskReturn;
 
     public VolunteerReturn() {
         listVolunteerInstance = new ArrayList();
@@ -175,5 +176,13 @@ public class VolunteerReturn {
 
     public void setLog(String log) {
         this.log = log;
+    }
+
+    public List<TaskReturn> getListTaskReturn() {
+        return listTaskReturn;
+    }
+
+    public void setListTaskReturn(List<TaskReturn> listTaskReturn) {
+        this.listTaskReturn = listTaskReturn;
     }
 }

@@ -65,4 +65,17 @@ create table VolunteerMatch (
   constraint "VoMa_Stud_FK" foreign key (studentId) references Student (studentId)
 );
 
+create table Task (
+  taskId int not null,
+  externalIdentifier varchar(10) not null,
+  title varchar(100) not null,
+  description varchar(1000),
+  volunteerId int not null,
+  isCancelled boolean not null,
+  isFinished boolean not null,
+  constraint "Task_PK" primary key (taskId),
+  constraint "Task_ExtId" unique (externalIdentifier),
+  constraint "Task_Volu_FK" foreign key (volunteerId) references Volunteer (volunteerid)
+);
+
 update Scriptlog set isCompleted = true, tsFinished = current_timestamp where scriptName = '20180105_CreateTables';

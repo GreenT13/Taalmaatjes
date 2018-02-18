@@ -12,6 +12,7 @@
 <?import javafx.scene.web.WebView?>
 
 <!--suppress ALL -->
+
 <HBox stylesheets="@DetailVolunteer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.DetailVolunteer">
     <children>
         <VBox HBox.hgrow="ALWAYS">
@@ -204,6 +205,20 @@
                       <Insets top="10.0" />
                    </padding>
                 </VBox>
+            <VBox prefWidth="100.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label styleClass="largeFont" text="Taken " />
+                        <Hyperlink onAction="#goToScreenAddTask" styleClass="largeFont" text="(toevoegen)" />
+                     </children>
+                  </HBox>
+                  <VBox fx:id="vboxTask" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
             <VBox>
                <children>
                   <HBox>

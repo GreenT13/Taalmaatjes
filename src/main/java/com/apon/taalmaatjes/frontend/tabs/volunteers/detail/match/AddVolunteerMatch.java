@@ -83,6 +83,7 @@ public class AddVolunteerMatch implements Screen {
         prefill((VolunteerMatchReturn) result.getResult());
     }
 
+    @SuppressWarnings("Duplicates")
     private void changeList(String oldValue, String newValue) {
         if (newValue.contains(":")) {
             return;

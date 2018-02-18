@@ -6,6 +6,7 @@ package com.apon.taalmaatjes.backend.database.generated;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Scriptlog;
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Task;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteerinstance;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
@@ -37,6 +38,9 @@ public class Indexes {
     public static final Index PRIMARY_KEY_B = Indexes0.PRIMARY_KEY_B;
     public static final Index PRIMARY_KEY_BA = Indexes0.PRIMARY_KEY_BA;
     public static final Index STUD_EXTID_INDEX_B = Indexes0.STUD_EXTID_INDEX_B;
+    public static final Index PRIMARY_KEY_27 = Indexes0.PRIMARY_KEY_27;
+    public static final Index TASK_EXTID_INDEX_2 = Indexes0.TASK_EXTID_INDEX_2;
+    public static final Index TASK_VOLU_FK_INDEX_2 = Indexes0.TASK_VOLU_FK_INDEX_2;
     public static final Index PRIMARY_KEY_2 = Indexes0.PRIMARY_KEY_2;
     public static final Index VOLU_EXTID_INDEX_2 = Indexes0.VOLU_EXTID_INDEX_2;
     public static final Index PRIMARY_KEY_5 = Indexes0.PRIMARY_KEY_5;
@@ -53,6 +57,9 @@ public class Indexes {
         public static Index PRIMARY_KEY_B = createIndex("PRIMARY_KEY_B", Scriptlog.SCRIPTLOG, new OrderField[] { Scriptlog.SCRIPTLOG.SCRIPTNAME }, true);
         public static Index PRIMARY_KEY_BA = createIndex("PRIMARY_KEY_BA", Student.STUDENT, new OrderField[] { Student.STUDENT.STUDENTID }, true);
         public static Index STUD_EXTID_INDEX_B = createIndex("Stud_ExtId_INDEX_B", Student.STUDENT, new OrderField[] { Student.STUDENT.EXTERNALIDENTIFIER }, true);
+        public static Index PRIMARY_KEY_27 = createIndex("PRIMARY_KEY_27", Task.TASK, new OrderField[] { Task.TASK.TASKID }, true);
+        public static Index TASK_EXTID_INDEX_2 = createIndex("Task_ExtId_INDEX_2", Task.TASK, new OrderField[] { Task.TASK.EXTERNALIDENTIFIER }, true);
+        public static Index TASK_VOLU_FK_INDEX_2 = createIndex("Task_Volu_FK_INDEX_2", Task.TASK, new OrderField[] { Task.TASK.VOLUNTEERID }, false);
         public static Index PRIMARY_KEY_2 = createIndex("PRIMARY_KEY_2", Volunteer.VOLUNTEER, new OrderField[] { Volunteer.VOLUNTEER.VOLUNTEERID }, true);
         public static Index VOLU_EXTID_INDEX_2 = createIndex("Volu_ExtId_INDEX_2", Volunteer.VOLUNTEER, new OrderField[] { Volunteer.VOLUNTEER.EXTERNALIDENTIFIER }, true);
         public static Index PRIMARY_KEY_5 = createIndex("PRIMARY_KEY_5", Volunteerinstance.VOLUNTEERINSTANCE, new OrderField[] { Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID, Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID }, true);

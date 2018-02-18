@@ -6,10 +6,7 @@ import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerMapper;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
-import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
-import com.apon.taalmaatjes.backend.database.mydao.VolunteerInstanceMyDao;
-import com.apon.taalmaatjes.backend.database.mydao.VolunteerMatchMyDao;
-import com.apon.taalmaatjes.backend.database.mydao.VolunteerMyDao;
+import com.apon.taalmaatjes.backend.database.mydao.*;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
@@ -61,6 +58,10 @@ public class VolunteerAPI {
         // Retrieve all matches
         VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
         volunteerMapper.setMatchList(volunteerMatchMyDao.getMatchForVolunteer(volunteerId, false), new StudentMyDao(context));
+
+        // Retrieve all tasks
+        TaskMyDao taskMyDao = new TaskMyDao(context);
+        volunteerMapper.setTaskList(taskMyDao.getTasksForVolunteer(volunteerId));
 
         // Close and return.
         context.close();
@@ -198,7 +199,7 @@ public class VolunteerAPI {
         }
 
         // Return the list.
-        Log.logDebug("End VolunteerAPI.searchByInput");
+        Log.logDebug("End VolunteerAPI.advancedSearch");
         return ResultUtil.createOk(volunteerReturns);
     }
 

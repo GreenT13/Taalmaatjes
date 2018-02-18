@@ -20,21 +20,21 @@ public class TransitionHandler {
 
     private TransitionHandler() {
         mapBreadcrum = new HashMap();
-        mapBreadcrum.put(TabEnum.HOME, new Stack());
+        mapBreadcrum.put(TabEnum.TASKS, new Stack());
         mapBreadcrum.put(TabEnum.VOLUNTEERS, new Stack());
         mapBreadcrum.put(TabEnum.STUDENTS, new Stack());
         mapBreadcrum.put(TabEnum.REPORTS, new Stack());
 
         // Initialize all starting screen.
         mapCurrentScreen = new HashMap();
-        mapCurrentScreen.put(TabEnum.HOME, ScreenEnum.HOME);
         mapCurrentScreen.put(TabEnum.VOLUNTEERS, ScreenEnum.VOLUNTEERS_OVERVIEW);
         mapCurrentScreen.put(TabEnum.STUDENTS, ScreenEnum.STUDENTS_OVERVIEW);
+        mapCurrentScreen.put(TabEnum.TASKS, ScreenEnum.TASKS_OVERVIEW);
         mapCurrentScreen.put(TabEnum.REPORTS, ScreenEnum.REPORT);
 
         // Always start on the home screen.
-        currentBreadcrum = mapBreadcrum.get(TabEnum.HOME);
-        currentTab = TabEnum.HOME;
+        currentBreadcrum = mapBreadcrum.get(TabEnum.VOLUNTEERS);
+        currentTab = TabEnum.VOLUNTEERS;
 
         // Initialize variable. It will be filled in Main.java using setters in this class.
         mapEnumTab = new HashMap();
@@ -149,16 +149,16 @@ public class TransitionHandler {
         return true;
     }
 
-    public void setTabHome(Tab tabHome) {
-        mapEnumTab.put(TabEnum.HOME, tabHome);
-    }
-
     public void setTabVolunteer(Tab tabVolunteer) {
         mapEnumTab.put(TabEnum.VOLUNTEERS, tabVolunteer);
     }
 
     public void setTabStudent(Tab tabStudent) {
         mapEnumTab.put(TabEnum.STUDENTS, tabStudent);
+    }
+
+    public void setTabTask(Tab tabTask) {
+        mapEnumTab.put(TabEnum.TASKS, tabTask);
     }
 
     public void setTabReport(Tab tabReport) {

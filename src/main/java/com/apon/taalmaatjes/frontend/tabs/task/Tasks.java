@@ -1,12 +1,13 @@
-package com.apon.taalmaatjes.frontend.tabs.students;
+package com.apon.taalmaatjes.frontend.tabs.task;
 
 import com.apon.taalmaatjes.backend.api.StudentAPI;
+import com.apon.taalmaatjes.backend.api.TaskAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
-import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
+import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.PersonRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
-import com.apon.taalmaatjes.frontend.presentation.TextUtils;
+import com.apon.taalmaatjes.frontend.presentation.TaskRow;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.application.Platform;
@@ -24,24 +25,23 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class Students implements Screen {
+public class Tasks implements Screen {
+
     private boolean isVisible = false;
 
     @FXML
     private FlowPane flowPaneAdvancedSearch;
 
     @FXML
-    private TableView<PersonRow> tableViewResult;
+    private TableView<TaskRow> tableViewResult;
 
     @FXML
     private TextField textFieldSearch;
 
     @FXML
-    ComboBox<String> comboIsLookingForVolunteer, comboIsGroup, comboHasMatch;
+    ComboBox<String> comboStatus;
 
-    @FXML
-    HBox hboxError; @FXML
-    Label labelError;
+    @FXML HBox hboxError; @FXML Label labelError;
 
     private void showError(@Nullable Result result) {
         hboxError.setVisible(true);
@@ -63,10 +63,9 @@ public class Students implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<TaskRow, String>("extId"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("title"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("description"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -83,29 +82,28 @@ public class Students implements Screen {
                     //Check whether item is selected and set value of selected item to Label
                     if(tableViewResult.getSelectionModel().getSelectedItem() != null) {
                         // Handle actions in different function.
-                        clickedOnRow((PersonRow) newValue);
+                        clickedOnRow((TaskRow) newValue);
                     }
                 });
     }
 
-    private void clickedOnRow(PersonRow personRow) {
+    private void clickedOnRow(TaskRow taskRow) {
         // Clear selection model when out of the ChangeListener (so addVolunteer runLater).
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
         // TransitionHandler to detail screen.
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, personRow.getExtId(),
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_DETAIL, taskRow.getExtId(),
                 true, true);
     }
 
-    private void fillTable(List<StudentReturn> list) {
-        ObservableList<PersonRow> data = FXCollections.observableArrayList();
+    private void fillTable(List<TaskReturn> list) {
+        ObservableList<TaskRow> data = FXCollections.observableArrayList();
 
-        for (StudentReturn studentReturn : list) {
-            data.add(new PersonRow(studentReturn.getExternalIdentifier(),
-                    studentReturn.getFirstName(),
-                    studentReturn.getLastName(),
-                    null));
+        for (TaskReturn taskReturn : list) {
+            data.add(new TaskRow(taskReturn.getTaskExtId(),
+                    taskReturn.getTitle(),
+                    taskReturn.getDescription()));
         }
 
         tableViewResult.setItems(data);
@@ -116,13 +114,26 @@ public class Students implements Screen {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
         if (!isVisible) {
-            result = StudentAPI.getInstance().advancedSearch(textFieldSearch.getText(),
+            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(),
                     null, null, null);
         } else {
-            result = StudentAPI.getInstance().advancedSearch(textFieldSearch.getText(),
-                    TextUtils.getComboValue(comboIsLookingForVolunteer.getValue()),
-                    TextUtils.getComboValue(comboIsGroup.getValue()),
-                    TextUtils.getComboValue(comboHasMatch.getValue()));
+            Boolean isFinished = null;
+            Boolean isCancelled = null;
+            switch (comboStatus.getValue()) {
+                case "Open":
+                    isFinished = false;
+                    isCancelled = false;
+                    break;
+                case "Afgehandeld":
+                    isFinished = true;
+                    isCancelled = false;
+                    break;
+                case "Geannuleerd":
+                    isFinished = false;
+                    isCancelled = true;
+                    break;
+            }
+            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished, isCancelled,null);
         }
 
         if (result == null || result.hasErrors()) {
@@ -130,7 +141,7 @@ public class Students implements Screen {
             return;
         }
 
-        fillTable((List<StudentReturn>) result.getResult());
+        fillTable((List<TaskReturn>) result.getResult());
     }
 
     /**
@@ -144,14 +155,14 @@ public class Students implements Screen {
     }
 
     @FXML
-    public void goToScreenAddStudent(ActionEvent actionEvent) {
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_ADD, null,
+    public void goToScreenAddTask(ActionEvent actionEvent) {
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_ADD, null,
                 false, true);
     }
-
 
     @Override
     public void setObject(Object o) {
         // Do nothing.
     }
+
 }

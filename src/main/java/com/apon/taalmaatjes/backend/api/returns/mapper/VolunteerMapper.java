@@ -1,12 +1,15 @@
 package com.apon.taalmaatjes.backend.api.returns.mapper;
 
+import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.TaskPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
+import com.apon.taalmaatjes.backend.database.mydao.TaskMyDao;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 
 import java.util.ArrayList;
@@ -67,7 +70,6 @@ public class VolunteerMapper {
                 volunteerReturn.setActiveToday(true);
                 volunteerReturn.setActiveUntil(volunteerinstancePojo.getDateend());
             }
-
         }
     }
 
@@ -92,8 +94,20 @@ public class VolunteerMapper {
         for (VolunteermatchPojo volunteermatchPojo : listVolunteerMatchPojo) {
             addMatch(volunteermatchPojo, studentMyDao);
         }
+    }
 
+    private void addTask(TaskPojo taskPojo) {
+        TaskMapper taskMapper = new TaskMapper();
+        taskMapper.setTask(taskPojo);
+        volunteerReturn.getListTaskReturn().add(taskMapper.getTaskReturn());
+    }
 
+    public void setTaskList(List<TaskPojo> listTaskPojo) {
+        List<TaskReturn> listTaskReturn = new ArrayList();
+        volunteerReturn.setListTaskReturn(listTaskReturn);
+        for (TaskPojo taskPojo : listTaskPojo) {
+            addTask(taskPojo);
+        }
     }
 
     public VolunteerPojo getPojo(Integer volunteerId) {

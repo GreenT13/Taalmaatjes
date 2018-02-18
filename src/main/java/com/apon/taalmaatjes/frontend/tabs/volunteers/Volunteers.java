@@ -4,7 +4,7 @@ import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.Person;
+import com.apon.taalmaatjes.frontend.presentation.PersonRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
@@ -31,7 +31,7 @@ public class Volunteers implements Screen {
     private FlowPane flowPaneAdvancedSearch;
 
     @FXML
-    private TableView<Person> tableViewResult;
+    private TableView<PersonRow> tableViewResult;
 
     @FXML
     private TextField textFieldSearch, inputCity;
@@ -61,10 +61,10 @@ public class Volunteers implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<Person, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("extId"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("lastName"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("email"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -81,26 +81,26 @@ public class Volunteers implements Screen {
                 //Check whether item is selected and set value of selected item to Label
                 if(tableViewResult.getSelectionModel().getSelectedItem() != null) {
                     // Handle actions in different function.
-                    clickedOnRow((Person) newValue);
+                    clickedOnRow((PersonRow) newValue);
                 }
             });
     }
 
-    private void clickedOnRow(Person person) {
+    private void clickedOnRow(PersonRow personRow) {
         // Clear selection model when out of the ChangeListener (so addVolunteer runLater).
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
         // TransitionHandler to detail screen.
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, person.getExtId(),
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, personRow.getExtId(),
                 true, true);
     }
 
     private void fillTable(List<VolunteerReturn> list) {
-        ObservableList<Person> data = FXCollections.observableArrayList();
+        ObservableList<PersonRow> data = FXCollections.observableArrayList();
 
         for (VolunteerReturn volunteerReturn : list) {
-            data.add(new Person(volunteerReturn.getExternalIdentifier(),
+            data.add(new PersonRow(volunteerReturn.getExternalIdentifier(),
                     volunteerReturn.getFirstName(),
                     volunteerReturn.getLastName(),
                     volunteerReturn.getEmail()));
