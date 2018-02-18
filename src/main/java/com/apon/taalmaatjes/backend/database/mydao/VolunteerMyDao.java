@@ -204,8 +204,10 @@ public class VolunteerMyDao extends VolunteerDao {
             }
         }
 
-        if (hasTraining != null) {
+        if (hasTraining != null && hasTraining) {
             query.where(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
+        } else if (hasTraining != null && !hasTraining) {
+            query.where(Volunteer.VOLUNTEER.DATETRAINING.isNull());
         }
 
         if (hasMatch != null) {
@@ -227,7 +229,7 @@ public class VolunteerMyDao extends VolunteerDao {
             query.where(Volunteer.VOLUNTEER.CITY.lower().like("%" + city.toLowerCase() + "%"));
         }
 
-        return query.orderBy(Volunteer.VOLUNTEER.VOLUNTEERID.desc()).limit(50).fetch().map(mapper());
+        return query.orderBy(Volunteer.VOLUNTEER.FIRSTNAME.asc()).limit(50).fetch().map(mapper());
     }
 
 }

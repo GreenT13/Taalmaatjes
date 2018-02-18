@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <BorderPane stylesheets="@Volunteers.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.Volunteers">
    <center>
       <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
@@ -48,8 +49,27 @@
                         <Button mnemonicParsing="false" onAction="#goToScreenAddVolunteer" text="Toevoegen vrijwilliger" />
                      </children>
                   </StackPane>
+                  <HBox fx:id="random" alignment="CENTER_RIGHT">
+                     <children>
+                        <Label text="Is actief: " />
+                        <ComboBox fx:id="comboIsActive" onAction="#handleActionSearch" styleClass="yes-no-combo">
+                           <items>
+                               <FXCollections fx:factory="observableArrayList">
+                                   <String fx:id="empty" fx:value="" />
+                                   <String fx:id="yes" fx:value="Ja" />
+                                   <String fx:id="no" fx:value="Nee" />
+                               </FXCollections>
+                           </items>
+                           <value>
+                              <String fx:value="Ja" />
+                           </value>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                  </HBox>
                   <TextField fx:id="textFieldSearch" onAction="#handleActionSearch" />
-                  <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionSearch" text="Zoeken" />
                   <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionToggleAdvancedSearch" text="▼" />
                </children>
             </HBox>
@@ -58,27 +78,13 @@
                   <HBox fx:id="random211" alignment="CENTER_RIGHT">
                      <children>
                         <Label text="Stad: " />
-                        <TextField fx:id="inputCity" />
-                     </children>
-                  </HBox>
-                  <HBox fx:id="random" alignment="CENTER_RIGHT">
-                     <children>
-                        <Label text="Is actief: " />
-                        <ComboBox fx:id="comboIsActive" styleClass="yes-no-combo">
-                           <items>
-                               <FXCollections fx:factory="observableArrayList">
-                                   <String fx:id="empty" fx:value="" />
-                                   <String fx:id="yes" fx:value="Ja" />
-                                   <String fx:id="no" fx:value="Nee" />
-                               </FXCollections>
-                           </items>
-                        </ComboBox>
+                        <TextField fx:id="inputCity" onAction="#handleActionSearch" />
                      </children>
                   </HBox>
                   <HBox fx:id="random2" alignment="CENTER_RIGHT">
                      <children>
                         <Label text="Training gehad: " />
-                        <ComboBox fx:id="comboTraining" styleClass="yes-no-combo">
+                        <ComboBox fx:id="comboTraining" onAction="#handleActionSearch" styleClass="yes-no-combo">
                            <items>
                               <FXCollections fx:factory="observableArrayList">
                                  <String fx:id="empty2" fx:value="" />
@@ -92,7 +98,7 @@
                   <HBox fx:id="random21" alignment="CENTER_RIGHT">
                      <children>
                         <Label text="Heeft taalmaatjes: " />
-                        <ComboBox fx:id="comboHasMatch" styleClass="yes-no-combo">
+                        <ComboBox fx:id="comboHasMatch" onAction="#handleActionSearch" styleClass="yes-no-combo">
                            <items>
                               <FXCollections fx:factory="observableArrayList">
                                  <String fx:id="empty21" fx:value="" />

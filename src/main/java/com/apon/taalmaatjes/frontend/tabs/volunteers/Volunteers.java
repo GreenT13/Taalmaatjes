@@ -84,6 +84,10 @@ public class Volunteers implements Screen {
                     clickedOnRow((PersonRow) newValue);
                 }
             });
+
+        // Update search when typing.
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
+        inputCity.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
     }
 
     private void clickedOnRow(PersonRow personRow) {
@@ -115,7 +119,7 @@ public class Volunteers implements Screen {
         Result result;
         if (!isVisible) {
             result = VolunteerAPI.getInstance().advancedSearch(textFieldSearch.getText(),
-                    null, null, null, null);
+                    TextUtils.getComboValue(comboIsActive.getValue()), null, null, null);
         } else {
             result = VolunteerAPI.getInstance().advancedSearch(textFieldSearch.getText(),
                     TextUtils.getComboValue(comboIsActive.getValue()),
