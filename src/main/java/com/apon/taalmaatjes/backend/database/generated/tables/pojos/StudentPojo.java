@@ -22,15 +22,16 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StudentPojo implements Serializable {
 
-    private static final long serialVersionUID = -561141391;
+    private static final long serialVersionUID = -390419701;
 
     private Integer studentid;
     private String  externalidentifier;
     private String  firstname;
     private String  insertion;
     private String  lastname;
-    private Boolean islookingforvolunteer;
     private Boolean isgroup;
+    private String  groupidentification;
+    private Boolean hasquit;
 
     public StudentPojo() {}
 
@@ -40,8 +41,9 @@ public class StudentPojo implements Serializable {
         this.firstname = value.firstname;
         this.insertion = value.insertion;
         this.lastname = value.lastname;
-        this.islookingforvolunteer = value.islookingforvolunteer;
         this.isgroup = value.isgroup;
+        this.groupidentification = value.groupidentification;
+        this.hasquit = value.hasquit;
     }
 
     public StudentPojo(
@@ -50,16 +52,18 @@ public class StudentPojo implements Serializable {
         String  firstname,
         String  insertion,
         String  lastname,
-        Boolean islookingforvolunteer,
-        Boolean isgroup
+        Boolean isgroup,
+        String  groupidentification,
+        Boolean hasquit
     ) {
         this.studentid = studentid;
         this.externalidentifier = externalidentifier;
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
-        this.islookingforvolunteer = islookingforvolunteer;
         this.isgroup = isgroup;
+        this.groupidentification = groupidentification;
+        this.hasquit = hasquit;
     }
 
     public Integer getStudentid() {
@@ -102,20 +106,28 @@ public class StudentPojo implements Serializable {
         this.lastname = lastname;
     }
 
-    public Boolean getIslookingforvolunteer() {
-        return this.islookingforvolunteer;
-    }
-
-    public void setIslookingforvolunteer(Boolean islookingforvolunteer) {
-        this.islookingforvolunteer = islookingforvolunteer;
-    }
-
     public Boolean getIsgroup() {
         return this.isgroup;
     }
 
     public void setIsgroup(Boolean isgroup) {
         this.isgroup = isgroup;
+    }
+
+    public String getGroupidentification() {
+        return this.groupidentification;
+    }
+
+    public void setGroupidentification(String groupidentification) {
+        this.groupidentification = groupidentification;
+    }
+
+    public Boolean getHasquit() {
+        return this.hasquit;
+    }
+
+    public void setHasquit(Boolean hasquit) {
+        this.hasquit = hasquit;
     }
 
     @Override
@@ -127,8 +139,9 @@ public class StudentPojo implements Serializable {
         sb.append(", ").append(firstname);
         sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
-        sb.append(", ").append(islookingforvolunteer);
         sb.append(", ").append(isgroup);
+        sb.append(", ").append(groupidentification);
+        sb.append(", ").append(hasquit);
 
         sb.append(")");
         return sb.toString();

@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <HBox stylesheets="@DetailStudent.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.students.detail.DetailStudent">
     <children>
         <VBox HBox.hgrow="ALWAYS">
@@ -39,29 +40,34 @@
                             <children>
                                 <VBox prefHeight="42.0" prefWidth="176.0">
                                     <children>
-                                        <HBox styleClass="hboxAlign">
-                                            <children>
-                                                <Label text="Is op zoek" />
-                                            </children>
-                                        </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Groep identificatie" />
+                                 </children>
+                              </HBox>
                                         <HBox styleClass="hboxAlign">
                                             <children>
                                                 <Label text="Is een groep" />
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Is gestopt" />
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                                 <VBox>
                                     <children>
-                                        <HBox styleClass="hboxAlign">
-                                            <children>
-                                                <TextField fx:id="labelIsLookingForVolunteer" editable="false" prefHeight="21.0" styleClass="copyable-label">
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                </TextField>
-                                            </children>
-                                        </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelGroupIdentification" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                                         <HBox styleClass="hboxAlign">
                                             <children>
                                                 <TextField fx:id="labelIsGroup" editable="false" prefHeight="21.0" styleClass="copyable-label">
@@ -71,6 +77,15 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelHasQuit" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                             </children>

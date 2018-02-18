@@ -74,8 +74,8 @@ public class StudentAPI {
         Log.logDebug("Start StudentAPI.addVolunteer for externalIdentifier " + studentReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
-        if (studentReturn.getLookingForVolunteer() == null) {
-            return ResultUtil.createError("StudentAPI.error.fillIsLookingForVolunteer");
+        if (studentReturn.getHasQuit() == null) {
+            return ResultUtil.createError("StudentAPI.error.fillHasQuit");
         }
         if (studentReturn.getLastName() == null) {
             return ResultUtil.createError("StudentAPI.error.fillLastName");
@@ -115,8 +115,8 @@ public class StudentAPI {
         Log.logDebug("Start StudentAPI.updateStudent for studentExtId " + studentReturn.getExternalIdentifier());
 
         // Check if it is a valid volunteer.
-        if (studentReturn.getLookingForVolunteer() == null) {
-            return ResultUtil.createError("StudentAPI.error.fillIsLookingForVolunteer");
+        if (studentReturn.getHasQuit() == null) {
+            return ResultUtil.createError("StudentAPI.error.fillHasQuit");
         }
         if (studentReturn.getExternalIdentifier() == null) {
             return ResultUtil.createError("StudentAPI.error.fillStudentExtId");
@@ -165,7 +165,7 @@ public class StudentAPI {
                 + " isGroup " + isGroup + " hasMatch " + hasMatch);
         // Retrieve the list from the database.
         StudentMyDao studentMyDao = new StudentMyDao(context);
-        List<StudentPojo> studentPojoList = studentMyDao.advancedSearch(input, isLookingForVolunteer, isGroup, hasMatch);
+        List<StudentPojo> studentPojoList = studentMyDao.advancedSearch(input, isGroup, hasMatch);
 
         // No connection is needed.
         context.close();

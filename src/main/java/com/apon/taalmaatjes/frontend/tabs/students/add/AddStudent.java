@@ -24,10 +24,10 @@ public class AddStudent implements Screen {
     Label labelTitle;
 
     @FXML
-    TextField inputFirstName, inputInsertion, inputLastName;
+    TextField inputFirstName, inputInsertion, inputLastName, inputGroupIdentification;
 
     @FXML
-    CheckBox checkIsGroup, checkIsLookingForVolunteer;
+    CheckBox checkIsGroup, checkHasQuit;
 
     private String studentExtId;
 
@@ -91,8 +91,9 @@ public class AddStudent implements Screen {
         studentReturn.setFirstName(StringUtil.getDatabaseString(inputFirstName.getText()));
         studentReturn.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
         studentReturn.setLastName(StringUtil.getDatabaseString(inputLastName.getText()));
-        studentReturn.setLookingForVolunteer(checkIsLookingForVolunteer.isSelected());
         studentReturn.setGroup(checkIsGroup.isSelected());
+        studentReturn.setGroupIdentification(StringUtil.getDatabaseString(inputGroupIdentification.getText()));
+        studentReturn.setHasQuit(checkHasQuit.isSelected());
 
         return studentReturn;
     }
@@ -115,7 +116,8 @@ public class AddStudent implements Screen {
         inputFirstName.setText(studentReturn.getFirstName());
         inputInsertion.setText(studentReturn.getInsertion());
         inputLastName.setText(studentReturn.getLastName());
-        checkIsLookingForVolunteer.setSelected(studentReturn.getLookingForVolunteer());
+        inputGroupIdentification.setText(studentReturn.getGroupIdentification());
         checkIsGroup.setSelected(studentReturn.getGroup());
+        checkHasQuit.setSelected(studentReturn.getHasQuit());
     }
 }

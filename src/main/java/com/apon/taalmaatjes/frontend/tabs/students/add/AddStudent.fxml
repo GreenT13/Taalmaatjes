@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <HBox stylesheets="@AddStudent.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.students.add.AddStudent">
     <children>
         <VBox prefHeight="870.0" prefWidth="536.0">
@@ -25,7 +26,7 @@
             </HBox>
                 <HBox prefHeight="384.0" prefWidth="513.0">
                     <children>
-                        <VBox prefHeight="200.0" prefWidth="124.0">
+                        <VBox prefHeight="384.0" prefWidth="139.0">
                             <children>
                                 <HBox styleClass="hboxAlign">
                                     <children>
@@ -42,6 +43,11 @@
                                         <Label text="Achternaam" />
                                     </children>
                                 </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Groep identificatie" />
+                           </children>
+                        </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
                                         <Label text="Is groep" />
@@ -49,7 +55,7 @@
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <Label text="Is op zoek" />
+                                        <Label text="Is gestopt" />
                                     </children>
                                 </HBox>
                             </children>
@@ -71,6 +77,11 @@
                                         <TextField fx:id="inputLastName" prefHeight="43.0" HBox.hgrow="ALWAYS" />
                                     </children>
                                 </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <TextField fx:id="inputGroupIdentification" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
                                         <CheckBox fx:id="checkIsGroup" mnemonicParsing="false" />
@@ -78,7 +89,7 @@
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <CheckBox fx:id="checkIsLookingForVolunteer" mnemonicParsing="false" selected="true" />
+                                        <CheckBox fx:id="checkHasQuit" mnemonicParsing="false" />
                                     </children>
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">

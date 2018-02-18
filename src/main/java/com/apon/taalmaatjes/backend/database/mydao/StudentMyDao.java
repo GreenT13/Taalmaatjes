@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.jooq.impl.DSL.using;
 
+@SuppressWarnings("ALL")
 public class StudentMyDao extends StudentDao {
     private final static Integer STARTING_EXT_ID = 5001;
 
@@ -171,12 +172,11 @@ public class StudentMyDao extends StudentDao {
     /**
      * Search for students based on non-null inputs.
      * @param input
-     * @param isLookingForVolunteer
      * @param isGroup
      * @param hasMatch
      * @return
      */
-    public List<StudentPojo> advancedSearch(String input, Boolean isLookingForVolunteer, Boolean isGroup, Boolean hasMatch) {
+    public List<StudentPojo> advancedSearch(String input, Boolean isGroup, Boolean hasMatch) {
         SelectWhereStep<StudentRecord> query = using(configuration()).selectFrom(Student.STUDENT);
 
         // Add the input to search criteria.
@@ -189,10 +189,6 @@ public class StudentMyDao extends StudentDao {
                                 .or(Student.STUDENT.LASTNAME.lower().like(s + "%"))
                 );
             }
-        }
-
-        if (isLookingForVolunteer != null) {
-            query.where(Student.STUDENT.ISLOOKINGFORVOLUNTEER.eq(isLookingForVolunteer));
         }
 
         if (isGroup != null) {

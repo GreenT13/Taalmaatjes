@@ -7,8 +7,9 @@ public class StudentReturn {
     private String firstName;
     private String insertion;
     private String lastName;
-    private Boolean isLookingForVolunteer;
     private Boolean isGroup;
+    private String groupIdentification;
+    private Boolean hasQuit;
 
     private List<VolunteerMatchReturn> listVolunteerMatch;
 
@@ -44,14 +45,6 @@ public class StudentReturn {
         this.lastName = lastName;
     }
 
-    public Boolean getLookingForVolunteer() {
-        return isLookingForVolunteer;
-    }
-
-    public void setLookingForVolunteer(Boolean lookingForVolunteer) {
-        isLookingForVolunteer = lookingForVolunteer;
-    }
-
     public Boolean getGroup() {
         return isGroup;
     }
@@ -66,5 +59,21 @@ public class StudentReturn {
 
     public void setListVolunteerMatch(List<VolunteerMatchReturn> listVolunteerMatch) {
         this.listVolunteerMatch = listVolunteerMatch;
+    }
+
+    public String getGroupIdentification() {
+        return groupIdentification;
+    }
+
+    public void setGroupIdentification(String groupIdentification) {
+        this.groupIdentification = groupIdentification;
+    }
+
+    public Boolean getHasQuit() {
+        return hasQuit;
+    }
+
+    public void setHasQuit(Boolean hasQuit) {
+        this.hasQuit = hasQuit;
     }
 }

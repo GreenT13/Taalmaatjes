@@ -47,8 +47,9 @@ create table Student (
   firstName varchar(100),
   insertion varchar(100),
   lastName varchar(100) not null,
-  isLookingForVolunteer boolean not null,
   isGroup boolean not null,
+  groupIdentification varchar(100),
+  hasQuit boolean not null,
   constraint "Stud_PK" primary key (studentId),
   constraint "Stud_ExtId" unique(externalIdentifier)
 );

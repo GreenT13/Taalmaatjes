@@ -26,7 +26,7 @@ public class DetailStudent implements Screen {
     private String studentExtId;
 
     @FXML
-    TextField labelName, labelIsLookingForVolunteer, labelIsGroup;
+    TextField labelName, labelIsGroup, labelGroupIdentification, labelHasQuit;
 
     @FXML
     VBox vboxMatch;
@@ -80,11 +80,11 @@ public class DetailStudent implements Screen {
         name += studentReturn.getLastName();
         labelName.setText(name);
 
-        // Set isLookingForVolunteer
-        labelIsLookingForVolunteer.setText(StringUtil.getOutputString(studentReturn.getLookingForVolunteer()));
-
         // Set is group
         labelIsGroup.setText(StringUtil.getOutputString(studentReturn.getGroup()));
+
+        labelGroupIdentification.setText(StringUtil.getOutputString(studentReturn.getGroupIdentification()));
+        labelHasQuit.setText(StringUtil.getOutputString(studentReturn.getHasQuit()));
 
         for (VolunteerMatchReturn volunteerMatchReturn : studentReturn.getListVolunteerMatch()) {
             addMatchLine(volunteerMatchReturn);
@@ -125,8 +125,9 @@ public class DetailStudent implements Screen {
         hideError();
 
         TextUtils.setWidthToContent(labelName);
-        TextUtils.setWidthToContent(labelIsLookingForVolunteer);
         TextUtils.setWidthToContent(labelIsGroup);
+        TextUtils.setWidthToContent(labelGroupIdentification);
+        TextUtils.setWidthToContent(labelHasQuit);
     }
 
     @SuppressWarnings("unused")

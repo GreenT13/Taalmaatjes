@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Student extends TableImpl<StudentRecord> {
 
-    private static final long serialVersionUID = -893603202;
+    private static final long serialVersionUID = -1238103909;
 
     /**
      * The reference instance of <code>PUBLIC.STUDENT</code>
@@ -79,14 +79,19 @@ public class Student extends TableImpl<StudentRecord> {
     public final TableField<StudentRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
 
     /**
-     * The column <code>PUBLIC.STUDENT.ISLOOKINGFORVOLUNTEER</code>.
-     */
-    public final TableField<StudentRecord, Boolean> ISLOOKINGFORVOLUNTEER = createField("ISLOOKINGFORVOLUNTEER", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
-
-    /**
      * The column <code>PUBLIC.STUDENT.ISGROUP</code>.
      */
     public final TableField<StudentRecord, Boolean> ISGROUP = createField("ISGROUP", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.STUDENT.GROUPIDENTIFICATION</code>.
+     */
+    public final TableField<StudentRecord, String> GROUPIDENTIFICATION = createField("GROUPIDENTIFICATION", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>PUBLIC.STUDENT.HASQUIT</code>.
+     */
+    public final TableField<StudentRecord, Boolean> HASQUIT = createField("HASQUIT", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * Create a <code>PUBLIC.STUDENT</code> table reference

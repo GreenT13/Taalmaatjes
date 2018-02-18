@@ -28,8 +28,9 @@ public class StudentMapper {
         studentReturn.setFirstName(studentPojo.getFirstname());
         studentReturn.setInsertion(studentPojo.getInsertion());
         studentReturn.setLastName(studentPojo.getLastname());
-        studentReturn.setLookingForVolunteer(studentPojo.getIslookingforvolunteer());
         studentReturn.setGroup(studentPojo.getIsgroup());
+        studentReturn.setGroupIdentification(studentPojo.getGroupidentification());
+        studentReturn.setHasQuit(studentPojo.getHasquit());
     }
 
     private void addMatch(VolunteermatchPojo volunteermatchPojo, VolunteerMyDao volunteerMyDao) {
@@ -40,7 +41,6 @@ public class StudentMapper {
         volunteerMatchReturn.setDateEnd(volunteermatchPojo.getDateend());
 
         // Set the volunteer.
-        VolunteerMapper volunteerMapper = new VolunteerMapper();
         volunteerMatchReturn.setVolunteerExtId(volunteerMyDao.fetchOneByVolunteerid(volunteermatchPojo.getVolunteerid()).getExternalidentifier());
 
         studentReturn.getListVolunteerMatch().add(volunteerMatchReturn);
@@ -62,8 +62,9 @@ public class StudentMapper {
         studentPojo.setFirstname(studentReturn.getFirstName());
         studentPojo.setInsertion(studentReturn.getInsertion());
         studentPojo.setLastname(studentReturn.getLastName());
-        studentPojo.setIslookingforvolunteer(studentReturn.getLookingForVolunteer());
         studentPojo.setIsgroup(studentReturn.getGroup());
+        studentPojo.setGroupidentification(studentReturn.getGroupIdentification());
+        studentPojo.setHasquit(studentReturn.getHasQuit());
 
         return studentPojo;
     }
