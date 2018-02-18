@@ -7,6 +7,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.records.Volunteerm
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import org.jooq.Configuration;
 import org.jooq.SelectConditionStep;
+import org.jooq.impl.DSL;
 import org.jooq.util.mysql.MySQLDataType;
 
 import java.util.List;
@@ -136,5 +137,20 @@ public class VolunteerMatchMyDao extends VolunteermatchDao {
                 .fetchOne();
 
         return mapper().map(record);
+    }
+
+    /**
+     * Get the number of matches that are active today.
+     * @return Integer
+     */
+    public Integer getMatchToday() {
+        return using(configuration())
+                .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERMATCHID.count())
+                .from(Volunteermatch.VOLUNTEERMATCH)
+                // Active today: dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                .where(Volunteermatch.VOLUNTEERMATCH.DATESTART.le(DSL.currentDate()))
+                .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
+                        .or(Volunteermatch.VOLUNTEERMATCH.DATEEND.ge(DSL.currentDate())))
+                .fetchOne(0, Integer.class);
     }
 }

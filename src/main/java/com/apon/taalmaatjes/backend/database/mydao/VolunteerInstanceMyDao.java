@@ -11,7 +11,6 @@ import org.jooq.SelectConditionStep;
 import org.jooq.impl.DSL;
 import org.jooq.util.mysql.MySQLDataType;
 
-import java.sql.Date;
 import java.util.List;
 
 import static org.jooq.impl.DSL.using;
@@ -117,19 +116,6 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
         return super.fetchByVolunteerid(values);
     }
 
-    public VolunteerinstancePojo getInstanceToday(int volunteerId) {
-        VolunteerinstanceRecord record =  using(configuration())
-                .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
-                .where(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID.eq(volunteerId))
-                // dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
-                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
-                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
-                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())))
-                .fetchOne();
-
-        return mapper().map(record);
-    }
-
     public VolunteerinstancePojo fetchByIds(int volunteerId, int volunteerInstanceId) {
         VolunteerinstanceRecord record =  using(configuration())
                 .selectFrom(Volunteerinstance.VOLUNTEERINSTANCE)
@@ -140,4 +126,18 @@ public class VolunteerInstanceMyDao extends VolunteerinstanceDao {
         return mapper().map(record);
     }
 
+    /**
+     * Return the number of volunteers that are active today.
+     * @return Integer.
+     */
+    public Integer getActiveToday() {
+        return using(configuration())
+                .select(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERINSTANCEID.count())
+                .from(Volunteerinstance.VOLUNTEERINSTANCE)
+                // Active today: dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                .where(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(DSL.currentDate()))
+                .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
+                        .or(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.ge(DSL.currentDate())))
+                .fetchOne(0, Integer.class);
+    }
 }

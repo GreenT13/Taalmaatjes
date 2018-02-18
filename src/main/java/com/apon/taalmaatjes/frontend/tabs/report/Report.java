@@ -1,16 +1,19 @@
 package com.apon.taalmaatjes.frontend.tabs.report;
 
 import com.apon.taalmaatjes.backend.api.ReportAPI;
+import com.apon.taalmaatjes.backend.api.TaalmaatjesAPI;
 import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
+import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -23,6 +26,9 @@ public class Report implements Screen {
 
     @FXML
     TextArea textAreaResult;
+
+    @FXML
+    TextField labelActiveVolunteers, labelActiveMatches;
 
     @FXML
     DatePicker datePickerStart, datePickerEnd;
@@ -51,6 +57,26 @@ public class Report implements Screen {
 
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
+
+        TextUtils.setWidthToContent(labelActiveVolunteers);
+        TextUtils.setWidthToContent(labelActiveMatches);
+
+        // Set the values of the two labels.
+        Result result = TaalmaatjesAPI.getInstance().countActiveVolunteersToday();
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        Integer count = (Integer) result.getResult();
+        labelActiveVolunteers.setText(count.toString());
+
+        result = TaalmaatjesAPI.getInstance().countActiveMatches();
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        count = (Integer) result.getResult();
+        labelActiveMatches.setText(count.toString());
     }
 
     @FXML
