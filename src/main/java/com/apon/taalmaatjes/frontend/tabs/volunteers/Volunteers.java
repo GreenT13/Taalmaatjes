@@ -4,7 +4,7 @@ import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.PersonRow;
+import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
@@ -31,7 +31,7 @@ public class Volunteers implements Screen {
     private FlowPane flowPaneAdvancedSearch;
 
     @FXML
-    private TableView<PersonRow> tableViewResult;
+    private TableView<VolunteerRow> tableViewResult;
 
     @FXML
     private TextField textFieldSearch, inputCity;
@@ -61,10 +61,10 @@ public class Volunteers implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("extId"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("email"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -81,7 +81,7 @@ public class Volunteers implements Screen {
                 //Check whether item is selected and set value of selected item to Label
                 if(tableViewResult.getSelectionModel().getSelectedItem() != null) {
                     // Handle actions in different function.
-                    clickedOnRow((PersonRow) newValue);
+                    clickedOnRow((VolunteerRow) newValue);
                 }
             });
 
@@ -90,21 +90,21 @@ public class Volunteers implements Screen {
         inputCity.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
     }
 
-    private void clickedOnRow(PersonRow personRow) {
+    private void clickedOnRow(VolunteerRow volunteerRow) {
         // Clear selection model when out of the ChangeListener (so addVolunteer runLater).
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
         // TransitionHandler to detail screen.
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, personRow.getExtId(),
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, volunteerRow.getExtId(),
                 true, true);
     }
 
     private void fillTable(List<VolunteerReturn> list) {
-        ObservableList<PersonRow> data = FXCollections.observableArrayList();
+        ObservableList<VolunteerRow> data = FXCollections.observableArrayList();
 
         for (VolunteerReturn volunteerReturn : list) {
-            data.add(new PersonRow(volunteerReturn.getExternalIdentifier(),
+            data.add(new VolunteerRow(volunteerReturn.getExternalIdentifier(),
                     volunteerReturn.getFirstName(),
                     volunteerReturn.getLastName(),
                     volunteerReturn.getEmail()));
@@ -144,6 +144,7 @@ public class Volunteers implements Screen {
     public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
         isVisible = !isVisible;
         flowPaneAdvancedSearch.setVisible(isVisible);
+        handleActionSearch(null);
     }
 
     @FXML

@@ -179,9 +179,9 @@ public class VolunteerMyDao extends VolunteerDao {
             String[] searchStrings = input.toLowerCase().split(" ");
             for (String s : searchStrings) {
                 query.where(
-                        Volunteer.VOLUNTEER.FIRSTNAME.lower().like(s + "%")
-                                .or(Volunteer.VOLUNTEER.INSERTION.lower().like(s + "%"))
-                                .or(Volunteer.VOLUNTEER.LASTNAME.lower().like(s + "%"))
+                        Volunteer.VOLUNTEER.FIRSTNAME.lower().like("%" + s + "%")
+                                .or(Volunteer.VOLUNTEER.INSERTION.lower().like("%" + s + "%"))
+                                .or(Volunteer.VOLUNTEER.LASTNAME.lower().like("%" + s + "%"))
                 );
             }
         }
@@ -230,6 +230,23 @@ public class VolunteerMyDao extends VolunteerDao {
         }
 
         return query.orderBy(Volunteer.VOLUNTEER.FIRSTNAME.asc()).limit(50).fetch().map(mapper());
+    }
+
+    public List<VolunteerPojo> getCurrentVolunteer(int studentId) {
+        return using(configuration())
+                .selectFrom(Volunteer.VOLUNTEER)
+                .where(Volunteer.VOLUNTEER.VOLUNTEERID.eq(
+                        using(configuration())
+                                .select(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID)
+                                .from(Volunteermatch.VOLUNTEERMATCH)
+                                .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(studentId))
+                                // Instance is active today: dateStart <= current_date and (dateEnd is null || current_date <= dateEnd)
+                                .and(Volunteermatch.VOLUNTEERMATCH.DATESTART.le(DSL.currentDate()))
+                                .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
+                                        .or(Volunteermatch.VOLUNTEERMATCH.DATEEND.ge(DSL.currentDate())))
+                ))
+                .fetch()
+                .map(mapper());
     }
 
 }

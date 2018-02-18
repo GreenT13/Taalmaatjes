@@ -49,7 +49,7 @@ public class VolunteerAPI {
         VolunteerMapper volunteerMapper = new VolunteerMapper();
 
         // Retrieve volunteer from the database.
-        volunteerMapper.setVolunter(volunteerMyDao.fetchOneByVolunteerid(volunteerId));
+        volunteerMapper.setVolunteer(volunteerMyDao.fetchOneByVolunteerid(volunteerId));
 
         // Retrieve all instances
         VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
@@ -193,7 +193,7 @@ public class VolunteerAPI {
         List<VolunteerReturn> volunteerReturns = new ArrayList();
         for (VolunteerPojo volunteerPojo : volunteerPojos) {
             VolunteerMapper volunteerMapper = new VolunteerMapper();
-            volunteerMapper.setVolunter(volunteerPojo);
+            volunteerMapper.setVolunteer(volunteerPojo);
 
             volunteerReturns.add(volunteerMapper.getVolunteerReturn());
         }

@@ -95,7 +95,7 @@ public class AddVolunteerMatch implements Screen {
             hideError();
             return;
         }
-        Result result = StudentAPI.getInstance().advancedSearch(newValue,null,null,null);
+        Result result = StudentAPI.getInstance().advancedSearch(newValue,null,null);
 
         if (result == null || result.hasErrors()) {
             showError(result);

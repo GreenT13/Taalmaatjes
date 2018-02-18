@@ -26,6 +26,10 @@ public class NameUtil {
     }
 
     public static String getVolunteerName(VolunteerReturn volunteerReturn) {
+        if (volunteerReturn == null) {
+            return null;
+        }
+
         String volunteerName = "";
 
         if (volunteerReturn.getFirstName() != null) {
@@ -36,7 +40,11 @@ public class NameUtil {
             volunteerName += volunteerReturn.getInsertion() + " ";
         }
 
+        if (volunteerReturn.getLastName() != null) {
+            volunteerName += volunteerReturn.getLastName();
+        }
+
         // Last name is always filled.
-        return volunteerName + volunteerReturn.getLastName();
+        return volunteerName;
     }
 }

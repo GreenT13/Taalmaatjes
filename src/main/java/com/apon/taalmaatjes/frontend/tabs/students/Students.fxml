@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <BorderPane stylesheets="@Students.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.students.Students">
     <center>
         <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
@@ -23,7 +24,7 @@
                 <TableColumn styleClass="grayColumnTextId" text="ID" />
                 <TableColumn styleClass="grayColumnText" text="Voornaam" />
                 <TableColumn styleClass="grayColumnText" text="Achternaam" />
-                <TableColumn styleClass="grayColumnText" text="Email" />
+                <TableColumn styleClass="grayColumnText" text="Vrijwilliger" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -48,8 +49,27 @@
                                 <Button mnemonicParsing="false" onAction="#goToScreenAddStudent" text="Toevoegen cursist" />
                             </children>
                         </StackPane>
-                        <TextField fx:id="textFieldSearch" onAction="#handleActionSearch" />
-                  <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionSearch" text="Zoeken" />
+                        <HBox alignment="CENTER_RIGHT">
+                            <children>
+                                <Label text="Heeft taalmaatjes: " />
+                                <ComboBox fx:id="comboHasMatch" onAction="#handleActionSearch" styleClass="yes-no-combo">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="" />
+                                            <String fx:value="Ja" />
+                                            <String fx:value="Nee" />
+                                        </FXCollections>
+                                    </items>
+                                    <value>
+                                        <String fx:value="Nee" />
+                                    </value>
+                                </ComboBox>
+                            </children>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                        </HBox>
+                        <TextField fx:id="textFieldSearch" />
                         <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionToggleAdvancedSearch" text="▼" />
                     </children>
                 </HBox>
@@ -57,41 +77,13 @@
                     <children>
                         <HBox alignment="CENTER_RIGHT">
                             <children>
-                                <Label text="Is op zoek: " />
-                                <ComboBox fx:id="comboIsLookingForVolunteer" styleClass="yes-no-combo">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:id="empty" fx:value="" />
-                                            <String fx:id="yes" fx:value="Ja" />
-                                            <String fx:id="no" fx:value="Nee" />
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT">
-                            <children>
                                 <Label text="Is groep: " />
-                                <ComboBox fx:id="comboIsGroup" styleClass="yes-no-combo">
+                                <ComboBox fx:id="comboIsGroup" onAction="#handleActionSearch" styleClass="yes-no-combo">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:id="empty2" fx:value="" />
-                                            <String fx:id="yes2" fx:value="Ja" />
-                                            <String fx:id="no2" fx:value="Nee" />
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT">
-                            <children>
-                                <Label text="Heeft taalmaatjes: " />
-                                <ComboBox fx:id="comboHasMatch" styleClass="yes-no-combo">
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:id="empty21" fx:value="" />
-                                            <String fx:id="yes21" fx:value="Ja" />
-                                            <String fx:id="no21" fx:value="Nee" />
+                                            <String fx:value="" />
+                                            <String fx:value="Ja" />
+                                            <String fx:value="Nee" />
                                         </FXCollections>
                                     </items>
                                 </ComboBox>

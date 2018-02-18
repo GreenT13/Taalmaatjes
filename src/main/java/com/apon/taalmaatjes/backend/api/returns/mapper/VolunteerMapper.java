@@ -30,7 +30,7 @@ public class VolunteerMapper {
         this.volunteerReturn = volunteerReturn;
     }
 
-    public void setVolunter(VolunteerPojo volunteerPojo) {
+    public void setVolunteer(VolunteerPojo volunteerPojo) {
         volunteerReturn.setExternalIdentifier(volunteerPojo.getExternalidentifier());
         volunteerReturn.setFirstName(volunteerPojo.getFirstname());
         volunteerReturn.setInsertion(volunteerPojo.getInsertion());

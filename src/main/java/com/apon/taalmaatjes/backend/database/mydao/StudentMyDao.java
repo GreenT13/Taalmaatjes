@@ -1,9 +1,11 @@
 package com.apon.taalmaatjes.backend.database.mydao;
 
 import com.apon.taalmaatjes.backend.database.generated.tables.Student;
+import com.apon.taalmaatjes.backend.database.generated.tables.Volunteer;
 import com.apon.taalmaatjes.backend.database.generated.tables.Volunteermatch;
 import com.apon.taalmaatjes.backend.database.generated.tables.daos.StudentDao;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.StudentRecord;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.VolunteermatchRecord;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
@@ -184,9 +186,9 @@ public class StudentMyDao extends StudentDao {
             String[] searchStrings = input.toLowerCase().split(" ");
             for (String s : searchStrings) {
                 query.where(
-                        Student.STUDENT.FIRSTNAME.lower().like(s + "%")
-                                .or(Student.STUDENT.INSERTION.lower().like(s + "%"))
-                                .or(Student.STUDENT.LASTNAME.lower().like(s + "%"))
+                        Student.STUDENT.FIRSTNAME.lower().like("%" + s + "%")
+                                .or(Student.STUDENT.INSERTION.lower().like("%" + s + "%"))
+                                .or(Student.STUDENT.LASTNAME.lower().like("%" + s + "%"))
                 );
             }
         }
@@ -210,7 +212,6 @@ public class StudentMyDao extends StudentDao {
             }
         }
 
-        return query.orderBy(Student.STUDENT.STUDENTID.desc()).limit(50).fetch().map(mapper());
+        return query.orderBy(Student.STUDENT.FIRSTNAME.asc()).limit(50).fetch().map(mapper());
     }
-
 }

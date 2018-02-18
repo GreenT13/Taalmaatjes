@@ -1,11 +1,10 @@
 package com.apon.taalmaatjes.frontend.tabs.task;
 
-import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.TaskAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.PersonRow;
+import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TaskRow;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
@@ -64,8 +63,8 @@ public class Tasks implements Screen {
 
         // Initialize the table.
         ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<TaskRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("title"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("description"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("title"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("description"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());

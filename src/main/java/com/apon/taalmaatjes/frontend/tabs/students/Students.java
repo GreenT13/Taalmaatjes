@@ -3,10 +3,8 @@ package com.apon.taalmaatjes.frontend.tabs.students;
 import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
-import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.PersonRow;
-import com.apon.taalmaatjes.frontend.presentation.Screen;
-import com.apon.taalmaatjes.frontend.presentation.TextUtils;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.application.Platform;
@@ -31,13 +29,13 @@ public class Students implements Screen {
     private FlowPane flowPaneAdvancedSearch;
 
     @FXML
-    private TableView<PersonRow> tableViewResult;
+    private TableView<StudentRow> tableViewResult;
 
     @FXML
     private TextField textFieldSearch;
 
     @FXML
-    ComboBox<String> comboIsLookingForVolunteer, comboIsGroup, comboHasMatch;
+    ComboBox<String> comboIsGroup, comboHasMatch;
 
     @FXML
     HBox hboxError; @FXML
@@ -63,10 +61,10 @@ public class Students implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<PersonRow, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("extId"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("currentVolunteer"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -83,29 +81,41 @@ public class Students implements Screen {
                     //Check whether item is selected and set value of selected item to Label
                     if(tableViewResult.getSelectionModel().getSelectedItem() != null) {
                         // Handle actions in different function.
-                        clickedOnRow((PersonRow) newValue);
+                        clickedOnRow((StudentRow) newValue);
                     }
                 });
+
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
     }
 
-    private void clickedOnRow(PersonRow personRow) {
+    private void clickedOnRow(StudentRow studentRow) {
         // Clear selection model when out of the ChangeListener (so addVolunteer runLater).
         // https://stackoverflow.com/questions/23098483/javafx-tableview-clear-selection-gives-nullpointerexception
         Platform.runLater(() -> tableViewResult.getSelectionModel().clearSelection());
 
         // TransitionHandler to detail screen.
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, personRow.getExtId(),
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, studentRow.getExtId(),
                 true, true);
     }
 
     private void fillTable(List<StudentReturn> list) {
-        ObservableList<PersonRow> data = FXCollections.observableArrayList();
+        ObservableList<StudentRow> data = FXCollections.observableArrayList();
+
 
         for (StudentReturn studentReturn : list) {
-            data.add(new PersonRow(studentReturn.getExternalIdentifier(),
+            // Get the name of the volunteer that is matched to the student.
+            Result result = StudentAPI.getInstance().getVolunteerForStudent(studentReturn.getExternalIdentifier());
+            if (result == null || result.hasErrors()) {
+                showError(result);
+                return;
+            }
+            // On seperate line so errors show more clearly.
+            VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
+
+            data.add(new StudentRow(studentReturn.getExternalIdentifier(),
                     studentReturn.getFirstName(),
                     studentReturn.getLastName(),
-                    null));
+                    NameUtil.getVolunteerName(volunteerReturn)));
         }
 
         tableViewResult.setItems(data);
@@ -117,10 +127,9 @@ public class Students implements Screen {
         Result result;
         if (!isVisible) {
             result = StudentAPI.getInstance().advancedSearch(textFieldSearch.getText(),
-                    null, null, null);
+                    null, TextUtils.getComboValue(comboHasMatch.getValue()));
         } else {
             result = StudentAPI.getInstance().advancedSearch(textFieldSearch.getText(),
-                    TextUtils.getComboValue(comboIsLookingForVolunteer.getValue()),
                     TextUtils.getComboValue(comboIsGroup.getValue()),
                     TextUtils.getComboValue(comboHasMatch.getValue()));
         }
@@ -141,6 +150,7 @@ public class Students implements Screen {
     public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
         isVisible = !isVisible;
         flowPaneAdvancedSearch.setVisible(isVisible);
+        handleActionSearch(null);
     }
 
     @FXML
