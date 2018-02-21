@@ -16,7 +16,7 @@ public class Main {
     @FXML
     Tab tabVolunteer, tabStudent, tabTask, tabReport;
 
-    private boolean needToRefresh = false;
+    private boolean needToRefresh = true;
 
     @FXML
     public void initialize() {
