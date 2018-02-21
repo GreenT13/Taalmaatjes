@@ -42,7 +42,7 @@
                                     <children>
                               <HBox styleClass="hboxAlign">
                                  <children>
-                                    <Label text="Groep identificatie" />
+                                    <Label text="Groep" />
                                  </children>
                               </HBox>
                                         <HBox styleClass="hboxAlign">
