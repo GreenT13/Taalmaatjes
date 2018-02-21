@@ -19,6 +19,10 @@ import javax.annotation.Nullable;
 public class EditLog implements Screen {
     private String volunteerExtId;
 
+    private final static String CSS = "<head><style>p { display: inline; }</style></head>";
+    private final static String HTML_BEFORE = "<body style=\"color: rgb(104,117,128);\" contenteditable=\"false\"";
+    private final static String HTML_AFTER = CSS + "<body style=\"color: rgb(104,117,128); padding: 0px; margin: 0px;\" contenteditable=\"false\"";
+
     @FXML
     HTMLEditor htmlEditor;
 
@@ -70,9 +74,7 @@ public class EditLog implements Screen {
 
         // For some reason, the contenteditable does not set to false.
         String log = htmlEditor.getHtmlText().replace("contenteditable=\"true\"", "contenteditable=\"false\"");
-        log = log.replace(
-                "<body style=\"color: rgb(104,117,128);\" contenteditable=\"false\"",
-                "<body style=\"color: rgb(104,117,128); padding: 0px; margin: 0px;\" contenteditable=\"false\"");
+        log = log.replace(HTML_BEFORE, HTML_AFTER);
         Log.logDebug("AFDFESKFN UIEOFS");
         Log.logDebug(log);
         volunteerReturn.setLog(log);
@@ -97,11 +99,9 @@ public class EditLog implements Screen {
         // Set margin
 
         if (volunteerReturn.getLog() != null) {
-            htmlEditor.setHtmlText(volunteerReturn.getLog().replace(
-                    "<body style=\"color: rgb(104,117,128); padding: 0px; margin: 0px;\" contenteditable=\"false\"",
-                    "<body style=\"color: rgb(104,117,128);\" contenteditable=\"false\""));
+            htmlEditor.setHtmlText(volunteerReturn.getLog().replace(HTML_AFTER, HTML_BEFORE));
         } else {
-            htmlEditor.setHtmlText("<html><head></head><body style=\"color: rgb(104,117,128);\" contenteditable=\"false\"></body></html>");
+            htmlEditor.setHtmlText("<html>" + CSS + HTML_BEFORE + "></body></html>");
         }
 
         Log.logDebug("XXDFAFZZXC");
