@@ -95,7 +95,7 @@ public class Students implements Screen {
 
         // TransitionHandler to detail screen.
         TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, studentRow.getExtId(),
-                true, true);
+                false, true);
     }
 
     private void fillTable(List<StudentReturn> list) {

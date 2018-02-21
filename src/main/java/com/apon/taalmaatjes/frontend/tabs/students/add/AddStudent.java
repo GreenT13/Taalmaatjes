@@ -69,6 +69,8 @@ public class AddStudent implements Screen {
                 return;
             }
             studentExtId = (String) result.getResult();
+            TransitionHandler.getInstance().goBack();
+
         } else {
             // External identifier is not a field you can fill in, hence we fill it here with the value.
             studentReturn.setExternalIdentifier(studentExtId);
@@ -80,10 +82,11 @@ public class AddStudent implements Screen {
                 showError(result);
                 return;
             }
+            TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, studentExtId,
+                    false, false);
+
         }
 
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.STUDENTS_DETAIL, studentExtId,
-                false, false);
     }
 
     private StudentReturn convertControlsToPojo() {
