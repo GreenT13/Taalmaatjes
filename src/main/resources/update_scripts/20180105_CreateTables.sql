@@ -46,7 +46,7 @@ create table Student (
   externalIdentifier varchar(10) not null,
   firstName varchar(100),
   insertion varchar(100),
-  lastName varchar(100) not null,
+  lastName varchar(100),
   isGroup boolean not null,
   groupIdentification varchar(100),
   hasQuit boolean not null,
