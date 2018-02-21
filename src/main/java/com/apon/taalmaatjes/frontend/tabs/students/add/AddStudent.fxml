@@ -21,7 +21,7 @@
                 </HBox>
             <HBox>
                <children>
-                  <Label fx:id="labelTitle" styleClass="largeFont" text="Toevoegen student" />
+                  <Label fx:id="labelTitle" styleClass="largeFont" text="Toevoegen cursist" />
                </children>
             </HBox>
                 <HBox prefHeight="384.0" prefWidth="513.0">
