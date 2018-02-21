@@ -199,15 +199,16 @@ public class DetailVolunteer implements Screen {
             return;
         }
 
-        String studentName = NameUtil.getStudentName((StudentReturn) result.getResult());
+        StudentReturn studentReturn = (StudentReturn) result.getResult();
+        String studentName = NameUtil.getStudentName((StudentReturn) result.getResult()) + " " + studentReturn.getGroupIdentification();
         label.getStyleClass().add("labelMatch");
-        String text = " Heeft van " + StringUtil.getOutputString(volunteerMatchReturn.getDateStart()) + " tot ";
+        String text = " " + StringUtil.getOutputString(volunteerMatchReturn.getDateStart()) + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu";
         } else {
             text += volunteerMatchReturn.getDateEnd();
         }
-        text+= " " + studentName + " begeleid.";
+        text+= " " + studentName;
 
         label.setText(text);
     }
