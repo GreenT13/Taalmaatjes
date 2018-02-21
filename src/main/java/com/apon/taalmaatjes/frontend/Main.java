@@ -5,7 +5,6 @@ import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings("unused")
 public class Main {
@@ -15,8 +14,6 @@ public class Main {
 
     @FXML
     Tab tabVolunteer, tabStudent, tabTask, tabReport;
-
-    private boolean needToRefresh = true;
 
     @FXML
     public void initialize() {
@@ -37,34 +34,7 @@ public class Main {
                     } else if (newTab.equals(tabReport)) {
                         TransitionHandler.getInstance().goToTab(TabEnum.REPORTS);
                     }
-                    needToRefresh = false;
                 }
         );
     }
-
-    @FXML
-    public void onMouseClick(MouseEvent mouseEvent) {
-        if (!needToRefresh) {
-            needToRefresh = true;
-            return;
-        }
-
-        // Refresh
-        switch(tabPaneMain.getSelectionModel().getSelectedIndex() ){
-            case 0:
-                TransitionHandler.getInstance().goToTab(TabEnum.VOLUNTEERS);
-                break;
-            case 1:
-                TransitionHandler.getInstance().goToTab(TabEnum.STUDENTS);
-                break;
-            case 2:
-                TransitionHandler.getInstance().goToTab(TabEnum.TASKS);
-                break;
-            case 3:
-                TransitionHandler.getInstance().goToTab(TabEnum.REPORTS);
-                break;
-        }
-        System.out.println("Refreshed " + tabPaneMain.getSelectionModel().getSelectedIndex());
-    }
-
 }
