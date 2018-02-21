@@ -94,6 +94,11 @@
                               <Label text="Beroep" />
                            </children>
                         </HBox>
+                        <HBox fx:id="hboxActiveFrom1" styleClass="hboxAlign">
+                           <children>
+                              <Label text="Actief vanaf" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox prefHeight="336.0" prefWidth="289.0">
@@ -163,6 +168,11 @@
                         <HBox styleClass="hboxAlign">
                            <children>
                               <TextField fx:id="inputJob" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="hboxActiveFrom2" styleClass="hboxAlign">
+                           <children>
+                              <DatePicker fx:id="inputDateActive" prefHeight="43.0" prefWidth="150.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT">

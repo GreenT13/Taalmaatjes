@@ -8,9 +8,10 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.Volunteerins
 import com.apon.taalmaatjes.backend.database.jooq.Context;
 import com.apon.taalmaatjes.backend.database.mydao.*;
 import com.apon.taalmaatjes.backend.log.Log;
-import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 
+import javax.annotation.Nullable;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,9 +73,10 @@ public class VolunteerAPI {
     /**
      * Add a volunteer based on frontend object.
      * @param volunteerReturn The volunteer.
+     * @param dateStart (optional) Date for which the first volunteerInstance is created. If left null, no instance is created.
      * @return external identifier from the added volunteer.
      */
-    public Result addVolunteer(VolunteerReturn volunteerReturn) {
+    public Result addVolunteer(VolunteerReturn volunteerReturn, @Nullable Date dateStart) {
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
@@ -99,14 +101,16 @@ public class VolunteerAPI {
             return ResultUtil.createError("VolunteerAPI.addVolunteer.error.insertVolunteer");
         }
 
-        // Volunteer is active from today.
-        VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
-        volunteerinstancePojo.setVolunteerid(volunteerPojo.getVolunteerid());
-        volunteerinstancePojo.setDatestart(DateTimeUtil.getCurrentDate());
-        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
-        if (!volunteerInstanceMyDao.insertPojo(volunteerinstancePojo)) {
-            context.rollback();
-            return ResultUtil.createError("VolunteerAPI.addVolunteer.error.insertVolunteerInstance");
+        // Volunteer is active from dateStart
+        if (dateStart != null) {
+            VolunteerinstancePojo volunteerinstancePojo = new VolunteerinstancePojo();
+            volunteerinstancePojo.setVolunteerid(volunteerPojo.getVolunteerid());
+            volunteerinstancePojo.setDatestart(dateStart);
+            VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+            if (!volunteerInstanceMyDao.insertPojo(volunteerinstancePojo)) {
+                context.rollback();
+                return ResultUtil.createError("VolunteerAPI.addVolunteer.error.insertVolunteerInstance");
+            }
         }
 
         // Commit, close and return.

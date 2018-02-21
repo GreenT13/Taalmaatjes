@@ -34,7 +34,10 @@ public class AddVolunteer implements Screen {
     Label labelAge;
 
     @FXML
-    DatePicker inputDateOfBirth, inputDateTraining;
+    HBox hboxActiveFrom1, hboxActiveFrom2;
+
+    @FXML
+    DatePicker inputDateOfBirth, inputDateTraining, inputDateActive;
 
     private String volunteerExtId;
 
@@ -62,6 +65,12 @@ public class AddVolunteer implements Screen {
     public void initialize() {
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
+
+        hboxActiveFrom1.managedProperty().bind(hboxActiveFrom1.visibleProperty());
+        hboxActiveFrom2.managedProperty().bind(hboxActiveFrom2.visibleProperty());
+
+        // Prefill date with today.
+        inputDateActive.setValue(DateTimeUtil.getCurrentDate().toLocalDate());
     }
 
     @FXML
@@ -69,7 +78,8 @@ public class AddVolunteer implements Screen {
         VolunteerReturn volunteerReturn = convertControlsToPojo();
         if (volunteerExtId == null) {
             // Add a new volunteer.
-            Result result = VolunteerAPI.getInstance().addVolunteer(volunteerReturn);
+            Result result = VolunteerAPI.getInstance().addVolunteer(volunteerReturn,
+                    DateTimeUtil.convertLocalDateToSqlDate(inputDateActive.getValue()));
 
             if (result == null || result.hasErrors()) {
                 showError(result);
@@ -122,6 +132,9 @@ public class AddVolunteer implements Screen {
         }
 
         labelTitle.setText("Bewerken vrijwilliger");
+
+        hboxActiveFrom1.setVisible(false);
+        hboxActiveFrom2.setVisible(false);
 
         prefillVolunteer((VolunteerReturn) result.getResult());
     }
