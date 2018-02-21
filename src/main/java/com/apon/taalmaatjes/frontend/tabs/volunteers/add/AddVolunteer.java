@@ -86,6 +86,8 @@ public class AddVolunteer implements Screen {
                 return;
             }
             volunteerExtId = (String) result.getResult();
+
+            TransitionHandler.getInstance().goBack();
         } else {
             // External identifier is not a field you can fill in, hence we fill it here with the value.
             volunteerReturn.setExternalIdentifier(volunteerExtId);
@@ -97,10 +99,11 @@ public class AddVolunteer implements Screen {
                 showError(result);
                 return;
             }
+
+            TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, volunteerExtId,
+                    false, false);
         }
 
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, volunteerExtId,
-                false, false);
     }
 
     private VolunteerReturn convertControlsToPojo() {
