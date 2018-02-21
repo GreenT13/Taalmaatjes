@@ -11,8 +11,8 @@ import java.sql.SQLException;
 
 public class TaalmaatjesAPI {
     private static TaalmaatjesAPI ourInstance = new TaalmaatjesAPI();
-    private final static String VERSION_NUMBER = "v0.2";
-    private final static String RELEASE_DATE = "2018-02-18";
+    private final static String VERSION_NUMBER = "v0.3";
+    private final static String RELEASE_DATE = "2018-02-21";
 
     public static TaalmaatjesAPI getInstance() {
         return ourInstance;
