@@ -21,10 +21,19 @@
    <center>
       <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
           <columns>
-            <TableColumn styleClass="grayColumnTextId" text="ID" />
-            <TableColumn styleClass="grayColumnText" text="Voornaam" />
+            <TableColumn text="Voornaam">
+               <styleClass>
+                  <String fx:value="grayColumnText" />
+                  <String fx:value="firstname" />
+               </styleClass></TableColumn>
             <TableColumn styleClass="grayColumnText" text="Achternaam" />
             <TableColumn styleClass="grayColumnText" text="Email" />
+            <TableColumn text="Telefoonnummer">
+               <styleClass>
+                  <String fx:value="grayColumnText" />
+                  <String fx:value="telnr" />
+               </styleClass></TableColumn>
+            <TableColumn styleClass="grayColumnText" text="Koppelingen" />
           </columns>
           <columnResizePolicy>
               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

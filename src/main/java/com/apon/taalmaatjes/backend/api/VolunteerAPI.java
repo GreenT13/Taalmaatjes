@@ -190,19 +190,22 @@ public class VolunteerAPI {
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
         List<VolunteerPojo> volunteerPojos = volunteerMyDao.advancedSearch(input, isActive, hasTraining, hasMatch, city);
 
-        // No connection is needed.
-        context.close();
-
         // Convert the list of pojos to returns.
         List<VolunteerReturn> volunteerReturns = new ArrayList();
         for (VolunteerPojo volunteerPojo : volunteerPojos) {
             VolunteerMapper volunteerMapper = new VolunteerMapper();
             volunteerMapper.setVolunteer(volunteerPojo);
 
+            // Retrieve all matches
+            VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+            volunteerMapper.setMatchList(volunteerMatchMyDao.getMatchForVolunteer(volunteerPojo.getVolunteerid()
+                    , false), new StudentMyDao(context));
+
             volunteerReturns.add(volunteerMapper.getVolunteerReturn());
         }
 
         // Return the list.
+        context.close();
         Log.logDebug("End VolunteerAPI.advancedSearch");
         return ResultUtil.createOk(volunteerReturns);
     }

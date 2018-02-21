@@ -47,10 +47,18 @@
 
 .grayColumnText, .grayColumnText:focused {
     -fx-text-fill: -darkgray;
-    -columnWidth: 250px;
+    -columnWidth: 200px;
     -fx-max-width: -columnWidth;
     -fx-min-width: -columnWidth;
     -fx-pref-width: -columnWidth;
+}
+
+.firstname {
+    -columnWidth: 160px;
+}
+
+.telnr {
+    -columnWidth: 130px !important;
 }
 
 .grayColumnTextId {

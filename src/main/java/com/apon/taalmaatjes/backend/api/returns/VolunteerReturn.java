@@ -23,8 +23,7 @@ public class VolunteerReturn {
     private String job;
 
     // Variables determined by logic.
-    private Date activeUntil;
-    private boolean isActiveToday;
+    private Integer nrOfMatchesToday = 0;
 
     private List<VolunteerInstanceReturn> listVolunteerInstance;
     private List<VolunteerMatchReturn> listVolunteerMatch;
@@ -139,22 +138,6 @@ public class VolunteerReturn {
         this.houseNr = houseNr;
     }
 
-    public Date getActiveUntil() {
-        return activeUntil;
-    }
-
-    public void setActiveUntil(Date activeUntil) {
-        this.activeUntil = activeUntil;
-    }
-
-    public boolean isActiveToday() {
-        return isActiveToday;
-    }
-
-    public void setActiveToday(boolean activeToday) {
-        isActiveToday = activeToday;
-    }
-
     public List<VolunteerInstanceReturn> getListVolunteerInstance() {
         return listVolunteerInstance;
     }
@@ -193,5 +176,13 @@ public class VolunteerReturn {
 
     public void setJob(String job) {
         this.job = job;
+    }
+
+    public Integer getNrOfMatchesToday() {
+        return nrOfMatchesToday;
+    }
+
+    public void setNrOfMatchesToday(Integer nrOfMatchesToday) {
+        this.nrOfMatchesToday = nrOfMatchesToday;
     }
 }

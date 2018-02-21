@@ -61,10 +61,11 @@ public class Volunteers implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("email"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("phoneNr"));
+        ((TableColumn)tableViewResult.getColumns().get(4)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("nrOfMatches"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -97,7 +98,7 @@ public class Volunteers implements Screen {
 
         // TransitionHandler to detail screen.
         TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, volunteerRow.getExtId(),
-                true, true);
+                false, true);
     }
 
     private void fillTable(List<VolunteerReturn> list) {
@@ -107,7 +108,9 @@ public class Volunteers implements Screen {
             data.add(new VolunteerRow(volunteerReturn.getExternalIdentifier(),
                     volunteerReturn.getFirstName(),
                     volunteerReturn.getLastName(),
-                    volunteerReturn.getEmail()));
+                    volunteerReturn.getEmail(),
+                    volunteerReturn.getPhoneNumber(),
+                    volunteerReturn.getNrOfMatchesToday()));
         }
 
         tableViewResult.setItems(data);

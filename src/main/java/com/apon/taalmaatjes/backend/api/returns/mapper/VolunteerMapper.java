@@ -9,7 +9,6 @@ import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPoj
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.mydao.StudentMyDao;
-import com.apon.taalmaatjes.backend.database.mydao.TaskMyDao;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 
 import java.util.ArrayList;
@@ -63,14 +62,6 @@ public class VolunteerMapper {
 
         for (VolunteerinstancePojo volunteerinstancePojo : listVolunteerInstancePojo) {
             addInstance(volunteerinstancePojo);
-
-            // If (dateStart <= current_date && (dateEnd == null || current_date <= dateEnd)), we fill values
-            if (volunteerinstancePojo.getDatestart().compareTo(DateTimeUtil.getCurrentDate()) <= 0 &&
-                    (volunteerinstancePojo.getDateend() == null ||
-                        volunteerinstancePojo.getDateend().compareTo(DateTimeUtil.getCurrentDate()) >= 0)) {
-                volunteerReturn.setActiveToday(true);
-                volunteerReturn.setActiveUntil(volunteerinstancePojo.getDateend());
-            }
         }
     }
 
@@ -79,6 +70,11 @@ public class VolunteerMapper {
         volunteerMatchReturn.setExternalIdentifier(volunteermatchPojo.getExternalidentifier());
         volunteerMatchReturn.setDateStart(volunteermatchPojo.getDatestart());
         volunteerMatchReturn.setDateEnd(volunteermatchPojo.getDateend());
+
+        // If current date lies between dateStart and dateEnd, we have an active match. So count it.
+        if (DateTimeUtil.isBetween(DateTimeUtil.getCurrentDate(), volunteermatchPojo.getDatestart(), volunteermatchPojo.getDateend())) {
+            volunteerReturn.setNrOfMatchesToday(volunteerReturn.getNrOfMatchesToday() + 1);
+        }
 
         // Set the student.
         StudentMapper studentMapper = new StudentMapper();
