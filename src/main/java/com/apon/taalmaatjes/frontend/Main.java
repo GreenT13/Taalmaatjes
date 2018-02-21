@@ -53,12 +53,16 @@ public class Main {
         switch(tabPaneMain.getSelectionModel().getSelectedIndex() ){
             case 0:
                 TransitionHandler.getInstance().goToTab(TabEnum.VOLUNTEERS);
+                break;
             case 1:
                 TransitionHandler.getInstance().goToTab(TabEnum.STUDENTS);
+                break;
             case 2:
                 TransitionHandler.getInstance().goToTab(TabEnum.TASKS);
+                break;
             case 3:
                 TransitionHandler.getInstance().goToTab(TabEnum.REPORTS);
+                break;
         }
         System.out.println("Refreshed " + tabPaneMain.getSelectionModel().getSelectedIndex());
     }
