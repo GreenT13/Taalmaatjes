@@ -6,7 +6,7 @@
 
     <groupId>com.apon</groupId>
     <artifactId>Taalmaatjes</artifactId>
-    <version>0.1</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -101,8 +101,8 @@
                     <jdbc>
                         <driver>org.h2.Driver</driver>
                         <url>${url.database}</url>
-                        <user></user>
-                        <password></password>
+                        <!-- <user></user>
+                        <password></password> -->
                     </jdbc>
                     <generator>
                         <!-- Use my own GeneratorStrategy to make naming easier. -->
@@ -112,7 +112,7 @@
                         <database>
                             <name>org.jooq.util.h2.H2Database</name>
                             <includes>.*</includes>
-                            <excludes></excludes>
+                            <!-- <excludes></excludes> -->
                             <inputSchema>PUBLIC</inputSchema>
                         </database>
                         <target>
