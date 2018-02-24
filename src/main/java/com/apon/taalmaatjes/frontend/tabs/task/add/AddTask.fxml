@@ -31,12 +31,12 @@
                             <children>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <Label text="Titel" />
+                                        <Label text="Vrijwilliger" />
                                     </children>
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <Label text="Vrijwilliger" />
+                                        <Label text="Titel" />
                                     </children>
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
@@ -50,12 +50,12 @@
                             <children>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <TextField fx:id="inputTitle" prefHeight="43.0" HBox.hgrow="ALWAYS" />
+                              <ComboBox fx:id="comboVolunteer" editable="true" onKeyPressed="#handleActionSearchVolunteers" prefHeight="31.0" prefWidth="280.0" />
                                     </children>
                                 </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                              <ComboBox fx:id="comboVolunteer" editable="true" onKeyPressed="#handleActionSearchVolunteers" prefHeight="31.0" prefWidth="280.0" />
+                                        <TextField fx:id="inputTitle" prefHeight="43.0" HBox.hgrow="ALWAYS" />
                                     </children>
                                 </HBox>
                                 <HBox maxHeight="239.0" minHeight="48.0" prefHeight="239.0" prefWidth="289.0">
