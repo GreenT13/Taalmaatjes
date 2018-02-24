@@ -10,8 +10,11 @@ import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebView;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +35,10 @@ public class EditLog implements Screen {
     public void initialize() {
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
+
+        WebView webview = (WebView) htmlEditor.lookup("WebView");
+        GridPane.setHgrow(webview, Priority.ALWAYS);
+        GridPane.setVgrow(webview, Priority.ALWAYS);
     }
 
     private void showError(@Nullable Result result) {

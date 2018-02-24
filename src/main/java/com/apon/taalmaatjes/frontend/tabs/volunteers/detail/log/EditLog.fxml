@@ -6,33 +6,32 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.HTMLEditor?>
+<?import javafx.scene.control.ScrollPane?>
 
 <!--suppress ALL -->
-
-<HBox stylesheets="@EditLog.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.log.EditLog">
-    <children>
-      <VBox>
-         <children>
-            <HBox fx:id="hboxError">
-               <children>
-                  <Label id="labelError" fx:id="labelError" text="Label" />
-               </children>
-            </HBox>
-            <HBox>
-               <children>
-                    <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
-                     <HBox.margin>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane style="-fx-fit-to-width: true; -fx-fit-to-height: true" stylesheets="@EditLog.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.log.EditLog">
+    <top>
+        <HBox fx:id="hboxError">
+            <children>
+                <Label id="labelError" fx:id="labelError" text="Label" />
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
+                    <HBox.margin>
                         <Insets bottom="5.0" right="5.0" />
-                     </HBox.margin>
-                    </Button>
-                    <Button mnemonicParsing="false" onAction="#goBack" text="Terug" />
-               </children>
-            </HBox>
-            <HTMLEditor fx:id="htmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;false&quot;&gt;&lt;/body&gt;&lt;/html&gt;" />
-         </children>
-      </VBox>
-    </children>
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#goBack" text="Terug" />
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <HTMLEditor fx:id="htmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;false&quot;&gt;&lt;/body&gt;&lt;/html&gt;" />
+    </center>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
-</HBox>
+</BorderPane>

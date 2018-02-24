@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -40,6 +41,9 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     WebView webView;
+
+    @FXML
+    BorderPane borderPaneWebView;
 
     boolean isActive;
 
@@ -230,16 +234,24 @@ public class DetailVolunteer implements Screen {
         webView.setBlendMode(BlendMode.DARKEN);
         webView.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, Event::consume);
 
-//        // Adjust height based on loaded test when content changes.
-//        webView.getEngine().documentProperty().addListener((prop, oldDoc, newDoc) -> {
-//            String heightText = webView.getEngine().executeScript(
-//                    "window.getComputedStyle(document.body, null).getPropertyValue('height')").toString();
-//
-//            webView.setPrefHeight(Double.valueOf(heightText.replace("px", "")));
-//        });
+        // Adjust height based on loaded test when content changes.
+        webView.getEngine().documentProperty().addListener((prop, oldDoc, newDoc) -> {
+            String heightText = webView.getEngine().executeScript(
+                    "window.getComputedStyle(document.body, null).getPropertyValue('height')").toString();
+
+            // Add 20 so we don't see the scrollbar.
+            borderPaneWebView.setPrefHeight(20 + Double.valueOf(heightText.replace("px", "")));
+        });
+        webView.getEngine().documentProperty().addListener((prop, oldDoc, newDoc) -> {
+            String widthText = webView.getEngine().executeScript(
+                    "window.getComputedStyle(document.body, null).getPropertyValue('width')").toString();
+            borderPaneWebView.setPrefWidth(20 + Double.valueOf(widthText.replace("px", "")));
+        });
+
+
         // It doesnt matter how large the box becomes, since it is the last element.
         // If it is needed, above the possible solution for dynamic sizing.
-        webView.setPrefHeight(10000);
+//        webView.setPrefHeight(1000);
 
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
