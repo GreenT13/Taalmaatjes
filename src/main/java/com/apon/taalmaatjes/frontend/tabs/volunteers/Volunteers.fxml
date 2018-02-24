@@ -18,7 +18,7 @@
 
 <!--suppress ALL -->
 
-<ScrollPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.Volunteers">
+<ScrollPane style="-fx-fit-to-height: true; -fx-fit-to-width: true;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.Volunteers">
    <content>
       <BorderPane stylesheets="@Volunteers.css">
          <center>

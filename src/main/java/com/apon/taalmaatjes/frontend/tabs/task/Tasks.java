@@ -4,9 +4,9 @@ import com.apon.taalmaatjes.backend.api.TaskAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TaskRow;
+import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.application.Platform;
@@ -17,7 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
@@ -25,11 +24,6 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class Tasks implements Screen {
-
-    private boolean isVisible = false;
-
-    @FXML
-    private FlowPane flowPaneAdvancedSearch;
 
     @FXML
     private TableView<TaskRow> tableViewResult;
@@ -66,12 +60,6 @@ public class Tasks implements Screen {
         ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("title"));
         ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("description"));
 
-        // Add line to make sure that the space of the invisible panel is removed.
-        flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
-
-        // Set default visibility.
-        flowPaneAdvancedSearch.setVisible(isVisible);
-
         // Fill the table.
         handleActionSearch(null);
 
@@ -84,6 +72,9 @@ public class Tasks implements Screen {
                         clickedOnRow((TaskRow) newValue);
                     }
                 });
+
+        // Search when textFieldSearch content is changed.
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
     }
 
     private void clickedOnRow(TaskRow taskRow) {
@@ -93,7 +84,7 @@ public class Tasks implements Screen {
 
         // TransitionHandler to detail screen.
         TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_DETAIL, taskRow.getExtId(),
-                true, true);
+                false, true);
     }
 
     private void fillTable(List<TaskReturn> list) {
@@ -112,28 +103,23 @@ public class Tasks implements Screen {
     private void handleActionSearch(ActionEvent actionEvent) {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
-        if (!isVisible) {
-            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(),
-                    null, null, null);
-        } else {
-            Boolean isFinished = null;
-            Boolean isCancelled = null;
-            switch (comboStatus.getValue()) {
-                case "Open":
-                    isFinished = false;
-                    isCancelled = false;
-                    break;
-                case "Afgehandeld":
-                    isFinished = true;
-                    isCancelled = false;
-                    break;
-                case "Geannuleerd":
-                    isFinished = false;
-                    isCancelled = true;
-                    break;
-            }
-            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished, isCancelled,null);
+        Boolean isFinished = null;
+        Boolean isCancelled = null;
+        switch (comboStatus.getValue()) {
+            case "Open":
+                isFinished = false;
+                isCancelled = false;
+                break;
+            case "Afgerond":
+                isFinished = true;
+                isCancelled = false;
+                break;
+            case "Geannuleerd":
+                isFinished = false;
+                isCancelled = true;
+                break;
         }
+        result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished, isCancelled,null);
 
         if (result == null || result.hasErrors()) {
             showError(result);
@@ -141,16 +127,6 @@ public class Tasks implements Screen {
         }
 
         fillTable((List<TaskReturn>) result.getResult());
-    }
-
-    /**
-     * Toggle the visibility of flowPaneAdvancedSearch.
-     * @param actionEvent Unused.
-     */
-    @FXML
-    public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
-        isVisible = !isVisible;
-        flowPaneAdvancedSearch.setVisible(isVisible);
     }
 
     @FXML

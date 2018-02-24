@@ -68,8 +68,3 @@
     -fx-min-width: -columnWidth;
     -fx-pref-width: -columnWidth;
 }
-
-
-.yes-no-combo {
-    -fx-pref-width: 100px;
-}

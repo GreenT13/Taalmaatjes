@@ -19,7 +19,7 @@
 
 <BorderPane stylesheets="@Tasks.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.task.Tasks">
     <center>
-        <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableViewResult" prefHeight="420.0" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn styleClass="grayColumnTextId" text="ID" />
                 <TableColumn styleClass="grayColumnText" text="Titel" />
@@ -43,22 +43,15 @@
                 </HBox>
                 <HBox alignment="TOP_RIGHT">
                     <children>
-                        <StackPane alignment="CENTER_LEFT" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#goToScreenAddTask" text="Toevoegen taak" />
                             </children>
                         </StackPane>
-                        <TextField fx:id="textFieldSearch" onAction="#handleActionSearch" />
-                        <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionSearch" text="Zoeken" />
-                        <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionToggleAdvancedSearch" text="▼" />
-                    </children>
-                </HBox>
-                <FlowPane fx:id="flowPaneAdvancedSearch" alignment="CENTER_RIGHT">
-                    <children>
                         <HBox alignment="CENTER_RIGHT">
                             <children>
                                 <Label text="Status: " />
-                                <ComboBox fx:id="comboStatus" styleClass="yes-no-combo">
+                                <ComboBox fx:id="comboStatus" onAction="#handleActionSearch" prefHeight="25.0" prefWidth="140.0">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:id="empty" fx:value="" />
@@ -67,11 +60,22 @@
                                             <String fx:id="cancelled" fx:value="Geannuleerd" />
                                         </FXCollections>
                                     </items>
+                                    <value>
+                                        <String fx:value="Open" />
+                                    </value>
                                 </ComboBox>
                             </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
                         </HBox>
+                        <TextField fx:id="textFieldSearch" onAction="#handleActionSearch" />
                     </children>
-                </FlowPane>
+                </HBox>
+                <FlowPane fx:id="flowPaneAdvancedSearch" alignment="CENTER_RIGHT" />
             </children>
         </VBox>
     </top>
