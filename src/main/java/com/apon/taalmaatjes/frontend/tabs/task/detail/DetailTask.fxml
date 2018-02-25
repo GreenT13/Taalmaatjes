@@ -13,9 +13,9 @@
 
 <!--suppress ALL -->
 
-<HBox prefHeight="346.0" prefWidth="456.0" stylesheets="@DetailTask.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.task.detail.DetailTask">
+<HBox stylesheets="@DetailTask.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.task.detail.DetailTask">
     <children>
-        <VBox prefHeight="311.0" prefWidth="543.0" HBox.hgrow="ALWAYS">
+        <VBox HBox.hgrow="ALWAYS">
             <children>
                 <HBox fx:id="hboxError">
                     <children>
@@ -34,6 +34,16 @@
                                     </styleClass></TextField>
                                 <Hyperlink onAction="#goToScreenEditTask" styleClass="largeFont" text="(bewerken)" />
                                 <Region prefHeight="1.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#deleteTask" text="Verwijderen">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#finishTask" text="Afhandelen">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Button>
                                 <Button mnemonicParsing="false" onAction="#goBack" text="Terug" />
                             </children>
                         </HBox>
@@ -91,7 +101,7 @@
                                 </VBox>
                             </children>
                         </HBox>
-                  <TextArea fx:id="textAreaDescription" editable="false" prefHeight="261.0" prefWidth="538.0" wrapText="true" />
+                  <TextArea fx:id="textAreaDescription" editable="false" wrapText="true" />
                     </children>
                 </VBox>
             </children>

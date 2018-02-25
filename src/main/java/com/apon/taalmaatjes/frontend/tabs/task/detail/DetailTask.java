@@ -11,13 +11,13 @@ import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class DetailTask implements Screen {
     private String taskExtId;
 
@@ -92,12 +92,55 @@ public class DetailTask implements Screen {
         TextUtils.setWidthToContent(labelVolunteer);
     }
 
-    @SuppressWarnings("unused")
     @FXML
     public void goToScreenEditTask(ActionEvent actionEvent) {
         AddTaskObject addTaskObject = new AddTaskObject();
         addTaskObject.setTaskExtId(taskExtId);
         TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_ADD, addTaskObject,
                 false, true);
+    }
+
+    @FXML
+    public void deleteTask(ActionEvent actionEvent) {
+        Alert alert =
+                new Alert(Alert.AlertType.WARNING,
+                        "Weet je zeker dat je deze taak wilt verwijderen?",
+                        ButtonType.YES,
+                        ButtonType.NO);
+        alert.setTitle("Date format warning");
+        Optional<ButtonType> alertResult = alert.showAndWait();
+
+        if (alertResult.get() == ButtonType.NO) {
+            return;
+        }
+
+        // Delete the task.
+        Result result = TaskAPI.getInstance().deleteTask(taskExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Go back where you came from.
+        TransitionHandler.getInstance().goBack();
+    }
+
+    @FXML
+    public void finishTask(ActionEvent actionEvent) {
+        Result result = TaskAPI.getInstance().getTask(taskExtId);
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+        TaskReturn taskReturn = (TaskReturn) result.getResult();
+
+        result = TaskAPI.getInstance().finishTask(taskExtId, !taskReturn.getFinished());
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Go back where you came from.
+        TransitionHandler.getInstance().goBack();
     }
 }

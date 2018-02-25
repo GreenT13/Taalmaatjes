@@ -192,6 +192,61 @@ public class TaskAPI {
         context.close();
         Log.logDebug("End TaskAPI.advancedSearch");
         return ResultUtil.createOk(taskReturns);
+    }
 
+    public Result deleteTask(String taskExtId) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start TaskAPI.deleteTask for taskExtId " + taskExtId);
+
+        // Get taskId
+        TaskMyDao taskMyDao = new TaskMyDao(context);
+        Integer taskId = taskMyDao.getIdFromExtId(taskExtId);
+        if (taskId == null) {
+            return ResultUtil.createError("TaskAPI.error.noTaskExtIdFound");
+        }
+
+        // Delete task
+        taskMyDao.deleteTask(taskId);
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End TaskAPI.deleteTask");
+        return ResultUtil.createOk();
+    }
+
+    public Result finishTask(String taskExtId, boolean isFinished) {
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start TaskAPI.finishTask for taskExtId " + taskExtId);
+
+        // Get taskId
+        TaskMyDao taskMyDao = new TaskMyDao(context);
+        Integer taskId = taskMyDao.getIdFromExtId(taskExtId);
+        if (taskId == null) {
+            return ResultUtil.createError("TaskAPI.error.noTaskExtIdFound");
+        }
+
+        // Finish the task.
+        taskMyDao.finishTask(taskId, isFinished);
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End TaskAPI.finishTask");
+        return ResultUtil.createOk();
     }
 }

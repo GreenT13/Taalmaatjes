@@ -81,7 +81,7 @@
                   <HBox fx:id="random211" alignment="CENTER_RIGHT">
                      <children>
                         <Label text="Vrijwilliger: " />
-                        <ComboBox fx:id="comboVolunteer" editable="true" onKeyPressed="#handleActionSearch" prefHeight="31.0" prefWidth="280.0" />
+                        <ComboBox fx:id="comboVolunteer" editable="true" onKeyPressed="#handleActionSearchKey" prefHeight="31.0" prefWidth="280.0" />
                      </children>
                   </HBox>
                </children></FlowPane>

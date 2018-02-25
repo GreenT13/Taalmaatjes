@@ -76,7 +76,7 @@ public class Tasks implements Screen {
         flowPaneAdvancedSearch.setVisible(isVisible);
 
         // Fill the table.
-        handleActionSearch((ActionEvent) null);
+        handleActionSearch(null);
 
         // Add listener to when an item is clicked.
         tableViewResult.getSelectionModel().selectedItemProperty().addListener(
@@ -89,7 +89,7 @@ public class Tasks implements Screen {
                 });
 
         // Search when textFieldSearch content is changed.
-        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch((ActionEvent) null));
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
 
         comboVolunteer.getEditor().textProperty().addListener((observable, oldValue, newValue) -> changeList(oldValue, newValue));
     }
@@ -157,8 +157,8 @@ public class Tasks implements Screen {
     }
 
     @FXML
-    private void handleActionSearch(KeyEvent keyEvent) {
-        handleActionSearch((ActionEvent) null);
+    private void handleActionSearchKey(KeyEvent keyEvent) {
+        handleActionSearch(null);
     }
 
     @FXML
@@ -198,7 +198,7 @@ public class Tasks implements Screen {
     public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
         isVisible = !isVisible;
         flowPaneAdvancedSearch.setVisible(isVisible);
-        handleActionSearch((ActionEvent) null);
+        handleActionSearch(null);
     }
 
     @FXML

@@ -136,4 +136,21 @@ public class TaskMyDao extends TaskDao {
                 .fetch()
                 .map(mapper());
     }
+
+    public void deleteTask(int taskId) {
+        using(configuration())
+                .deleteFrom(Task.TASK)
+                .where(Task.TASK.TASKID.eq(taskId))
+                .returning()
+                .fetch();
+    }
+
+    public void finishTask(int taskId, boolean isFinished) {
+        using(configuration())
+                .update(Task.TASK)
+                .set(Task.TASK.ISFINISHED, isFinished)
+                .where(Task.TASK.TASKID.eq(taskId))
+                .returning()
+                .fetch();
+    }
 }
