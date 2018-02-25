@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 import com.apon.taalmaatjes.backend.log.Log;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
+import com.apon.taalmaatjes.frontend.presentation.NameUtil;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
@@ -28,6 +29,9 @@ public class EditLog implements Screen {
 
     @FXML
     HTMLEditor htmlEditor;
+
+    @FXML
+    Label labelVolunteer;
 
     @FXML HBox hboxError; @FXML Label labelError;
 
@@ -103,16 +107,15 @@ public class EditLog implements Screen {
     }
 
     private void prefill(VolunteerReturn volunteerReturn) {
-        // Set margin
+        // Set name of volunteer
+        labelVolunteer.setText(NameUtil.getVolunteerName(volunteerReturn));
 
+        // Set margin
         if (volunteerReturn.getLog() != null) {
             htmlEditor.setHtmlText(volunteerReturn.getLog().replace(HTML_AFTER, HTML_BEFORE));
         } else {
             htmlEditor.setHtmlText("<html>" + CSS + HTML_BEFORE + "></body></html>");
         }
-
-        Log.logDebug("XXDFAFZZXC");
-        Log.logDebug(htmlEditor.getHtmlText());
     }
 
 }

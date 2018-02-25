@@ -7,9 +7,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.HTMLEditor?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <!--suppress ALL -->
-<?import javafx.scene.layout.BorderPane?>
 <BorderPane style="-fx-fit-to-width: true; -fx-fit-to-height: true" stylesheets="@EditLog.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.log.EditLog">
     <top>
         <HBox fx:id="hboxError">
@@ -19,6 +20,11 @@
         </HBox>
         <HBox>
             <children>
+                <StackPane alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="labelVolunteer" styleClass="largeFont" />
+                    </children>
+                </StackPane>
                 <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
                     <HBox.margin>
                         <Insets bottom="5.0" right="5.0" />
