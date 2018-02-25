@@ -47,19 +47,10 @@
 
 .grayColumnText, .grayColumnText:focused {
     -fx-text-fill: -darkgray;
-    -columnWidth: 250px;
+    -columnWidth: 160px;
     -fx-max-width: -columnWidth;
     -fx-min-width: -columnWidth;
     -fx-pref-width: -columnWidth;
-}
-
-.grayColumnTextId {
-    -fx-text-fill: -darkgray;
-    -columnWidth: 50px;
-    -fx-max-width: -columnWidth;
-    -fx-min-width: -columnWidth;
-    -fx-pref-width: -columnWidth;
-
 }
 
 .yes-no-combo {

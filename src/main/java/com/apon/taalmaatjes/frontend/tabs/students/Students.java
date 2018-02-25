@@ -61,10 +61,11 @@ public class Students implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("extId"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("insertion"));
         ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
         ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("currentVolunteer"));
+        ((TableColumn)tableViewResult.getColumns().get(4)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("group"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -114,8 +115,10 @@ public class Students implements Screen {
 
             data.add(new StudentRow(studentReturn.getExternalIdentifier(),
                     studentReturn.getFirstName(),
+                    studentReturn.getInsertion(),
                     studentReturn.getLastName(),
-                    NameUtil.getVolunteerName(volunteerReturn)));
+                    NameUtil.getVolunteerName(volunteerReturn),
+                    studentReturn.getGroupIdentification()));
         }
 
         tableViewResult.setItems(data);

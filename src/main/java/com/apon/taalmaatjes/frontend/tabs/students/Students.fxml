@@ -21,10 +21,11 @@
     <center>
         <TableView fx:id="tableViewResult" prefHeight="420.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn styleClass="grayColumnTextId" text="ID" />
                 <TableColumn styleClass="grayColumnText" text="Voornaam" />
+                <TableColumn styleClass="grayColumnText" text="Tussenvoegsel" />
                 <TableColumn styleClass="grayColumnText" text="Achternaam" />
                 <TableColumn styleClass="grayColumnText" text="Vrijwilliger" />
+            <TableColumn styleClass="grayColumnText" text="Groep" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
