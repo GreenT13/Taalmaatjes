@@ -132,7 +132,9 @@ public class DetailVolunteer implements Screen {
 
         // Add tasks
         for (TaskReturn taskReturn : volunteerReturn.getListTaskReturn()) {
-            addTaskLine(taskReturn);
+            if (!taskReturn.getFinished()) {
+                addTaskLine(taskReturn);
+            }
         }
 
         // Set the log field.
@@ -167,7 +169,7 @@ public class DetailVolunteer implements Screen {
         if (volunteerInstanceReturn.getDateEnd() == null) {
             text += "nu.";
         } else {
-            text += volunteerInstanceReturn.getDateEnd() + ".";
+            text += StringUtil.getOutputString(volunteerInstanceReturn.getDateEnd()) + ".";
         }
 
         label.setText(text);
@@ -206,13 +208,13 @@ public class DetailVolunteer implements Screen {
         }
 
         StudentReturn studentReturn = (StudentReturn) result.getResult();
-        String studentName = NameUtil.getStudentName((StudentReturn) result.getResult()) + " " + studentReturn.getGroupIdentification();
+        String studentName = NameUtil.getStudentName((StudentReturn) result.getResult()) + " " + StringUtil.getOutputStringNull(studentReturn.getGroupIdentification());
         label.getStyleClass().add("labelMatch");
         String text = " " + StringUtil.getOutputString(volunteerMatchReturn.getDateStart()) + " tot ";
         if (volunteerMatchReturn.getDateEnd() == null) {
             text += "nu";
         } else {
-            text += volunteerMatchReturn.getDateEnd();
+            text += StringUtil.getOutputString(volunteerMatchReturn.getDateEnd());
         }
         text+= " " + studentName;
 
@@ -228,7 +230,7 @@ public class DetailVolunteer implements Screen {
         vboxTask.getChildren().add(hbox);
 
         // Fix hyperlink
-        hyperlink.setText("(Wijzigen)");
+        hyperlink.setText("(Tonen)");
         hyperlink.setOnAction(event -> goToScreenEditTask(taskReturn.getTaskExtId()));
 
         label.getStyleClass().add("labelMatch");
@@ -319,10 +321,7 @@ public class DetailVolunteer implements Screen {
 
     @FXML
     private void goToScreenEditTask(String taskExtId) {
-        AddTaskObject addTaskObject = new AddTaskObject();
-        addTaskObject.setVolunteerExtId(volunteerExtId);
-        addTaskObject.setTaskExtId(taskExtId);
-        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_ADD, addTaskObject,
+        TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_DETAIL, taskExtId,
                 false, true);
     }
 }

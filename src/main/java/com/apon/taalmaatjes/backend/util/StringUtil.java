@@ -25,6 +25,14 @@ public class StringUtil {
         return string;
     }
 
+    public static String getOutputStringNull(String string) {
+        if (isEmpty(string)) {
+            return "";
+        }
+
+        return string;
+    }
+
     public static String getOutputString(String string) {
         if (isEmpty(string)) {
             return "<Niet gevuld>";
