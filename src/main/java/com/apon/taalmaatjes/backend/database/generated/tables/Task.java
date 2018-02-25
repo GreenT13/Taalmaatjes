@@ -9,6 +9,7 @@ import com.apon.taalmaatjes.backend.database.generated.Keys;
 import com.apon.taalmaatjes.backend.database.generated.Public;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.TaskRecord;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Task extends TableImpl<TaskRecord> {
 
-    private static final long serialVersionUID = 426943796;
+    private static final long serialVersionUID = 873786990;
 
     /**
      * The reference instance of <code>PUBLIC.TASK</code>
@@ -80,14 +81,14 @@ public class Task extends TableImpl<TaskRecord> {
     public final TableField<TaskRecord, Integer> VOLUNTEERID = createField("VOLUNTEERID", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>PUBLIC.TASK.ISCANCELLED</code>.
-     */
-    public final TableField<TaskRecord, Boolean> ISCANCELLED = createField("ISCANCELLED", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
-
-    /**
      * The column <code>PUBLIC.TASK.ISFINISHED</code>.
      */
     public final TableField<TaskRecord, Boolean> ISFINISHED = createField("ISFINISHED", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.TASK.DATETOBEFINISHED</code>.
+     */
+    public final TableField<TaskRecord, Date> DATETOBEFINISHED = createField("DATETOBEFINISHED", org.jooq.impl.SQLDataType.DATE, this, "");
 
     /**
      * Create a <code>PUBLIC.TASK</code> table reference

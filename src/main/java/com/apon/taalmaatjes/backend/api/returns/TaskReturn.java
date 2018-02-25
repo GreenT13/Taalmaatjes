@@ -1,12 +1,14 @@
 package com.apon.taalmaatjes.backend.api.returns;
 
+import java.sql.Date;
+
 public class TaskReturn {
     private String taskExtId;
     private String title;
     private String description;
     private String volunteerExtId;
-    private Boolean isCancelled;
     private Boolean isFinished;
+    private Date dateToBeFinished;
 
     public String getTaskExtId() {
         return taskExtId;
@@ -40,19 +42,19 @@ public class TaskReturn {
         this.volunteerExtId = volunteerExtId;
     }
 
-    public Boolean getCancelled() {
-        return isCancelled;
-    }
-
-    public void setCancelled(Boolean cancelled) {
-        isCancelled = cancelled;
-    }
-
     public Boolean getFinished() {
         return isFinished;
     }
 
     public void setFinished(Boolean finished) {
         isFinished = finished;
+    }
+
+    public Date getDateToBeFinished() {
+        return dateToBeFinished;
+    }
+
+    public void setDateToBeFinished(Date dateToBeFinished) {
+        this.dateToBeFinished = dateToBeFinished;
     }
 }

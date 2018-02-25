@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Volunteer extends TableImpl<VolunteerRecord> {
 
-    private static final long serialVersionUID = -690040210;
+    private static final long serialVersionUID = -166268296;
 
     /**
      * The reference instance of <code>PUBLIC.VOLUNTEER</code>
@@ -83,6 +83,11 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.DATEOFBIRTH</code>.
      */
     public final TableField<VolunteerRecord, Date> DATEOFBIRTH = createField("DATEOFBIRTH", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.SEX</code>.
+     */
+    public final TableField<VolunteerRecord, String> SEX = createField("SEX", org.jooq.impl.SQLDataType.VARCHAR(1).nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.VOLUNTEER.PHONENUMBER</code>.
@@ -133,6 +138,16 @@ public class Volunteer extends TableImpl<VolunteerRecord> {
      * The column <code>PUBLIC.VOLUNTEER.DATETRAINING</code>.
      */
     public final TableField<VolunteerRecord, Date> DATETRAINING = createField("DATETRAINING", org.jooq.impl.SQLDataType.DATE, this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.ISCLASSASSISTANT</code>.
+     */
+    public final TableField<VolunteerRecord, Boolean> ISCLASSASSISTANT = createField("ISCLASSASSISTANT", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.VOLUNTEER.ISTAALMAATJE</code>.
+     */
+    public final TableField<VolunteerRecord, Boolean> ISTAALMAATJE = createField("ISTAALMAATJE", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * Create a <code>PUBLIC.VOLUNTEER</code> table reference

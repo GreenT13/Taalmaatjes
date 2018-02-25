@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
@@ -21,7 +22,7 @@ public class DetailTask implements Screen {
     private String taskExtId;
 
     @FXML
-    TextField labelTitle, labelVolunteer;
+    TextField labelTitle, labelVolunteer, labelDateToBeFinished;
 
     @FXML
     TextArea textAreaDescription;
@@ -62,6 +63,7 @@ public class DetailTask implements Screen {
 
         TaskReturn taskReturn = (TaskReturn) result.getResult();
         labelTitle.setText(taskReturn.getTaskExtId() + ": " + taskReturn.getTitle());
+        labelDateToBeFinished.setText(StringUtil.getOutputString(taskReturn.getDateToBeFinished()));
 
         result = VolunteerAPI.getInstance().getVolunteer(taskReturn.getVolunteerExtId());
         if (result == null || result.hasErrors()) {

@@ -69,10 +69,6 @@ public class TaskMyDao extends TaskDao {
             taskPojo.setIsfinished(false);
         }
 
-        if (taskPojo.getIscancelled() == null) {
-            taskPojo.setIscancelled(false);
-        }
-
         return true;
     }
 
@@ -111,17 +107,13 @@ public class TaskMyDao extends TaskDao {
         return true;
     }
 
-    public List<TaskPojo> advancedSearch(String input, Boolean isCancelled, Boolean isFinished, String volunteerExtId) {
+    public List<TaskPojo> advancedSearch(String input, Boolean isFinished, String volunteerExtId) {
         SelectWhereStep<TaskRecord> query = using(configuration()).selectFrom(Task.TASK);
 
         // Search for input in the description and the title.
         if (input != null && input.trim().length() > 0) {
             query.where(Task.TASK.DESCRIPTION.lower().like("%" + input.toLowerCase() + "%"))
             .or(Task.TASK.TITLE.lower().like("%" + input.toLowerCase() + "%"));
-        }
-
-        if (isCancelled != null) {
-            query.where(Task.TASK.ISCANCELLED.eq(isCancelled));
         }
 
         if (isFinished != null) {

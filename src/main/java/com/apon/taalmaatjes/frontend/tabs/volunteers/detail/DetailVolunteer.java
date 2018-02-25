@@ -29,9 +29,9 @@ public class DetailVolunteer implements Screen {
     private String volunteerExtId;
 
     @FXML
-    TextField labelName, labelDateOfBirth, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr;
+    TextField labelName, labelDateOfBirth, labelSex, labelPhoneNr, labelMobPhoneNr, labelEmail, labelStreetNameAndHouseNr;
     @FXML
-    TextField labelPostalCode, labelCity, labelDateTraining, labelAge, labelJob;
+    TextField labelPostalCode, labelCity, labelDateTraining, labelAge, labelJob, labelIsClassAssistant, labelIsTaalmaatje;
 
     @FXML
     VBox vboxActive, vboxMatch, vboxTask;
@@ -86,6 +86,9 @@ public class DetailVolunteer implements Screen {
         labelDateOfBirth.setText(StringUtil.getOutputString(volunteerReturn.getDateOfBirth()));
         labelAge.setText(DateTimeUtil.determineAge(volunteerReturn.getDateOfBirth()).toString());
 
+        // Set sex
+        labelSex.setText(StringUtil.convertDbSexToOutput(volunteerReturn.getSex()));
+
         // Set phonenumber,
         labelPhoneNr.setText(StringUtil.getOutputString(volunteerReturn.getPhoneNumber()));
 
@@ -113,6 +116,10 @@ public class DetailVolunteer implements Screen {
 
         // Set job
         labelJob.setText(StringUtil.getOutputString(volunteerReturn.getJob()));
+
+        // Set checkboxes
+        labelIsClassAssistant.setText(StringUtil.getOutputString(volunteerReturn.getClassAssistant()));
+        labelIsTaalmaatje.setText(StringUtil.getOutputString(volunteerReturn.getTaalmaatje()));
 
         // Add all volunteerInstance lines (in order!).
         for (VolunteerInstanceReturn volunteerInstanceReturn : volunteerReturn.getListVolunteerInstance()) {
@@ -258,6 +265,7 @@ public class DetailVolunteer implements Screen {
 
         TextUtils.setWidthToContent(labelName);
         TextUtils.setWidthToContent(labelDateOfBirth);
+        TextUtils.setWidthToContent(labelSex);
         TextUtils.setWidthToContent(labelPhoneNr);
         TextUtils.setWidthToContent(labelMobPhoneNr);
         TextUtils.setWidthToContent(labelEmail);

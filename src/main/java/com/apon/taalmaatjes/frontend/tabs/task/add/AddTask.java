@@ -5,6 +5,7 @@ import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.ResultUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.AddTaskObject;
@@ -17,10 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -41,6 +39,9 @@ public class AddTask implements Screen {
 
     @FXML
     ComboBox<String> comboVolunteer;
+
+    @FXML
+    DatePicker datePickerToBeFinished;
 
     @FXML
     TextArea inputDescription;
@@ -79,6 +80,7 @@ public class AddTask implements Screen {
         hideError();
 
         comboVolunteer.getEditor().textProperty().addListener((observable, oldValue, newValue) -> changeList(oldValue, newValue));
+        datePickerToBeFinished.setValue(DateTimeUtil.getCurrentDate().toLocalDate());
     }
 
     @SuppressWarnings("Duplicates")
@@ -151,6 +153,9 @@ public class AddTask implements Screen {
         TaskReturn taskReturn = new TaskReturn();
         taskReturn.setTaskExtId(addTaskObject.getTaskExtId());
         taskReturn.setTitle(StringUtil.getDatabaseString(inputTitle.getText()));
+        if (datePickerToBeFinished != null) {
+            taskReturn.setDateToBeFinished(DateTimeUtil.convertLocalDateToSqlDate(datePickerToBeFinished.getValue()));
+        }
         if (comboVolunteer.getValue() != null) {
             taskReturn.setVolunteerExtId(comboVolunteer.getValue().substring(0, comboVolunteer.getValue().indexOf(':')));
         }

@@ -109,6 +109,13 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
     }
 
     /**
+     * Fetch records that have <code>SEX IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchBySex(String... values) {
+        return fetch(Volunteer.VOLUNTEER.SEX, values);
+    }
+
+    /**
      * Fetch records that have <code>PHONENUMBER IN (values)</code>
      */
     public List<VolunteerPojo> fetchByPhonenumber(String... values) {
@@ -176,5 +183,19 @@ public class VolunteerDao extends DAOImpl<VolunteerRecord, VolunteerPojo, Intege
      */
     public List<VolunteerPojo> fetchByDatetraining(Date... values) {
         return fetch(Volunteer.VOLUNTEER.DATETRAINING, values);
+    }
+
+    /**
+     * Fetch records that have <code>ISCLASSASSISTANT IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByIsclassassistant(Boolean... values) {
+        return fetch(Volunteer.VOLUNTEER.ISCLASSASSISTANT, values);
+    }
+
+    /**
+     * Fetch records that have <code>ISTAALMAATJE IN (values)</code>
+     */
+    public List<VolunteerPojo> fetchByIstaalmaatje(Boolean... values) {
+        return fetch(Volunteer.VOLUNTEER.ISTAALMAATJE, values);
     }
 }

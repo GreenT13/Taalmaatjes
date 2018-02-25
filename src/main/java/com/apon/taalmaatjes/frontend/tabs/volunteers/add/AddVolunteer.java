@@ -11,9 +11,7 @@ import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
@@ -38,6 +36,12 @@ public class AddVolunteer implements Screen {
 
     @FXML
     DatePicker inputDateOfBirth, inputDateTraining, inputDateActive;
+
+    @FXML
+    ComboBox<String> comboBoxSex;
+
+    @FXML
+    CheckBox checkboxIsClassAssistant, checkboxIsTaalmaatje;
 
     private String volunteerExtId;
 
@@ -112,6 +116,7 @@ public class AddVolunteer implements Screen {
         volunteerReturn.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
         volunteerReturn.setLastName(StringUtil.getDatabaseString(inputLastName.getText()));
         volunteerReturn.setDateOfBirth(DateTimeUtil.convertLocalDateToSqlDate(inputDateOfBirth.getValue()));
+        volunteerReturn.setSex(StringUtil.convertOutputSexToDb(comboBoxSex.getValue()));
         volunteerReturn.setPhoneNumber(StringUtil.getDatabaseString(inputPhoneNr.getText()));
         volunteerReturn.setMobilePhoneNumber(StringUtil.getDatabaseString(inputMobPhoneNr.getText()));
         volunteerReturn.setEmail(StringUtil.getDatabaseString(inputEmail.getText()));
@@ -121,6 +126,8 @@ public class AddVolunteer implements Screen {
         volunteerReturn.setCity(StringUtil.getDatabaseString(inputCity.getText()));
         volunteerReturn.setDateTraining(DateTimeUtil.convertLocalDateToSqlDate(inputDateTraining.getValue()));
         volunteerReturn.setJob(StringUtil.getDatabaseString(inputJob.getText()));
+        volunteerReturn.setClassAssistant(checkboxIsClassAssistant.isSelected());
+        volunteerReturn.setTaalmaatje(checkboxIsTaalmaatje.isSelected());
 
         return volunteerReturn;
     }
@@ -150,6 +157,9 @@ public class AddVolunteer implements Screen {
             inputDateOfBirth.setValue(volunteerReturn.getDateOfBirth().toLocalDate());
             labelAge.setText(DateTimeUtil.determineAge(volunteerReturn.getDateOfBirth()).toString());
         }
+        if (volunteerReturn.getSex().equals("F")) {
+            comboBoxSex.setValue("Vrouw");
+        }
         inputPhoneNr.setText(volunteerReturn.getPhoneNumber());
         inputMobPhoneNr.setText(volunteerReturn.getMobilePhoneNumber());
         inputEmail.setText(volunteerReturn.getEmail());
@@ -161,6 +171,8 @@ public class AddVolunteer implements Screen {
             inputDateTraining.setValue(volunteerReturn.getDateTraining().toLocalDate());
         }
         inputJob.setText(volunteerReturn.getJob());
+        checkboxIsClassAssistant.setSelected(volunteerReturn.getClassAssistant());
+        checkboxIsTaalmaatje.setSelected(volunteerReturn.getTaalmaatje());
     }
 
     @FXML

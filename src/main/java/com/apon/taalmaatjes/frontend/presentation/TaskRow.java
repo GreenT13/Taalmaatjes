@@ -33,7 +33,9 @@ public class TaskRow {
         return description.get();
     }
     public void setDescription(String description) {
-        description = description.replace('\n', ' ');
+        if (description != null) {
+            description = description.replace('\n', ' ');
+        }
 
         this.description.set(description);
     }

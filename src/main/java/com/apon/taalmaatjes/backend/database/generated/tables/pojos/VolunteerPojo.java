@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VolunteerPojo implements Serializable {
 
-    private static final long serialVersionUID = -38009073;
+    private static final long serialVersionUID = -252636017;
 
     private Integer volunteerid;
     private String  externalidentifier;
@@ -31,6 +31,7 @@ public class VolunteerPojo implements Serializable {
     private String  insertion;
     private String  lastname;
     private Date    dateofbirth;
+    private String  sex;
     private String  phonenumber;
     private String  mobilephonenumber;
     private String  email;
@@ -41,6 +42,8 @@ public class VolunteerPojo implements Serializable {
     private String  log;
     private String  job;
     private Date    datetraining;
+    private Boolean isclassassistant;
+    private Boolean istaalmaatje;
 
     public VolunteerPojo() {}
 
@@ -51,6 +54,7 @@ public class VolunteerPojo implements Serializable {
         this.insertion = value.insertion;
         this.lastname = value.lastname;
         this.dateofbirth = value.dateofbirth;
+        this.sex = value.sex;
         this.phonenumber = value.phonenumber;
         this.mobilephonenumber = value.mobilephonenumber;
         this.email = value.email;
@@ -61,6 +65,8 @@ public class VolunteerPojo implements Serializable {
         this.log = value.log;
         this.job = value.job;
         this.datetraining = value.datetraining;
+        this.isclassassistant = value.isclassassistant;
+        this.istaalmaatje = value.istaalmaatje;
     }
 
     public VolunteerPojo(
@@ -70,6 +76,7 @@ public class VolunteerPojo implements Serializable {
         String  insertion,
         String  lastname,
         Date    dateofbirth,
+        String  sex,
         String  phonenumber,
         String  mobilephonenumber,
         String  email,
@@ -79,7 +86,9 @@ public class VolunteerPojo implements Serializable {
         String  housenr,
         String  log,
         String  job,
-        Date    datetraining
+        Date    datetraining,
+        Boolean isclassassistant,
+        Boolean istaalmaatje
     ) {
         this.volunteerid = volunteerid;
         this.externalidentifier = externalidentifier;
@@ -87,6 +96,7 @@ public class VolunteerPojo implements Serializable {
         this.insertion = insertion;
         this.lastname = lastname;
         this.dateofbirth = dateofbirth;
+        this.sex = sex;
         this.phonenumber = phonenumber;
         this.mobilephonenumber = mobilephonenumber;
         this.email = email;
@@ -97,6 +107,8 @@ public class VolunteerPojo implements Serializable {
         this.log = log;
         this.job = job;
         this.datetraining = datetraining;
+        this.isclassassistant = isclassassistant;
+        this.istaalmaatje = istaalmaatje;
     }
 
     public Integer getVolunteerid() {
@@ -145,6 +157,14 @@ public class VolunteerPojo implements Serializable {
 
     public void setDateofbirth(Date dateofbirth) {
         this.dateofbirth = dateofbirth;
+    }
+
+    public String getSex() {
+        return this.sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getPhonenumber() {
@@ -227,6 +247,22 @@ public class VolunteerPojo implements Serializable {
         this.datetraining = datetraining;
     }
 
+    public Boolean getIsclassassistant() {
+        return this.isclassassistant;
+    }
+
+    public void setIsclassassistant(Boolean isclassassistant) {
+        this.isclassassistant = isclassassistant;
+    }
+
+    public Boolean getIstaalmaatje() {
+        return this.istaalmaatje;
+    }
+
+    public void setIstaalmaatje(Boolean istaalmaatje) {
+        this.istaalmaatje = istaalmaatje;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("VolunteerPojo (");
@@ -237,6 +273,7 @@ public class VolunteerPojo implements Serializable {
         sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
         sb.append(", ").append(dateofbirth);
+        sb.append(", ").append(sex);
         sb.append(", ").append(phonenumber);
         sb.append(", ").append(mobilephonenumber);
         sb.append(", ").append(email);
@@ -247,6 +284,8 @@ public class VolunteerPojo implements Serializable {
         sb.append(", ").append(log);
         sb.append(", ").append(job);
         sb.append(", ").append(datetraining);
+        sb.append(", ").append(isclassassistant);
+        sb.append(", ").append(istaalmaatje);
 
         sb.append(")");
         return sb.toString();

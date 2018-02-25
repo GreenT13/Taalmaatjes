@@ -4,7 +4,7 @@ import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.TaskPojo;
 
 public class TaskMapper {
-    TaskReturn taskReturn;
+    private TaskReturn taskReturn;
 
     public TaskMapper() {
         taskReturn = new TaskReturn();
@@ -22,8 +22,8 @@ public class TaskMapper {
         taskReturn.setTaskExtId(taskPojo.getExternalidentifier());
         taskReturn.setTitle(taskPojo.getTitle());
         taskReturn.setDescription(taskPojo.getDescription());
-        taskReturn.setCancelled(taskPojo.getIscancelled());
         taskReturn.setFinished(taskPojo.getIsfinished());
+        taskReturn.setDateToBeFinished(taskPojo.getDatetobefinished());
     }
 
     public TaskPojo getPojo(Integer taskId, Integer volunteerId) {
@@ -33,8 +33,8 @@ public class TaskMapper {
         taskPojo.setTitle(taskReturn.getTitle());
         taskPojo.setDescription(taskReturn.getDescription());
         taskPojo.setVolunteerid(volunteerId);
-        taskPojo.setIscancelled(taskReturn.getCancelled());
         taskPojo.setIsfinished(taskReturn.getFinished());
+        taskPojo.setDatetobefinished(taskReturn.getDateToBeFinished());
 
         return taskPojo;
     }

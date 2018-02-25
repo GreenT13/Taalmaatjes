@@ -8,6 +8,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.Task;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.TaskPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.TaskRecord;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -101,16 +102,16 @@ public class TaskDao extends DAOImpl<TaskRecord, TaskPojo, Integer> {
     }
 
     /**
-     * Fetch records that have <code>ISCANCELLED IN (values)</code>
-     */
-    public List<TaskPojo> fetchByIscancelled(Boolean... values) {
-        return fetch(Task.TASK.ISCANCELLED, values);
-    }
-
-    /**
      * Fetch records that have <code>ISFINISHED IN (values)</code>
      */
     public List<TaskPojo> fetchByIsfinished(Boolean... values) {
         return fetch(Task.TASK.ISFINISHED, values);
+    }
+
+    /**
+     * Fetch records that have <code>DATETOBEFINISHED IN (values)</code>
+     */
+    public List<TaskPojo> fetchByDatetobefinished(Date... values) {
+        return fetch(Task.TASK.DATETOBEFINISHED, values);
     }
 }

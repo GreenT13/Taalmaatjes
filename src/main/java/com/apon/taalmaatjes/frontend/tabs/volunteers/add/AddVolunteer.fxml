@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -28,7 +32,7 @@
             </HBox>
             <HBox>
                <children>
-                  <VBox prefHeight="200.0" prefWidth="124.0">
+                  <VBox prefHeight="816.0" prefWidth="134.0">
                      <children>
                         <HBox styleClass="hboxAlign">
                            <children>
@@ -48,6 +52,11 @@
                         <HBox styleClass="hboxAlign">
                            <children>
                               <Label text="Geboortedatum" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <Label text="Geslacht" />
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">
@@ -100,6 +109,16 @@
                               <Label text="Actief vanaf" />
                            </children>
                         </HBox>
+                        <HBox fx:id="hboxActiveFrom11" styleClass="hboxAlign">
+                           <children>
+                              <Label text="Is klassenassistent" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="hboxActiveFrom12" styleClass="hboxAlign">
+                           <children>
+                              <Label text="Is taalmaatje" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox prefHeight="336.0" prefWidth="289.0">
@@ -124,6 +143,21 @@
                               <DatePicker fx:id="inputDateOfBirth" onAction="#handleActionFillAgeOnEditDate" prefHeight="43.0" prefWidth="150.0" HBox.hgrow="ALWAYS" />
                               <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="NEVER" />
                               <Label fx:id="labelAge" />
+                           </children>
+                        </HBox>
+                        <HBox styleClass="hboxAlign">
+                           <children>
+                              <ComboBox fx:id="comboBoxSex" prefWidth="150.0">
+                                  <items>
+                                      <FXCollections fx:factory="observableArrayList">
+                                          <String fx:id="M" fx:value="Man" />
+                                          <String fx:id="F" fx:value="Vrouw" />
+                                      </FXCollections>
+                                  </items>
+                                  <value>
+                                      <String fx:id="M" fx:value="Man" />
+                                  </value>
+                              </ComboBox>
                            </children>
                         </HBox>
                         <HBox styleClass="hboxAlign">
@@ -174,6 +208,16 @@
                         <HBox fx:id="hboxActiveFrom2" styleClass="hboxAlign">
                            <children>
                               <DatePicker fx:id="inputDateActive" prefHeight="43.0" prefWidth="150.0" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="hboxActiveFrom21" styleClass="hboxAlign">
+                           <children>
+                              <CheckBox fx:id="checkboxIsClassAssistant" mnemonicParsing="false" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="hboxActiveFrom22" styleClass="hboxAlign">
+                           <children>
+                              <CheckBox fx:id="checkboxIsTaalmaatje" mnemonicParsing="false" selected="true" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT">

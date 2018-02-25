@@ -16,6 +16,7 @@ create table Volunteer (
   insertion varchar(100),
   lastName varchar(100) not null,
   dateOfBirth date not null,
+  sex varchar(1) not null, -- M = male, F = female.
   phoneNumber varchar(100),
   mobilePhoneNumber varchar(100),
   email varchar(100),
@@ -26,6 +27,8 @@ create table Volunteer (
   log clob,
   job varchar(100),
   dateTraining date,
+  isClassAssistant boolean not null,
+  isTaalmaatje boolean not null,
   constraint "Volu_PK" primary key (volunteerId),
   constraint "Volu_ExtId" unique (externalIdentifier)
 );
@@ -73,8 +76,8 @@ create table Task (
   title varchar(100) not null,
   description varchar(1000),
   volunteerId int not null,
-  isCancelled boolean not null,
   isFinished boolean not null,
+  dateToBeFinished date,
   constraint "Task_PK" primary key (taskId),
   constraint "Task_ExtId" unique (externalIdentifier),
   constraint "Task_Volu_FK" foreign key (volunteerId) references Volunteer (volunteerid)

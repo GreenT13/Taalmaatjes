@@ -1,8 +1,9 @@
 -- noinspection SqlResolveForFile
 
-insert into Volunteer (VOLUNTEERID, EXTERNALIDENTIFIER, FIRSTNAME, INSERTION, LASTNAME, DATEOFBIRTH, PHONENUMBER, EMAIL, dateTraining) values
-  (1, '1001', 'Rico', null, 'Apon', '1993-03-26', '06-1111111', 'testmail@test.com', '2018-01-01'),
-  (2, '1002', 'Alain', 'van', 'Schijndel', '0001-01-01', 'geknummer', 'emailzonderapenstaartje', null);
+insert into Volunteer (VOLUNTEERID, EXTERNALIDENTIFIER, FIRSTNAME, INSERTION, LASTNAME, SEX, DATEOFBIRTH, PHONENUMBER, EMAIL, dateTraining,
+                       isClassAssistant, isTaalmaatje) values
+  (1, '1001', 'Rico', null, 'Apon', 'M', '1993-03-26', '06-1111111', 'testmail@test.com', '2018-01-01', true, true),
+  (2, '1002', 'Alain', 'van', 'Schijndel', 'F', '0001-01-01', 'geknummer', 'emailzonderapenstaartje', null, false, false);
 
 insert into volunteerinstance (VOLUNTEERID, VOLUNTEERINSTANCEID, EXTERNALIDENTIFIER, DATESTART, DATEEND) values
   (1, 1, '1', '2018-01-01', null);

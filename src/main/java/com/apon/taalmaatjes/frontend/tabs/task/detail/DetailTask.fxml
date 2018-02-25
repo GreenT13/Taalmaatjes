@@ -46,6 +46,11 @@
                                                 <Label text="Vrijwilliger" />
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Datum afhandelen" />
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                                 <VBox>
@@ -59,6 +64,15 @@
                                                 </TextField>
                                             </children>
                                         </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelDateToBeFinished" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                             </children>

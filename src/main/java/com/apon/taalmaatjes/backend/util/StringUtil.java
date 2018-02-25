@@ -10,15 +10,11 @@ public class StringUtil {
      * 1. The string is null
      * 2. The string has length 0
      * 3. The string consists of only spaces.
-     * @param string
-     * @return
+     * @param string String to process
+     * @return boolean
      */
-    public static boolean isEmpty(String string) {
-        if (string == null || string.length() == 0 || string.trim().length() == 0) {
-            return true;
-        }
-
-        return false;
+    private static boolean isEmpty(String string) {
+        return string == null || string.length() == 0 || string.trim().length() == 0;
     }
 
     public static String getDatabaseString(String string) {
@@ -56,5 +52,27 @@ public class StringUtil {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
         return getOutputString(format.format(date));
+    }
+
+    public static String convertOutputSexToDb(String sex) {
+        switch (sex) {
+            case "Man":
+                return "M";
+            case "Vrouw":
+                return "F";
+            default:
+                return null;
+        }
+    }
+
+    public static String convertDbSexToOutput(String sex) {
+        switch (sex) {
+            case "M":
+                return "Man";
+            case "F":
+                return "Vrouw";
+            default:
+                return "";
+        }
     }
 }

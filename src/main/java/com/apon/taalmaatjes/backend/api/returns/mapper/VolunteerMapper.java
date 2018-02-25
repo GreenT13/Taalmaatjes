@@ -35,6 +35,7 @@ public class VolunteerMapper {
         volunteerReturn.setInsertion(volunteerPojo.getInsertion());
         volunteerReturn.setLastName(volunteerPojo.getLastname());
         volunteerReturn.setDateOfBirth(volunteerPojo.getDateofbirth());
+        volunteerReturn.setSex(volunteerPojo.getSex());
         volunteerReturn.setPhoneNumber(volunteerPojo.getPhonenumber());
         volunteerReturn.setMobilePhoneNumber(volunteerPojo.getMobilephonenumber());
         volunteerReturn.setEmail(volunteerPojo.getEmail());
@@ -44,6 +45,9 @@ public class VolunteerMapper {
         volunteerReturn.setHouseNr(volunteerPojo.getHousenr());
         volunteerReturn.setLog(volunteerPojo.getLog());
         volunteerReturn.setJob(volunteerPojo.getJob());
+        volunteerReturn.setClassAssistant(volunteerPojo.getIsclassassistant());
+        volunteerReturn.setTaalmaatje(volunteerPojo.getIstaalmaatje());
+
     }
 
     private void addInstance(VolunteerinstancePojo volunteerinstancePojo) {
@@ -115,6 +119,7 @@ public class VolunteerMapper {
         volunteerPojo.setInsertion(volunteerReturn.getInsertion());
         volunteerPojo.setLastname(volunteerReturn.getLastName());
         volunteerPojo.setDateofbirth(volunteerReturn.getDateOfBirth());
+        volunteerPojo.setSex(volunteerReturn.getSex());
         volunteerPojo.setPhonenumber(volunteerReturn.getPhoneNumber());
         volunteerPojo.setMobilephonenumber(volunteerReturn.getMobilePhoneNumber());
         volunteerPojo.setEmail(volunteerReturn.getEmail());
@@ -125,6 +130,8 @@ public class VolunteerMapper {
         volunteerPojo.setHousenr(volunteerReturn.getHouseNr());
         volunteerPojo.setLog(volunteerReturn.getLog());
         volunteerPojo.setJob(volunteerReturn.getJob());
+        volunteerPojo.setIsclassassistant(volunteerReturn.getClassAssistant());
+        volunteerPojo.setIstaalmaatje(volunteerReturn.getTaalmaatje());
 
         return volunteerPojo;
     }

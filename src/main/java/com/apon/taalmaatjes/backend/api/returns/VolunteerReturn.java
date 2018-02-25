@@ -11,6 +11,7 @@ public class VolunteerReturn {
     private String insertion;
     private String lastName;
     private Date dateOfBirth;
+    private String sex;
     private String phoneNumber;
     private String mobilePhoneNumber;
     private String email;
@@ -21,6 +22,8 @@ public class VolunteerReturn {
     private String houseNr;
     private String log;
     private String job;
+    private Boolean isClassAssistant;
+    private Boolean isTaalmaatje;
 
     // Variables determined by logic.
     private Integer nrOfMatchesToday = 0;
@@ -72,6 +75,14 @@ public class VolunteerReturn {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getPhoneNumber() {
@@ -184,5 +195,21 @@ public class VolunteerReturn {
 
     public void setNrOfMatchesToday(Integer nrOfMatchesToday) {
         this.nrOfMatchesToday = nrOfMatchesToday;
+    }
+
+    public Boolean getClassAssistant() {
+        return isClassAssistant;
+    }
+
+    public void setClassAssistant(Boolean classAssistant) {
+        isClassAssistant = classAssistant;
+    }
+
+    public Boolean getTaalmaatje() {
+        return isTaalmaatje;
+    }
+
+    public void setTaalmaatje(Boolean taalmaatje) {
+        isTaalmaatje = taalmaatje;
     }
 }

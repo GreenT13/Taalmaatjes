@@ -174,7 +174,7 @@ public class TaskAPI {
 
         // Retrieve the list from the database.
         TaskMyDao taskMyDao = new TaskMyDao(context);
-        List<TaskPojo> taskPojos = taskMyDao.advancedSearch(input, isCancelled, isFinished, volunteerExtId);
+        List<TaskPojo> taskPojos = taskMyDao.advancedSearch(input, isFinished, volunteerExtId);
 
         // Convert the list of pojos to returns.
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
