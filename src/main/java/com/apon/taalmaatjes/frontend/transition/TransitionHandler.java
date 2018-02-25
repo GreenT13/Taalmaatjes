@@ -59,14 +59,19 @@ public class TransitionHandler {
         Log.logDebug("End transitioned to tab " + tabEnum.toString());
     }
 
-    /**
-     * Transition to another screen.
-     * @param screenEnum Screen to transition to.
-     * @param object Object that is passed to the next screen.
-     * @param rememberCurrentNode Indicates whether node needs to be reloaded or not.
-     * @param canGoBack Indicate whether you can come back to this screen or not.
-     */
     public void goToScreen(ScreenEnum screenEnum, Object object, boolean rememberCurrentNode, boolean canGoBack) {
+        goToScreen(screenEnum, object, rememberCurrentNode, canGoBack, null);
+    }
+
+
+        /**
+         * Transition to another screen.
+         * @param screenEnum Screen to transition to.
+         * @param object Object that is passed to the next screen.
+         * @param rememberCurrentNode Indicates whether node needs to be reloaded or not.
+         * @param canGoBack Indicate whether you can come back to this screen or not.
+         */
+    public void goToScreen(ScreenEnum screenEnum, Object object, boolean rememberCurrentNode, boolean canGoBack, Object currentObject) {
         Log.logDebug("Start transitioning to screen " + screenEnum.toString());
 
         // Register the transition if it is actually part of the breadcrum path.
@@ -76,6 +81,7 @@ public class TransitionHandler {
                 !currentBreadcrum.peek().getScreen().equals(currentScreen))) {
             Transition transition = new Transition();
             transition.setScreen(currentScreen);
+            transition.setObject(currentObject);
 
             // Only addVolunteer a node if you can also go back.
             if (rememberCurrentNode) {
@@ -117,7 +123,11 @@ public class TransitionHandler {
                 currentScreen =  transition.getScreen();
                 // Load the screen.
                 Log.logDebug("Start returning to tab " + transition.getScreen().toString());
-                loadScreen(transition.getScreen(), object);
+                if (object != null) {
+                    loadScreen(transition.getScreen(), object);
+                } else {
+                    loadScreen(transition.getScreen(), transition.getObject());
+                }
                 Log.logDebug("End returning to tab " + transition.getScreen().toString());
                 return;
             }

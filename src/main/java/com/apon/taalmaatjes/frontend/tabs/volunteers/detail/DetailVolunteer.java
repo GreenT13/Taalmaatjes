@@ -322,6 +322,6 @@ public class DetailVolunteer implements Screen {
     @FXML
     private void goToScreenEditTask(String taskExtId) {
         TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_DETAIL, taskExtId,
-                false, true);
+                false, true, volunteerExtId);
     }
 }

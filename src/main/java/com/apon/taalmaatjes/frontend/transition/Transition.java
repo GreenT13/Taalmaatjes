@@ -5,6 +5,7 @@ import javafx.scene.Node;
 public class Transition {
     private ScreenEnum screen;
     private Node node;
+    private Object object;
 
     public Transition() { }
 
@@ -22,5 +23,13 @@ public class Transition {
 
     public void setNode(Node node) {
         this.node = node;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 }
