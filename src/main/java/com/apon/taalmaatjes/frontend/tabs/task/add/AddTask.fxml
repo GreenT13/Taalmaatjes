@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
-
-<HBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.task.add.AddTask">
+<HBox stylesheets="@AddTask.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.task.add.AddTask">
     <children>
         <VBox>
             <children>
