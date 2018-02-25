@@ -79,9 +79,6 @@ public class StudentAPI {
         if (studentReturn.getHasQuit() == null) {
             return ResultUtil.createError("StudentAPI.error.fillHasQuit");
         }
-        if (studentReturn.getLastName() == null) {
-            return ResultUtil.createError("StudentAPI.error.fillLastName");
-        }
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
         StudentMapper studentMapper = new StudentMapper(studentReturn);
@@ -122,9 +119,6 @@ public class StudentAPI {
         }
         if (studentReturn.getExternalIdentifier() == null) {
             return ResultUtil.createError("StudentAPI.error.fillStudentExtId");
-        }
-        if (studentReturn.getLastName() == null) {
-            return ResultUtil.createError("StudentAPI.error.fillLastName");
         }
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
