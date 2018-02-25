@@ -27,11 +27,11 @@
                   <TableColumn text="Voornaam">
                      <styleClass>
                         <String fx:value="grayColumnText" />
-                        <String fx:value="firstname" />
                      </styleClass>
                   </TableColumn>
+                  <TableColumn styleClass="grayColumnText" text="Tussenvoegsel" />
                   <TableColumn styleClass="grayColumnText" text="Achternaam" />
-                  <TableColumn styleClass="grayColumnText" text="Email" />
+                  <TableColumn styleClass="grayColumnText" text="Stad" />
                   <TableColumn text="Telefoonnummer">
                      <styleClass>
                         <String fx:value="grayColumnText" />

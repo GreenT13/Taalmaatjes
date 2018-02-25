@@ -2,6 +2,7 @@ package com.apon.taalmaatjes.frontend.presentation;
 
 import javafx.beans.property.SimpleStringProperty;
 
+@SuppressWarnings("unused")
 public class TaskRow {
     // TODO: rewrite this class so it is "normal".
     private SimpleStringProperty extId;

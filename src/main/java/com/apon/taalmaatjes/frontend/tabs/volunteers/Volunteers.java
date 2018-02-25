@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.volunteers;
 import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.ObjectUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
@@ -62,10 +63,11 @@ public class Volunteers implements Screen {
 
         // Initialize the table.
         ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("firstName"));
-        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("email"));
-        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("phoneNr"));
-        ((TableColumn)tableViewResult.getColumns().get(4)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("nrOfMatches"));
+        ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("insertion"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("lastName"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("city"));
+        ((TableColumn)tableViewResult.getColumns().get(4)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("phoneNr"));
+        ((TableColumn)tableViewResult.getColumns().get(5)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("nrOfMatches"));
 
         // Add line to make sure that the space of the invisible panel is removed.
         flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
@@ -107,10 +109,12 @@ public class Volunteers implements Screen {
         for (VolunteerReturn volunteerReturn : list) {
             data.add(new VolunteerRow(volunteerReturn.getExternalIdentifier(),
                     volunteerReturn.getFirstName(),
+                    volunteerReturn.getInsertion(),
                     volunteerReturn.getLastName(),
                     volunteerReturn.getEmail(),
-                    volunteerReturn.getPhoneNumber(),
-                    volunteerReturn.getNrOfMatchesToday()));
+                    ObjectUtil.coalesce(volunteerReturn.getMobilePhoneNumber(), volunteerReturn.getPhoneNumber()),
+                    volunteerReturn.getNrOfMatchesToday(),
+                    volunteerReturn.getCity()));
         }
 
         tableViewResult.setItems(data);
