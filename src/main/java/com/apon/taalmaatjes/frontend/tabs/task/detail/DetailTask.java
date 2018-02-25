@@ -22,7 +22,7 @@ public class DetailTask implements Screen {
     private String taskExtId;
 
     @FXML
-    TextField labelTitle, labelVolunteer, labelDateToBeFinished;
+    TextField labelTitle, labelVolunteer, labelDateToBeFinished, labelIsFinished;
 
     @FXML
     TextArea textAreaDescription;
@@ -64,6 +64,7 @@ public class DetailTask implements Screen {
         TaskReturn taskReturn = (TaskReturn) result.getResult();
         labelTitle.setText(taskReturn.getTaskExtId() + ": " + taskReturn.getTitle());
         labelDateToBeFinished.setText(StringUtil.getOutputString(taskReturn.getDateToBeFinished()));
+        labelIsFinished.setText(StringUtil.getOutputString(taskReturn.getFinished()));
 
         result = VolunteerAPI.getInstance().getVolunteer(taskReturn.getVolunteerExtId());
         if (result == null || result.hasErrors()) {

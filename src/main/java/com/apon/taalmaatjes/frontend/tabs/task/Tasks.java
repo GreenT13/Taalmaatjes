@@ -1,12 +1,12 @@
 package com.apon.taalmaatjes.frontend.tabs.task;
 
 import com.apon.taalmaatjes.backend.api.TaskAPI;
+import com.apon.taalmaatjes.backend.api.VolunteerAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.TaskReturn;
-import com.apon.taalmaatjes.frontend.presentation.MessageResource;
-import com.apon.taalmaatjes.frontend.presentation.Screen;
-import com.apon.taalmaatjes.frontend.presentation.TaskRow;
-import com.apon.taalmaatjes.frontend.presentation.VolunteerRow;
+import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.StringUtil;
+import com.apon.taalmaatjes.frontend.presentation.*;
 import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.application.Platform;
@@ -17,6 +17,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
@@ -24,12 +26,19 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class Tasks implements Screen {
+    private boolean isVisible = false;
+
+    @FXML
+    private FlowPane flowPaneAdvancedSearch;
 
     @FXML
     private TableView<TaskRow> tableViewResult;
 
     @FXML
     private TextField textFieldSearch;
+
+    @FXML
+    ComboBox<String> comboVolunteer;
 
     @FXML
     ComboBox<String> comboStatus;
@@ -56,12 +65,18 @@ public class Tasks implements Screen {
         hideError();
 
         // Initialize the table.
-        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<TaskRow, String>("extId"));
+        ((TableColumn)tableViewResult.getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<TaskRow, String>("dateToBeFinished"));
         ((TableColumn)tableViewResult.getColumns().get(1)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("title"));
-        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("description"));
+        ((TableColumn)tableViewResult.getColumns().get(2)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("nameVolunteer"));
+        ((TableColumn)tableViewResult.getColumns().get(3)).setCellValueFactory(new PropertyValueFactory<VolunteerRow, String>("description"));
+
+        // Add line to make sure that the space of the invisible panel is removed.
+        flowPaneAdvancedSearch.managedProperty().bind(flowPaneAdvancedSearch.visibleProperty());
+        // Set default visibility.
+        flowPaneAdvancedSearch.setVisible(isVisible);
 
         // Fill the table.
-        handleActionSearch(null);
+        handleActionSearch((ActionEvent) null);
 
         // Add listener to when an item is clicked.
         tableViewResult.getSelectionModel().selectedItemProperty().addListener(
@@ -74,7 +89,40 @@ public class Tasks implements Screen {
                 });
 
         // Search when textFieldSearch content is changed.
-        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch(null));
+        textFieldSearch.textProperty().addListener((observable, oldValue, newValue) -> handleActionSearch((ActionEvent) null));
+
+        comboVolunteer.getEditor().textProperty().addListener((observable, oldValue, newValue) -> changeList(oldValue, newValue));
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void changeList(String oldValue, String newValue) {
+        if (newValue.contains(":")) {
+            return;
+        }
+
+        if (newValue.trim().length() == 0) {
+            comboVolunteer.setItems(null);
+            comboVolunteer.hide();
+            hideError();
+            return;
+        }
+        Result result = VolunteerAPI.getInstance().advancedSearch(newValue,null,null,null, null);
+
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // So now we create a list of names to fill in the combobox.
+        ObservableList<String> comboVolunteerObservableList = FXCollections.observableArrayList();
+        List<VolunteerReturn> volunteerReturns = (List<VolunteerReturn>) result.getResult();
+        for (VolunteerReturn volunteerReturn : volunteerReturns) {
+            comboVolunteerObservableList.add(volunteerReturn.getExternalIdentifier() + ": " + NameUtil.getVolunteerName(volunteerReturn));
+        }
+
+        // Fill the combobox.
+        comboVolunteer.setItems(comboVolunteerObservableList);
+        comboVolunteer.show();
     }
 
     private void clickedOnRow(TaskRow taskRow) {
@@ -91,8 +139,17 @@ public class Tasks implements Screen {
         ObservableList<TaskRow> data = FXCollections.observableArrayList();
 
         for (TaskReturn taskReturn : list) {
+            Result result = VolunteerAPI.getInstance().getVolunteer(taskReturn.getVolunteerExtId());
+            if (result == null || result.hasErrors()) {
+                showError(result);
+                return;
+            }
+            VolunteerReturn volunteerReturn = (VolunteerReturn) result.getResult();
+
             data.add(new TaskRow(taskReturn.getTaskExtId(),
+                    StringUtil.getOutputString(taskReturn.getDateToBeFinished()),
                     taskReturn.getTitle(),
+                    NameUtil.getVolunteerName(volunteerReturn),
                     taskReturn.getDescription()));
         }
 
@@ -100,26 +157,30 @@ public class Tasks implements Screen {
     }
 
     @FXML
+    private void handleActionSearch(KeyEvent keyEvent) {
+        handleActionSearch((ActionEvent) null);
+    }
+
+    @FXML
     private void handleActionSearch(ActionEvent actionEvent) {
         // Don't do an advanced search if we have the advanced bar collapsed.
         Result result;
         Boolean isFinished = null;
-        Boolean isCancelled = null;
         switch (comboStatus.getValue()) {
             case "Open":
                 isFinished = false;
-                isCancelled = false;
                 break;
             case "Afgerond":
                 isFinished = true;
-                isCancelled = false;
-                break;
-            case "Geannuleerd":
-                isFinished = false;
-                isCancelled = true;
                 break;
         }
-        result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished, isCancelled,null);
+        if (!isVisible || comboVolunteer.getValue() == null) {
+            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished,null);
+        } else {
+            result = TaskAPI.getInstance().advancedSearch(textFieldSearch.getText(), isFinished,
+                    comboVolunteer.getValue().substring(0, comboVolunteer.getValue().indexOf(":")));
+        }
+
 
         if (result == null || result.hasErrors()) {
             showError(result);
@@ -127,6 +188,17 @@ public class Tasks implements Screen {
         }
 
         fillTable((List<TaskReturn>) result.getResult());
+    }
+
+    /**
+     * Toggle the visibility of flowPaneAdvancedSearch.
+     * @param actionEvent Unused.
+     */
+    @FXML
+    public void handleActionToggleAdvancedSearch(ActionEvent actionEvent) {
+        isVisible = !isVisible;
+        flowPaneAdvancedSearch.setVisible(isVisible);
+        handleActionSearch((ActionEvent) null);
     }
 
     @FXML

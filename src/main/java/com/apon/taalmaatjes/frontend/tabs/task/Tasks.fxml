@@ -21,8 +21,9 @@
     <center>
         <TableView fx:id="tableViewResult" prefHeight="420.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn styleClass="grayColumnTextId" text="ID" />
+                <TableColumn styleClass="grayColumnTextId" text="Datum" />
                 <TableColumn styleClass="grayColumnText" text="Titel" />
+            <TableColumn styleClass="grayColumnText" text="Vrijwilliger" />
                 <TableColumn styleClass="grayColumnTextDouble" text="Beschrijving" />
             </columns>
             <columnResizePolicy>
@@ -57,7 +58,6 @@
                                             <String fx:id="empty" fx:value="" />
                                             <String fx:id="open" fx:value="Open" />
                                             <String fx:id="finished" fx:value="Afgerond" />
-                                            <String fx:id="cancelled" fx:value="Geannuleerd" />
                                         </FXCollections>
                                     </items>
                                     <value>
@@ -73,9 +73,18 @@
                      </HBox.margin>
                         </HBox>
                         <TextField fx:id="textFieldSearch" onAction="#handleActionSearch" />
+                  <Button id="btnAdvanced" mnemonicParsing="false" onAction="#handleActionToggleAdvancedSearch" text="▼" />
                     </children>
                 </HBox>
-                <FlowPane fx:id="flowPaneAdvancedSearch" alignment="CENTER_RIGHT" />
+                <FlowPane fx:id="flowPaneAdvancedSearch" alignment="CENTER_RIGHT">
+               <children>
+                  <HBox fx:id="random211" alignment="CENTER_RIGHT">
+                     <children>
+                        <Label text="Vrijwilliger: " />
+                        <ComboBox fx:id="comboVolunteer" editable="true" onKeyPressed="#handleActionSearch" prefHeight="31.0" prefWidth="280.0" />
+                     </children>
+                  </HBox>
+               </children></FlowPane>
             </children>
         </VBox>
     </top>

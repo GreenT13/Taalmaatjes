@@ -126,7 +126,7 @@ public class TaskMyDao extends TaskDao {
                             .where(Volunteer.VOLUNTEER.EXTERNALIDENTIFIER.eq(volunteerExtId))));
         }
 
-        return query.orderBy(Task.TASK.TASKID.desc()).limit(50).fetch().map(mapper());
+        return query.orderBy(Task.TASK.DATETOBEFINISHED.asc()).limit(50).fetch().map(mapper());
     }
 
     public List<TaskPojo> getTasksForVolunteer(int volunteerId) {

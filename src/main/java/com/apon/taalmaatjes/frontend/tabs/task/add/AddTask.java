@@ -144,8 +144,8 @@ public class AddTask implements Screen {
             TransitionHandler.getInstance().goToScreen(ScreenEnum.VOLUNTEERS_DETAIL, addTaskObject.getVolunteerExtId(),
                     false, false);
         } else {
-            TransitionHandler.getInstance().goToScreen(ScreenEnum.TASKS_DETAIL, addTaskObject.getTaskExtId(),
-                    false, false);
+            // Go to overview screen.
+            TransitionHandler.getInstance().goBack();
         }
     }
 

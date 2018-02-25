@@ -51,6 +51,11 @@
                                     <Label text="Datum afhandelen" />
                                  </children>
                               </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Is afgehandeld" />
+                                 </children>
+                              </HBox>
                                     </children>
                                 </VBox>
                                 <VBox>
@@ -67,6 +72,15 @@
                               <HBox styleClass="hboxAlign">
                                  <children>
                                     <TextField fx:id="labelDateToBeFinished" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelIsFinished" editable="false" prefHeight="21.0" styleClass="copyable-label">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>

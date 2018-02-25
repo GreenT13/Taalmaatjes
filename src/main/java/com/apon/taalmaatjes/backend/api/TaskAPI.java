@@ -159,17 +159,16 @@ public class TaskAPI {
     /**
      * Search for tasks that specify the given conditions, if they are filled.
      * @param input The input searched for in the title and the description.
-     * @param isCancelled Whether the value of Task.isCancelled is true or false.
      * @param isFinished Whether the value of Task.isFinished is true or false.
      * @param volunteerExtId The volunteer it is linked to.
      * @return List&lt;TaskReturn&gt;
      */
-    public Result advancedSearch(String input, Boolean isCancelled, Boolean isFinished, String volunteerExtId) {
+    public Result advancedSearch(String input, Boolean isFinished, String volunteerExtId) {
         Context context;
         try {context = new Context();} catch (SQLException e) {
             return ResultUtil.createError("Context.error.create", e);
         }
-        Log.logDebug("Start TaskAPI.advancedSearch for input " + input + " isCancelled " + isCancelled + " isFinished " + isFinished
+        Log.logDebug("Start TaskAPI.advancedSearch for input " + input + " isFinished " + isFinished
                 + " volunteerExtId " + volunteerExtId);
 
         // Retrieve the list from the database.

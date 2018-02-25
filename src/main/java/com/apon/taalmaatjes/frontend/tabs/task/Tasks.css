@@ -55,7 +55,7 @@
 
 .grayColumnTextId {
     -fx-text-fill: -darkgray;
-    -columnWidth: 50px;
+    -columnWidth: 100px;
     -fx-max-width: -columnWidth;
     -fx-min-width: -columnWidth;
     -fx-pref-width: -columnWidth;
