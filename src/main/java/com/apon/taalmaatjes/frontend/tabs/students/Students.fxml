@@ -77,7 +77,7 @@
                     <children>
                         <HBox alignment="CENTER_RIGHT">
                             <children>
-                                <Label text="Is groep: " />
+                                <Label text="Example" />
                                 <ComboBox fx:id="comboIsGroup" onAction="#handleActionSearch" styleClass="yes-no-combo">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">

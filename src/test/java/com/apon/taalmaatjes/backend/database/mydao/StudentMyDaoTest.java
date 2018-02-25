@@ -60,9 +60,9 @@ public class StudentMyDaoTest extends BaseTest {
     }
 
     private void assertCountNewStudents(Date d1, Date d2, int resultGroup, int resultStudent) {
-        assertEquals(studentMyDao.countNewStudents(d1, d2, true), resultGroup);
-        assertEquals(studentMyDao.countNewStudents(d1, d2, false), resultStudent);
-        assertEquals(studentMyDao.countNewStudents(d1, d2, null), resultGroup + resultStudent);
+        assertEquals(studentMyDao.countNewStudents(d1, d2), resultGroup);
+        assertEquals(studentMyDao.countNewStudents(d1, d2), resultStudent);
+        assertEquals(studentMyDao.countNewStudents(d1, d2), resultGroup + resultStudent);
     }
 
     @Test

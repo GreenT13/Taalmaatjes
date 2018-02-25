@@ -27,7 +27,7 @@ public class AddStudent implements Screen {
     TextField inputFirstName, inputInsertion, inputLastName, inputGroupIdentification;
 
     @FXML
-    CheckBox checkIsGroup, checkHasQuit;
+    CheckBox checkHasQuit;
 
     private String studentExtId;
 
@@ -94,7 +94,6 @@ public class AddStudent implements Screen {
         studentReturn.setFirstName(StringUtil.getDatabaseString(inputFirstName.getText()));
         studentReturn.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
         studentReturn.setLastName(StringUtil.getDatabaseString(inputLastName.getText()));
-        studentReturn.setGroup(checkIsGroup.isSelected());
         studentReturn.setGroupIdentification(StringUtil.getDatabaseString(inputGroupIdentification.getText()));
         studentReturn.setHasQuit(checkHasQuit.isSelected());
 
@@ -120,7 +119,6 @@ public class AddStudent implements Screen {
         inputInsertion.setText(studentReturn.getInsertion());
         inputLastName.setText(studentReturn.getLastName());
         inputGroupIdentification.setText(studentReturn.getGroupIdentification());
-        checkIsGroup.setSelected(studentReturn.getGroup());
         checkHasQuit.setSelected(studentReturn.getHasQuit());
     }
 }

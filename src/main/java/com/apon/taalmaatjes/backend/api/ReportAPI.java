@@ -49,11 +49,8 @@ public class ReportAPI {
         report.setNrOfActiveVolunteers(volunteerMyDao.countActiveInPeriod(dateStart, dateEnd, Boolean.TRUE));
 
         StudentMyDao studentMyDao = new StudentMyDao(context);
-        report.setNrOfNewStudents(studentMyDao.countNewStudents(dateStart, dateEnd, false));
-        report.setNrOfActiveStudents(studentMyDao.countActiveInPeriod(dateStart, dateEnd, false));
-
-        report.setNrOfNewGroups(studentMyDao.countNewStudents(dateStart, dateEnd, true));
-        report.setNrOfActiveGroups(studentMyDao.countActiveInPeriod(dateStart, dateEnd, true));
+        report.setNrOfNewStudents(studentMyDao.countNewStudents(dateStart, dateEnd));
+        report.setNrOfActiveStudents(studentMyDao.countActiveInPeriod(dateStart, dateEnd));
 
         // Close, log and return.
         context.close();

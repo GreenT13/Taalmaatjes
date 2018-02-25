@@ -45,11 +45,6 @@
                                     <Label text="Groep" />
                                  </children>
                               </HBox>
-                                        <HBox styleClass="hboxAlign">
-                                            <children>
-                                                <Label text="Is een groep" />
-                                            </children>
-                                        </HBox>
                               <HBox styleClass="hboxAlign">
                                  <children>
                                     <Label text="Is gestopt" />
@@ -68,15 +63,6 @@
                                     </TextField>
                                  </children>
                               </HBox>
-                                        <HBox styleClass="hboxAlign">
-                                            <children>
-                                                <TextField fx:id="labelIsGroup" editable="false" prefHeight="21.0" styleClass="copyable-label">
-                                                    <opaqueInsets>
-                                                        <Insets />
-                                                    </opaqueInsets>
-                                                </TextField>
-                                            </children>
-                                        </HBox>
                               <HBox styleClass="hboxAlign">
                                  <children>
                                     <TextField fx:id="labelHasQuit" editable="false" prefHeight="21.0" styleClass="copyable-label">

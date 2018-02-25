@@ -22,14 +22,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StudentPojo implements Serializable {
 
-    private static final long serialVersionUID = -390419701;
+    private static final long serialVersionUID = 7111820;
 
     private Integer studentid;
     private String  externalidentifier;
     private String  firstname;
     private String  insertion;
     private String  lastname;
-    private Boolean isgroup;
     private String  groupidentification;
     private Boolean hasquit;
 
@@ -41,7 +40,6 @@ public class StudentPojo implements Serializable {
         this.firstname = value.firstname;
         this.insertion = value.insertion;
         this.lastname = value.lastname;
-        this.isgroup = value.isgroup;
         this.groupidentification = value.groupidentification;
         this.hasquit = value.hasquit;
     }
@@ -52,7 +50,6 @@ public class StudentPojo implements Serializable {
         String  firstname,
         String  insertion,
         String  lastname,
-        Boolean isgroup,
         String  groupidentification,
         Boolean hasquit
     ) {
@@ -61,7 +58,6 @@ public class StudentPojo implements Serializable {
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
-        this.isgroup = isgroup;
         this.groupidentification = groupidentification;
         this.hasquit = hasquit;
     }
@@ -106,14 +102,6 @@ public class StudentPojo implements Serializable {
         this.lastname = lastname;
     }
 
-    public Boolean getIsgroup() {
-        return this.isgroup;
-    }
-
-    public void setIsgroup(Boolean isgroup) {
-        this.isgroup = isgroup;
-    }
-
     public String getGroupidentification() {
         return this.groupidentification;
     }
@@ -139,7 +127,6 @@ public class StudentPojo implements Serializable {
         sb.append(", ").append(firstname);
         sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
-        sb.append(", ").append(isgroup);
         sb.append(", ").append(groupidentification);
         sb.append(", ").append(hasquit);
 

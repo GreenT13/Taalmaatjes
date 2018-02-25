@@ -9,8 +9,6 @@ public class ReportReturn {
     private Integer nrOfActiveVolunteers;
     private Integer nrOfNewStudents;
     private Integer nrOfActiveStudents;
-    private Integer nrOfNewGroups;
-    private Integer nrOfActiveGroups;
 
     public ReportReturn(Date dateStart, Date dateEnd) {
         this.dateStart = dateStart;
@@ -63,21 +61,5 @@ public class ReportReturn {
 
     public void setNrOfActiveStudents(Integer nrOfActiveStudents) {
         this.nrOfActiveStudents = nrOfActiveStudents;
-    }
-
-    public Integer getNrOfNewGroups() {
-        return nrOfNewGroups;
-    }
-
-    public void setNrOfNewGroups(Integer nrOfNewGroups) {
-        this.nrOfNewGroups = nrOfNewGroups;
-    }
-
-    public Integer getNrOfActiveGroups() {
-        return nrOfActiveGroups;
-    }
-
-    public void setNrOfActiveGroups(Integer nrOfActiveGroups) {
-        this.nrOfActiveGroups = nrOfActiveGroups;
     }
 }

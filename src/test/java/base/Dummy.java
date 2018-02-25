@@ -13,9 +13,9 @@ import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import org.jooq.Configuration;
 
 public class Dummy {
-    protected Configuration configuration;
+    private Configuration configuration;
 
-    protected Dummy(Configuration configuration) {
+    Dummy(Configuration configuration) {
         this.configuration = configuration;
     }
 
@@ -91,7 +91,6 @@ public class Dummy {
         StudentPojo studentPojo = new StudentPojo();
         studentPojo.setFirstname("First");
         studentPojo.setLastname("Last");
-        studentPojo.setIsgroup(isGroup);
         return studentPojo;
     }
 }

@@ -28,7 +28,6 @@ public class StudentMapper {
         studentReturn.setFirstName(studentPojo.getFirstname());
         studentReturn.setInsertion(studentPojo.getInsertion());
         studentReturn.setLastName(studentPojo.getLastname());
-        studentReturn.setGroup(studentPojo.getIsgroup());
         studentReturn.setGroupIdentification(studentPojo.getGroupidentification());
         studentReturn.setHasQuit(studentPojo.getHasquit());
     }
@@ -62,7 +61,6 @@ public class StudentMapper {
         studentPojo.setFirstname(studentReturn.getFirstName());
         studentPojo.setInsertion(studentReturn.getInsertion());
         studentPojo.setLastname(studentReturn.getLastName());
-        studentPojo.setIsgroup(studentReturn.getGroup());
         studentPojo.setGroupidentification(studentReturn.getGroupIdentification());
         studentPojo.setHasquit(studentReturn.getHasQuit());
 

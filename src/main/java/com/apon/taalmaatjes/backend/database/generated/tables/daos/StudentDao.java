@@ -101,13 +101,6 @@ public class StudentDao extends DAOImpl<StudentRecord, StudentPojo, Integer> {
     }
 
     /**
-     * Fetch records that have <code>ISGROUP IN (values)</code>
-     */
-    public List<StudentPojo> fetchByIsgroup(Boolean... values) {
-        return fetch(Student.STUDENT.ISGROUP, values);
-    }
-
-    /**
      * Fetch records that have <code>GROUPIDENTIFICATION IN (values)</code>
      */
     public List<StudentPojo> fetchByGroupidentification(String... values) {

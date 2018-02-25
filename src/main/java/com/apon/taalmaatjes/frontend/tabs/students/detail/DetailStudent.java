@@ -26,7 +26,7 @@ public class DetailStudent implements Screen {
     private String studentExtId;
 
     @FXML
-    TextField labelName, labelIsGroup, labelGroupIdentification, labelHasQuit;
+    TextField labelName, labelGroupIdentification, labelHasQuit;
 
     @FXML
     VBox vboxMatch;
@@ -68,20 +68,8 @@ public class DetailStudent implements Screen {
         StudentReturn studentReturn = (StudentReturn) result.getResult();
 
         // Set the name.
-        String name = String.valueOf(studentReturn.getExternalIdentifier()) + ": ";
-        if (!studentReturn.getGroup()) {
-            if (studentReturn.getFirstName() != null) {
-                name += studentReturn.getFirstName() + " ";
-            }
-            if (studentReturn.getInsertion() != null) {
-                name += studentReturn.getInsertion()  + " ";
-            }
-        }
-        name += studentReturn.getLastName();
+        String name = String.valueOf(studentReturn.getExternalIdentifier()) + ": " + NameUtil.getStudentName(studentReturn);
         labelName.setText(name);
-
-        // Set is group
-        labelIsGroup.setText(StringUtil.getOutputString(studentReturn.getGroup()));
 
         labelGroupIdentification.setText(StringUtil.getOutputString(studentReturn.getGroupIdentification()));
         labelHasQuit.setText(StringUtil.getOutputString(studentReturn.getHasQuit()));
@@ -125,7 +113,6 @@ public class DetailStudent implements Screen {
         hideError();
 
         TextUtils.setWidthToContent(labelName);
-        TextUtils.setWidthToContent(labelIsGroup);
         TextUtils.setWidthToContent(labelGroupIdentification);
         TextUtils.setWidthToContent(labelHasQuit);
     }

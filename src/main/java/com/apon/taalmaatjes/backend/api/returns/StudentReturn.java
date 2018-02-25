@@ -7,7 +7,6 @@ public class StudentReturn {
     private String firstName;
     private String insertion;
     private String lastName;
-    private Boolean isGroup;
     private String groupIdentification;
     private Boolean hasQuit;
 
@@ -43,14 +42,6 @@ public class StudentReturn {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Boolean getGroup() {
-        return isGroup;
-    }
-
-    public void setGroup(Boolean group) {
-        isGroup = group;
     }
 
     public List<VolunteerMatchReturn> getListVolunteerMatch() {

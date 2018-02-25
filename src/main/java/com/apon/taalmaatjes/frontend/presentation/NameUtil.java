@@ -6,23 +6,21 @@ import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
 public class NameUtil {
 
     public static String getStudentName(StudentReturn studentReturn) {
-        if (studentReturn.getGroup()) {
-            // Group is filled in lastName.
-            return studentReturn.getLastName();
-        } else {
-            String studentName = "";
+        String studentName = "";
 
-            if (studentReturn.getFirstName() != null) {
-                studentName += studentReturn.getFirstName() + " ";
-            }
-
-            if (studentReturn.getInsertion() != null) {
-                studentName += studentReturn.getInsertion() + " ";
-            }
-
-            // Last name is always filled.
-            return studentName + studentReturn.getLastName();
+        if (studentReturn.getFirstName() != null) {
+            studentName += studentReturn.getFirstName() + " ";
         }
+
+        if (studentReturn.getInsertion() != null) {
+            studentName += studentReturn.getInsertion() + " ";
+        }
+
+        if (studentReturn.getLastName() != null) {
+            studentName += studentReturn.getLastName();
+        }
+
+        return studentName;
     }
 
     public static String getVolunteerName(VolunteerReturn volunteerReturn) {

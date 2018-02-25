@@ -105,10 +105,9 @@ public class StudentMyDao extends StudentDao {
      * If isGroup is non-null, addVolunteer criteria that it must match.
      * @param minimumDate Minimum start date.
      * @param maximumDate Maximum start date.
-     * @param isGroup Whether Student.isGroup is true or false.
      * @return Integer value of students that satisfy the criteria.
      */
-    public int countNewStudents(@Nonnull Date minimumDate, @Nonnull Date maximumDate, @Nullable Boolean isGroup) {
+    public int countNewStudents(@Nonnull Date minimumDate, @Nonnull Date maximumDate) {
         SelectConditionStep<Record1<Integer>> query =  using(configuration())
                 .selectCount()
                 .from(Student.STUDENT)
@@ -118,10 +117,6 @@ public class StudentMyDao extends StudentDao {
                                 .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(Student.STUDENT.STUDENTID))
                                 // Check whether this date is between the minimumDate and maximumDate
                                 .asField().between(minimumDate, maximumDate));
-
-        if (isGroup != null) {
-            query.and(Student.STUDENT.ISGROUP.eq(isGroup));
-        }
 
         return query.fetchOne(0, int.class);
     }
@@ -137,7 +132,7 @@ public class StudentMyDao extends StudentDao {
      * @param isGroup
      * @return
      */
-    public int countActiveInPeriod(@Nonnull Date minimumDate, @Nonnull Date maximumDate, @Nullable Boolean isGroup) {
+    public int countActiveInPeriod(@Nonnull Date minimumDate, @Nonnull Date maximumDate) {
         SelectConditionStep<Record1<Integer>> query = using(configuration())
                 // Since we use a join on instance, we must count distinct number of ID's.
                 .select(Student.STUDENT.STUDENTID.countDistinct())
@@ -163,10 +158,6 @@ public class StudentMyDao extends StudentDao {
                                         .or(DSL.val(maximumDate).le(Volunteermatch.VOLUNTEERMATCH.DATEEND))))
                 );
 
-        if (isGroup != null) {
-            query.and(Student.STUDENT.ISGROUP.eq(isGroup));
-        }
-
         // Return the single row integer.
         return query.fetchOne(0, int.class);
     }
@@ -174,11 +165,10 @@ public class StudentMyDao extends StudentDao {
     /**
      * Search for students based on non-null inputs.
      * @param input
-     * @param isGroup
      * @param hasMatch
      * @return
      */
-    public List<StudentPojo> advancedSearch(String input, Boolean isGroup, Boolean hasMatch) {
+    public List<StudentPojo> advancedSearch(String input, Boolean hasMatch) {
         SelectWhereStep<StudentRecord> query = using(configuration()).selectFrom(Student.STUDENT);
 
         // Add the input to search criteria.
@@ -191,10 +181,6 @@ public class StudentMyDao extends StudentDao {
                                 .or(Student.STUDENT.LASTNAME.lower().like("%" + s + "%"))
                 );
             }
-        }
-
-        if (isGroup != null) {
-            query.where(Student.STUDENT.ISGROUP.eq(isGroup));
         }
 
         if (hasMatch != null) {

@@ -99,9 +99,7 @@ public class Report implements Screen {
                 "Aantal nieuwe vrijwilligers: " + report.getNrOfNewVolunteers() + "\n" +
                 "Aantal actieve vrijwilligers: " + report.getNrOfActiveVolunteers() + "\n" +
                 "Aantal nieuwe cursisten: " + report.getNrOfNewStudents() + "\n" +
-                "Aantal actieve cursisten: " + report.getNrOfActiveStudents() + "\n" +
-                "Aantal nieuwe groepen: " + report.getNrOfNewGroups() + "\n" +
-                "Aantal actieve groepen: " + report.getNrOfActiveGroups() + "\n");
+                "Aantal actieve cursisten: " + report.getNrOfActiveStudents() + "\n");
 
         hideError();
     }

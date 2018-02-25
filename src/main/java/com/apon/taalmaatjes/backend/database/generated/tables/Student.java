@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Student extends TableImpl<StudentRecord> {
 
-    private static final long serialVersionUID = -1013064324;
+    private static final long serialVersionUID = -1257085779;
 
     /**
      * The reference instance of <code>PUBLIC.STUDENT</code>
@@ -77,11 +77,6 @@ public class Student extends TableImpl<StudentRecord> {
      * The column <code>PUBLIC.STUDENT.LASTNAME</code>.
      */
     public final TableField<StudentRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
-
-    /**
-     * The column <code>PUBLIC.STUDENT.ISGROUP</code>.
-     */
-    public final TableField<StudentRecord, Boolean> ISGROUP = createField("ISGROUP", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.STUDENT.GROUPIDENTIFICATION</code>.

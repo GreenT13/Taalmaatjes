@@ -50,11 +50,6 @@
                         </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
-                                        <Label text="Is groep" />
-                                    </children>
-                                </HBox>
-                                <HBox styleClass="hboxAlign">
-                                    <children>
                                         <Label text="Is gestopt" />
                                     </children>
                                 </HBox>
@@ -82,11 +77,6 @@
                               <TextField fx:id="inputGroupIdentification" prefHeight="43.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                                <HBox styleClass="hboxAlign">
-                                    <children>
-                                        <CheckBox fx:id="checkIsGroup" mnemonicParsing="false" />
-                                    </children>
-                                </HBox>
                                 <HBox styleClass="hboxAlign">
                                     <children>
                                         <CheckBox fx:id="checkHasQuit" mnemonicParsing="false" />

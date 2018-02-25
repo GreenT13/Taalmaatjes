@@ -166,7 +166,7 @@ public class StudentAPI {
                 + " isGroup " + isGroup + " hasMatch " + hasMatch);
         // Retrieve the list from the database.
         StudentMyDao studentMyDao = new StudentMyDao(context);
-        List<StudentPojo> studentPojoList = studentMyDao.advancedSearch(input, isGroup, hasMatch);
+        List<StudentPojo> studentPojoList = studentMyDao.advancedSearch(input, hasMatch);
 
         // No connection is needed.
         context.close();
