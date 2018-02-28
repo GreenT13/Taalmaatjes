@@ -8,6 +8,7 @@ import com.apon.taalmaatjes.backend.database.generated.tables.Student;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.StudentPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.StudentRecord;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -98,6 +99,20 @@ public class StudentDao extends DAOImpl<StudentRecord, StudentPojo, Integer> {
      */
     public List<StudentPojo> fetchByLastname(String... values) {
         return fetch(Student.STUDENT.LASTNAME, values);
+    }
+
+    /**
+     * Fetch records that have <code>SEX IN (values)</code>
+     */
+    public List<StudentPojo> fetchBySex(String... values) {
+        return fetch(Student.STUDENT.SEX, values);
+    }
+
+    /**
+     * Fetch records that have <code>DATEOFBIRTH IN (values)</code>
+     */
+    public List<StudentPojo> fetchByDateofbirth(Date... values) {
+        return fetch(Student.STUDENT.DATEOFBIRTH, values);
     }
 
     /**

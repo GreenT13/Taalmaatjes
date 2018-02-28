@@ -9,6 +9,7 @@ import com.apon.taalmaatjes.backend.database.generated.Keys;
 import com.apon.taalmaatjes.backend.database.generated.Public;
 import com.apon.taalmaatjes.backend.database.generated.tables.records.StudentRecord;
 
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Student extends TableImpl<StudentRecord> {
 
-    private static final long serialVersionUID = -1257085779;
+    private static final long serialVersionUID = 661579781;
 
     /**
      * The reference instance of <code>PUBLIC.STUDENT</code>
@@ -77,6 +78,16 @@ public class Student extends TableImpl<StudentRecord> {
      * The column <code>PUBLIC.STUDENT.LASTNAME</code>.
      */
     public final TableField<StudentRecord, String> LASTNAME = createField("LASTNAME", org.jooq.impl.SQLDataType.VARCHAR(100), this, "");
+
+    /**
+     * The column <code>PUBLIC.STUDENT.SEX</code>.
+     */
+    public final TableField<StudentRecord, String> SEX = createField("SEX", org.jooq.impl.SQLDataType.VARCHAR(1).nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.STUDENT.DATEOFBIRTH</code>.
+     */
+    public final TableField<StudentRecord, Date> DATEOFBIRTH = createField("DATEOFBIRTH", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.STUDENT.GROUPIDENTIFICATION</code>.

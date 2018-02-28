@@ -102,21 +102,26 @@ public class StudentMyDao extends StudentDao {
 
     /**
      * Count how many students have their first dateStart from a match between minimumDate and maximumDate.
-     * If isGroup is non-null, addVolunteer criteria that it must match.
      * @param minimumDate Minimum start date.
      * @param maximumDate Maximum start date.
      * @return Integer value of students that satisfy the criteria.
      */
-    public int countNewStudents(@Nonnull Date minimumDate, @Nonnull Date maximumDate) {
+    public int countNew(@Nonnull Date minimumDate, @Nonnull Date maximumDate,
+                        @Nonnull int minAge, @Nonnull int maxAge, @Nonnull String sex) {
         SelectConditionStep<Record1<Integer>> query =  using(configuration())
                 .selectCount()
                 .from(Student.STUDENT)
-                .where(
-                        using(configuration()).select(Volunteermatch.VOLUNTEERMATCH.DATESTART.min())
+                .where(using(configuration()).select(Volunteermatch.VOLUNTEERMATCH.DATESTART.min())
                                 .from(Volunteermatch.VOLUNTEERMATCH)
+                                .innerJoin(Volunteer.VOLUNTEER).on(Volunteer.VOLUNTEER.VOLUNTEERID.eq(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID))
                                 .where(Volunteermatch.VOLUNTEERMATCH.STUDENTID.eq(Student.STUDENT.STUDENTID))
+                                .and(Volunteer.VOLUNTEER.DATETRAINING.le(maximumDate))
                                 // Check whether this date is between the minimumDate and maximumDate
-                                .asField().between(minimumDate, maximumDate));
+                                .asField().between(minimumDate, maximumDate))
+                // Need to equal sex
+                .and(Student.STUDENT.SEX.eq(sex))
+                // Age is in certain category.
+                .and(DSL.floor(DSL.dateDiff(DSL.currentDate(), Student.STUDENT.DATEOFBIRTH).div(365.25)).between(minAge, maxAge));
 
         return query.fetchOne(0, int.class);
     }
@@ -132,16 +137,20 @@ public class StudentMyDao extends StudentDao {
      * @param isGroup
      * @return
      */
-    public int countActiveInPeriod(@Nonnull Date minimumDate, @Nonnull Date maximumDate) {
+    public int countActive(@Nonnull Date minimumDate, @Nonnull Date maximumDate,
+                           @Nonnull int minAge, @Nonnull int maxAge, @Nonnull String sex) {
         SelectConditionStep<Record1<Integer>> query = using(configuration())
                 // Since we use a join on instance, we must count distinct number of ID's.
                 .select(Student.STUDENT.STUDENTID.countDistinct())
                 .from(Student.STUDENT)
-                .join(Volunteermatch.VOLUNTEERMATCH)
-                .on(Student.STUDENT.STUDENTID.eq(Volunteermatch.VOLUNTEERMATCH.STUDENTID))
+                .join(Volunteermatch.VOLUNTEERMATCH).on(Student.STUDENT.STUDENTID.eq(Volunteermatch.VOLUNTEERMATCH.STUDENTID))
+                .join(Volunteer.VOLUNTEER).on(Volunteer.VOLUNTEER.VOLUNTEERID.eq(Volunteermatch.VOLUNTEERMATCH.VOLUNTEERID))
                 .where(
                         // dateStart between minimumDate and maximumDate
                         Volunteermatch.VOLUNTEERMATCH.DATESTART.between(minimumDate, maximumDate)
+
+                        // Volunteer must be trained.
+                        .and(Volunteer.VOLUNTEER.DATETRAINING.le(maximumDate))
 
                         // dateEnd between minimumDate and maximumDate
                         // Will give unknown if dateEnd is null, which is fine since it is part of an or-cause.
@@ -156,7 +165,11 @@ public class StudentMyDao extends StudentDao {
                         .or(Volunteermatch.VOLUNTEERMATCH.DATESTART.le(maximumDate)
                                 .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
                                         .or(DSL.val(maximumDate).le(Volunteermatch.VOLUNTEERMATCH.DATEEND))))
-                );
+                )
+                // Need to equal sex
+                .and(Student.STUDENT.SEX.eq(sex))
+                // Age is in certain category.
+                .and(DSL.floor(DSL.dateDiff(DSL.currentDate(), Student.STUDENT.DATEOFBIRTH).div(365.25)).between(minAge, maxAge));
 
         // Return the single row integer.
         return query.fetchOne(0, int.class);

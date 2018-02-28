@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import java.sql.Date;
 import java.util.List;
 
+import static org.jooq.impl.DSL.max;
 import static org.jooq.impl.DSL.using;
 
 @SuppressWarnings("ALL")
@@ -92,13 +93,15 @@ public class VolunteerMyDao extends VolunteerDao {
 
     /**
      * Count how many volunteers there are in the database with a VolunteerInstance.dateStart
-     * between minimumDate and maximumDate. If hasTraining is non-null, addVolunteer criteria that it must match.
+     * between minimumDate and maximumDate, with age between certain range. Needs to follow training within date range.
      * @param minimumDate
      * @param maximumDate
-     * @param hasTraining
+     * @param minAge
+     * @param maxAge
      * @return
      */
-    public int countByDateStart(@Nonnull Date minimumDate, @Nonnull Date maximumDate, @Nullable Boolean hasTraining) {
+    public int countNew(@Nonnull Date minimumDate, @Nonnull Date maximumDate,
+                        @Nonnull int minAge, @Nonnull int maxAge, @Nonnull String sex) {
         SelectConditionStep<Record1<Integer>> query = using(configuration())
                 .selectCount()
                 .from(Volunteer.VOLUNTEER)
@@ -107,11 +110,15 @@ public class VolunteerMyDao extends VolunteerDao {
                         .from(Volunteerinstance.VOLUNTEERINSTANCE)
                         .where(Volunteer.VOLUNTEER.VOLUNTEERID.eq(Volunteerinstance.VOLUNTEERINSTANCE.VOLUNTEERID))
                         // Check whether this date is between the minimumDate and maximumDate
-                        .asField().between(minimumDate, maximumDate));
+                        .asField().between(minimumDate, maximumDate))
+                // Age is in certain category.
+                .and(DSL.floor(DSL.dateDiff(DSL.currentDate(), Volunteer.VOLUNTEER.DATEOFBIRTH).div(365.25)).between(minAge, maxAge));
 
-        if (hasTraining != null) {
-            query.and(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
-        }
+        // Volunteer needs to be trained in this range (new = trained in this range).
+        query.and(Volunteer.VOLUNTEER.DATETRAINING.between(minimumDate, maximumDate));
+
+        // Need to equal sex
+        query.and(Volunteer.VOLUNTEER.SEX.eq(sex));
 
         // Return the single row integer.
         return query.fetchOne(0, int.class);
@@ -128,7 +135,8 @@ public class VolunteerMyDao extends VolunteerDao {
      * @param hasTraining
      * @return
      */
-    public int countActiveInPeriod(@Nonnull Date minimumDate, @Nonnull Date maximumDate, @Nullable Boolean hasTraining) {
+    public int countActive(@Nonnull Date minimumDate, @Nonnull Date maximumDate,
+                           @Nonnull int minAge, @Nonnull int maxAge, @Nonnull String sex) {
         SelectConditionStep<Record1<Integer>> query = using(configuration())
                 // Since we use a join on instance, we must count distinct number of ID's.
                 .select(Volunteer.VOLUNTEER.VOLUNTEERID.countDistinct())
@@ -151,12 +159,16 @@ public class VolunteerMyDao extends VolunteerDao {
                     // dateStart <= max and (dateEnd is null || max <= dateEnd)
                     .or(Volunteerinstance.VOLUNTEERINSTANCE.DATESTART.le(maximumDate)
                             .and(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND.isNull()
-                                    .or(DSL.val(maximumDate).le(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND))))
-                );
+                                    .or(DSL.val(maximumDate).le(Volunteerinstance.VOLUNTEERINSTANCE.DATEEND)))))
 
-        if (hasTraining != null) {
-            query.and(Volunteer.VOLUNTEER.DATETRAINING.isNotNull());
-        }
+                // Age is in certain category.
+                .and(DSL.floor(DSL.dateDiff(DSL.currentDate(), Volunteer.VOLUNTEER.DATEOFBIRTH).div(365.25)).between(minAge, maxAge));
+
+        // Volunteer needs to be trained before end date of range.
+        query.and(Volunteer.VOLUNTEER.DATETRAINING.le(maximumDate));
+
+        // Need to equal sex
+        query.and(Volunteer.VOLUNTEER.SEX.eq(sex));
 
         // Return the single row integer.
         return query.fetchOne(0, int.class);

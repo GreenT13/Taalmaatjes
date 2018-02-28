@@ -1,14 +1,13 @@
 package com.apon.taalmaatjes.backend.api.returns;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ReportReturn {
     private Date dateStart;
     private Date dateEnd;
-    private Integer nrOfNewVolunteers;
-    private Integer nrOfActiveVolunteers;
-    private Integer nrOfNewStudents;
-    private Integer nrOfActiveStudents;
+    private List<RangeReportReturn> volunteers;
+    private List<RangeReportReturn> students;
 
     public ReportReturn(Date dateStart, Date dateEnd) {
         this.dateStart = dateStart;
@@ -31,35 +30,19 @@ public class ReportReturn {
         this.dateEnd = dateEnd;
     }
 
-    public Integer getNrOfNewVolunteers() {
-        return nrOfNewVolunteers;
+    public List<RangeReportReturn> getVolunteers() {
+        return volunteers;
     }
 
-    public void setNrOfNewVolunteers(Integer nrOfNewVolunteers) {
-        this.nrOfNewVolunteers = nrOfNewVolunteers;
+    public void setVolunteers(List<RangeReportReturn> volunteers) {
+        this.volunteers = volunteers;
     }
 
-    public Integer getNrOfActiveVolunteers() {
-        return nrOfActiveVolunteers;
+    public List<RangeReportReturn> getStudents() {
+        return students;
     }
 
-    public void setNrOfActiveVolunteers(Integer nrOfActiveVolunteers) {
-        this.nrOfActiveVolunteers = nrOfActiveVolunteers;
-    }
-
-    public Integer getNrOfNewStudents() {
-        return nrOfNewStudents;
-    }
-
-    public void setNrOfNewStudents(Integer nrOfNewStudents) {
-        this.nrOfNewStudents = nrOfNewStudents;
-    }
-
-    public Integer getNrOfActiveStudents() {
-        return nrOfActiveStudents;
-    }
-
-    public void setNrOfActiveStudents(Integer nrOfActiveStudents) {
-        this.nrOfActiveStudents = nrOfActiveStudents;
+    public void setStudents(List<RangeReportReturn> students) {
+        this.students = students;
     }
 }

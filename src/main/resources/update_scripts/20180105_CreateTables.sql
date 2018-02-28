@@ -50,6 +50,8 @@ create table Student (
   firstName varchar(100),
   insertion varchar(100),
   lastName varchar(100),
+  sex varchar(1) not null,
+  dateOfBirth date not null,
   groupIdentification varchar(100),
   hasQuit boolean not null,
   constraint "Stud_PK" primary key (studentId),

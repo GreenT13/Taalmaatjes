@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.report;
 import com.apon.taalmaatjes.Taalmaatjes;
 import com.apon.taalmaatjes.backend.api.ReportAPI;
 import com.apon.taalmaatjes.backend.api.TaalmaatjesAPI;
+import com.apon.taalmaatjes.backend.api.returns.RangeReportReturn;
 import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.util.DateTimeUtil;
@@ -95,11 +96,30 @@ public class Report implements Screen {
         vboxResult.setVisible(true);
         // Clear the text first.
         textAreaResult.setText("");
-        textAreaResult.appendText(
-                "Aantal nieuwe vrijwilligers: " + report.getNrOfNewVolunteers() + "\n" +
-                "Aantal actieve vrijwilligers: " + report.getNrOfActiveVolunteers() + "\n" +
-                "Aantal nieuwe cursisten: " + report.getNrOfNewStudents() + "\n" +
-                "Aantal actieve cursisten: " + report.getNrOfActiveStudents() + "\n");
+
+        // Append row for each range of volunteers.
+        for (RangeReportReturn rangeReportReturn : report.getVolunteers()) {
+            if (rangeReportReturn.isNew()) {
+                textAreaResult.appendText("Nieuwe ");
+            } else {
+                textAreaResult.appendText("Actieve ");
+            }
+            textAreaResult.appendText("vrijwilligers tussen " + rangeReportReturn.getMinAge() + " en " +
+                    rangeReportReturn.getMaxAge() + " met geslacht " + rangeReportReturn.getSex() +
+                    ": " + rangeReportReturn.getCount() + "\n");
+        }
+
+        // Append row for each range.
+        for (RangeReportReturn rangeReportReturn : report.getStudents()) {
+            if (rangeReportReturn.isNew()) {
+                textAreaResult.appendText("Nieuwe ");
+            } else {
+                textAreaResult.appendText("Actieve ");
+            }
+            textAreaResult.appendText("cursisten tussen " + rangeReportReturn.getMinAge() + " en " +
+                    rangeReportReturn.getMaxAge() + " met geslacht " + rangeReportReturn.getSex() +
+                    ": " + rangeReportReturn.getCount() + "\n");
+        }
 
         hideError();
     }

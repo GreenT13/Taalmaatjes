@@ -5,6 +5,7 @@ package com.apon.taalmaatjes.backend.database.generated.tables.pojos;
 
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.annotation.Generated;
 
@@ -22,13 +23,15 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StudentPojo implements Serializable {
 
-    private static final long serialVersionUID = 7111820;
+    private static final long serialVersionUID = 2051278094;
 
     private Integer studentid;
     private String  externalidentifier;
     private String  firstname;
     private String  insertion;
     private String  lastname;
+    private String  sex;
+    private Date    dateofbirth;
     private String  groupidentification;
     private Boolean hasquit;
 
@@ -40,6 +43,8 @@ public class StudentPojo implements Serializable {
         this.firstname = value.firstname;
         this.insertion = value.insertion;
         this.lastname = value.lastname;
+        this.sex = value.sex;
+        this.dateofbirth = value.dateofbirth;
         this.groupidentification = value.groupidentification;
         this.hasquit = value.hasquit;
     }
@@ -50,6 +55,8 @@ public class StudentPojo implements Serializable {
         String  firstname,
         String  insertion,
         String  lastname,
+        String  sex,
+        Date    dateofbirth,
         String  groupidentification,
         Boolean hasquit
     ) {
@@ -58,6 +65,8 @@ public class StudentPojo implements Serializable {
         this.firstname = firstname;
         this.insertion = insertion;
         this.lastname = lastname;
+        this.sex = sex;
+        this.dateofbirth = dateofbirth;
         this.groupidentification = groupidentification;
         this.hasquit = hasquit;
     }
@@ -102,6 +111,22 @@ public class StudentPojo implements Serializable {
         this.lastname = lastname;
     }
 
+    public String getSex() {
+        return this.sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Date getDateofbirth() {
+        return this.dateofbirth;
+    }
+
+    public void setDateofbirth(Date dateofbirth) {
+        this.dateofbirth = dateofbirth;
+    }
+
     public String getGroupidentification() {
         return this.groupidentification;
     }
@@ -127,6 +152,8 @@ public class StudentPojo implements Serializable {
         sb.append(", ").append(firstname);
         sb.append(", ").append(insertion);
         sb.append(", ").append(lastname);
+        sb.append(", ").append(sex);
+        sb.append(", ").append(dateofbirth);
         sb.append(", ").append(groupidentification);
         sb.append(", ").append(hasquit);
 

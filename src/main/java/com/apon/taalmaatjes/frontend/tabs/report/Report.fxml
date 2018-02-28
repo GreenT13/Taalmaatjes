@@ -87,10 +87,10 @@
                   </VBox>
                </children>
             </HBox>
-            <VBox fx:id="vboxResult" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="vboxResult">
                <children>
                   <Label styleClass="largeFont" text="Resultaat" />
-                  <TextArea fx:id="textAreaResult" editable="false" prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="textAreaResult" editable="false" prefHeight="321.0" prefWidth="559.0" />
                </children>
             </VBox>
          </children>

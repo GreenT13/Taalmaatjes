@@ -1,5 +1,7 @@
 package com.apon.taalmaatjes.backend.api;
 
+import com.apon.taalmaatjes.backend.api.returns.RangeReportReturn;
+import com.apon.taalmaatjes.backend.api.returns.ReportRange;
 import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
@@ -50,14 +52,51 @@ public class ReportAPI {
         Log.logDebug("Start ReportAPI.createReport from " + dateStart.toString() + " until " + dateEnd.toString());
 
         ReportReturn report = new ReportReturn(dateStart, dateEnd);
-
+        // Fill the volunteers
         VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
-        report.setNrOfNewVolunteers(volunteerMyDao.countByDateStart(dateStart, dateEnd, Boolean.TRUE));
-        report.setNrOfActiveVolunteers(volunteerMyDao.countActiveInPeriod(dateStart, dateEnd, Boolean.TRUE));
+        List<RangeReportReturn> volunteerReport = new ArrayList();
+        for (ReportRange reportRange : ReportRange.values()) {
+            // Add new active volunteers.
+            volunteerReport.add(
+                    new RangeReportReturn(reportRange.getMinAge(), reportRange.getMaxAge(),
+                            reportRange.getSex(), true,
+                            volunteerMyDao.countNew(dateStart, dateEnd,
+                                    reportRange.getMinAge(), reportRange.getMaxAge(), reportRange.getSex()))
+            );
 
+            // Add all active volunteers.
+            volunteerReport.add(
+                    new RangeReportReturn(reportRange.getMinAge(), reportRange.getMaxAge(),
+                            reportRange.getSex(), false,
+                            volunteerMyDao.countActive(dateStart, dateEnd,
+                                    reportRange.getMinAge(), reportRange.getMaxAge(), reportRange.getSex()))
+            );
+
+        }
+        report.setVolunteers(volunteerReport);
+
+        // Fill the volunteers
         StudentMyDao studentMyDao = new StudentMyDao(context);
-        report.setNrOfNewStudents(studentMyDao.countNewStudents(dateStart, dateEnd));
-        report.setNrOfActiveStudents(studentMyDao.countActiveInPeriod(dateStart, dateEnd));
+        List<RangeReportReturn> studentReport = new ArrayList();
+        for (ReportRange reportRange : ReportRange.values()) {
+            // Add new active volunteers.
+            studentReport.add(
+                    new RangeReportReturn(reportRange.getMinAge(), reportRange.getMaxAge(),
+                            reportRange.getSex(), true,
+                            studentMyDao.countNew(dateStart, dateEnd,
+                                    reportRange.getMinAge(), reportRange.getMaxAge(), reportRange.getSex()))
+            );
+
+            // Add all active volunteers.
+            studentReport.add(
+                    new RangeReportReturn(reportRange.getMinAge(), reportRange.getMaxAge(),
+                            reportRange.getSex(), false,
+                            studentMyDao.countActive(dateStart, dateEnd,
+                                    reportRange.getMinAge(), reportRange.getMaxAge(), reportRange.getSex()))
+            );
+
+        }
+        report.setStudents(studentReport);
 
         // Close, log and return.
         context.close();
