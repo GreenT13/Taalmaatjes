@@ -149,9 +149,6 @@ public class StudentMyDao extends StudentDao {
                         // dateStart between minimumDate and maximumDate
                         Volunteermatch.VOLUNTEERMATCH.DATESTART.between(minimumDate, maximumDate)
 
-                        // Volunteer must be trained.
-                        .and(Volunteer.VOLUNTEER.DATETRAINING.le(maximumDate))
-
                         // dateEnd between minimumDate and maximumDate
                         // Will give unknown if dateEnd is null, which is fine since it is part of an or-cause.
                         .or(Volunteermatch.VOLUNTEERMATCH.DATEEND.between(minimumDate, maximumDate))
@@ -166,6 +163,8 @@ public class StudentMyDao extends StudentDao {
                                 .and(Volunteermatch.VOLUNTEERMATCH.DATEEND.isNull()
                                         .or(DSL.val(maximumDate).le(Volunteermatch.VOLUNTEERMATCH.DATEEND))))
                 )
+                // Volunteer must be trained.
+                .and(Volunteer.VOLUNTEER.DATETRAINING.le(maximumDate))
                 // Need to equal sex
                 .and(Student.STUDENT.SEX.eq(sex))
                 // Age is in certain category.
