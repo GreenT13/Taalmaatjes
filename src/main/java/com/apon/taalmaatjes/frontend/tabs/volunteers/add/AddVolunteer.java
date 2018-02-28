@@ -20,16 +20,13 @@ import javax.annotation.Nullable;
 public class AddVolunteer implements Screen {
 
     @FXML
-    Label labelTitle;
+    Label labelTitle, labelAge;
 
     @FXML
     TextField inputFirstName, inputInsertion, inputLastName, inputPhoneNr, inputMobPhoneNr, inputEmail, inputPostalCode;
 
     @FXML
     TextField inputCity, inputStreetName, inputHouseNr, inputJob;
-
-    @FXML
-    Label labelAge;
 
     @FXML
     HBox hboxActiveFrom1, hboxActiveFrom2;

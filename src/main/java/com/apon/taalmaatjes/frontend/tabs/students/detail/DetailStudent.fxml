@@ -42,18 +42,60 @@
                                     <children>
                               <HBox styleClass="hboxAlign">
                                  <children>
+                                    <Label text="Geslacht" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Geboortedatum" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <Label text="Leeftijd" />
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
                                     <Label text="Groep" />
                                  </children>
                               </HBox>
                               <HBox styleClass="hboxAlign">
                                  <children>
-                                    <Label text="Is gestopt" />
+                                    <Label text="Geboortedatum" />
                                  </children>
                               </HBox>
                                     </children>
                                 </VBox>
                                 <VBox>
                                     <children>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelSex" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelDateOfBirth" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox styleClass="hboxAlign">
+                                 <children>
+                                    <TextField fx:id="labelAge" editable="false" prefHeight="21.0" styleClass="copyable-label">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                               <HBox styleClass="hboxAlign">
                                  <children>
                                     <TextField fx:id="labelGroupIdentification" editable="false" prefHeight="21.0" styleClass="copyable-label">

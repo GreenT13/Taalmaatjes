@@ -6,6 +6,7 @@ import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerMatchReturn;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerReturn;
+import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.NameUtil;
@@ -26,7 +27,7 @@ public class DetailStudent implements Screen {
     private String studentExtId;
 
     @FXML
-    TextField labelName, labelGroupIdentification, labelHasQuit;
+    TextField labelName, labelGroupIdentification, labelHasQuit, labelSex, labelDateOfBirth, labelAge;
 
     @FXML
     VBox vboxMatch;
@@ -70,7 +71,9 @@ public class DetailStudent implements Screen {
         // Set the name.
         String name = String.valueOf(studentReturn.getExternalIdentifier()) + ": " + NameUtil.getStudentName(studentReturn);
         labelName.setText(name);
-
+        labelSex.setText(StringUtil.convertDbSexToOutput(studentReturn.getSex()));
+        labelDateOfBirth.setText(StringUtil.getOutputString(studentReturn.getDateOfBirth()));
+        labelAge.setText(DateTimeUtil.determineAge(studentReturn.getDateOfBirth()).toString());
         labelGroupIdentification.setText(StringUtil.getOutputString(studentReturn.getGroupIdentification()));
         labelHasQuit.setText(StringUtil.getOutputString(studentReturn.getHasQuit()));
 
@@ -115,6 +118,9 @@ public class DetailStudent implements Screen {
         TextUtils.setWidthToContent(labelName);
         TextUtils.setWidthToContent(labelGroupIdentification);
         TextUtils.setWidthToContent(labelHasQuit);
+        TextUtils.setWidthToContent(labelSex);
+        TextUtils.setWidthToContent(labelDateOfBirth);
+        TextUtils.setWidthToContent(labelAge);
     }
 
     @SuppressWarnings("unused")

@@ -1,5 +1,6 @@
 package com.apon.taalmaatjes.backend.api.returns;
 
+import java.sql.Date;
 import java.util.List;
 
 public class StudentReturn {
@@ -7,6 +8,8 @@ public class StudentReturn {
     private String firstName;
     private String insertion;
     private String lastName;
+    private String sex;
+    private Date dateOfBirth;
     private String groupIdentification;
     private Boolean hasQuit;
 
@@ -66,5 +69,21 @@ public class StudentReturn {
 
     public void setHasQuit(Boolean hasQuit) {
         this.hasQuit = hasQuit;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

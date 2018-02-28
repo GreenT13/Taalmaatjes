@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.frontend.tabs.students.add;
 import com.apon.taalmaatjes.backend.api.StudentAPI;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.StudentReturn;
+import com.apon.taalmaatjes.backend.util.DateTimeUtil;
 import com.apon.taalmaatjes.backend.util.StringUtil;
 import com.apon.taalmaatjes.frontend.presentation.MessageResource;
 import com.apon.taalmaatjes.frontend.presentation.Screen;
@@ -10,9 +11,7 @@ import com.apon.taalmaatjes.frontend.transition.ScreenEnum;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
@@ -21,13 +20,19 @@ import javax.annotation.Nullable;
 public class AddStudent implements Screen {
 
     @FXML
-    Label labelTitle;
+    Label labelTitle, labelAge;
 
     @FXML
     TextField inputFirstName, inputInsertion, inputLastName, inputGroupIdentification;
 
     @FXML
     CheckBox checkHasQuit;
+
+    @FXML
+    DatePicker inputDateOfBirth;
+
+    @FXML
+    ComboBox<String> comboBoxSex;
 
     private String studentExtId;
 
@@ -94,6 +99,8 @@ public class AddStudent implements Screen {
         studentReturn.setFirstName(StringUtil.getDatabaseString(inputFirstName.getText()));
         studentReturn.setInsertion(StringUtil.getDatabaseString(inputInsertion.getText()));
         studentReturn.setLastName(StringUtil.getDatabaseString(inputLastName.getText()));
+        studentReturn.setSex(StringUtil.convertOutputSexToDb(comboBoxSex.getValue()));
+        studentReturn.setDateOfBirth(DateTimeUtil.convertLocalDateToSqlDate(inputDateOfBirth.getValue()));
         studentReturn.setGroupIdentification(StringUtil.getDatabaseString(inputGroupIdentification.getText()));
         studentReturn.setHasQuit(checkHasQuit.isSelected());
 
@@ -118,7 +125,25 @@ public class AddStudent implements Screen {
         inputFirstName.setText(studentReturn.getFirstName());
         inputInsertion.setText(studentReturn.getInsertion());
         inputLastName.setText(studentReturn.getLastName());
+        if (studentReturn.getDateOfBirth() != null) {
+            inputDateOfBirth.setValue(studentReturn.getDateOfBirth().toLocalDate());
+            labelAge.setText(DateTimeUtil.determineAge(studentReturn.getDateOfBirth()).toString());
+        }
+
+        if (studentReturn.getSex().equals("F")) {
+            comboBoxSex.setValue("Vrouw");
+        }
         inputGroupIdentification.setText(studentReturn.getGroupIdentification());
         checkHasQuit.setSelected(studentReturn.getHasQuit());
+    }
+
+    @FXML
+    public void handleActionFillAgeOnEditDate(ActionEvent actionEvent) {
+        // Fill the age if the value is valid.
+        if (inputDateOfBirth.getValue() != null) {
+            labelAge.setText(DateTimeUtil.determineAge(inputDateOfBirth.getValue()).toString());
+        } else {
+            labelAge.setText("");
+        }
     }
 }
