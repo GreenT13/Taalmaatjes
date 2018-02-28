@@ -21,7 +21,7 @@
                 </HBox>
                 <HBox>
                    <children>
-                      <Label styleClass="largeFont" fx:id="labelTitle" text="Toevoegen activiteit" />
+                      <Label fx:id="labelTitle" styleClass="largeFont" text="Toevoegen activiteit" />
                    </children>
                 </HBox>
                 <HBox>
@@ -58,6 +58,11 @@
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
+                              <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleActionDelete" text="Verwijderen" visible="false">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Button>
                                         <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
                                             <HBox.margin>
                                                 <Insets right="5.0" />

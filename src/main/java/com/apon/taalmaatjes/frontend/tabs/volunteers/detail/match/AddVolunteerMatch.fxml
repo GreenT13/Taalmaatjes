@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <HBox stylesheets="@AddVolunteerMatch.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.volunteers.detail.match.AddVolunteerMatch">
     <children>
         <VBox>
@@ -21,7 +22,7 @@
                 </HBox>
             <HBox>
                <children>
-                  <Label styleClass="largeFont" fx:id="labelTitle" text="Toevoegen koppeling" />
+                  <Label fx:id="labelTitle" styleClass="largeFont" text="Toevoegen koppeling" />
                </children>
             </HBox>
                 <HBox>
@@ -68,6 +69,11 @@
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT">
                                     <children>
+                              <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleActionDelete" text="Verwijderen" visible="false">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </Button>
                                         <Button mnemonicParsing="false" onAction="#handleActionSave" text="Opslaan">
                                             <HBox.margin>
                                                 <Insets right="5.0" />

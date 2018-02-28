@@ -10,11 +10,11 @@ import com.apon.taalmaatjes.frontend.presentation.VolunteerInstanceKey;
 import com.apon.taalmaatjes.frontend.transition.TransitionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class AddVolunteerInstance implements Screen {
@@ -26,12 +26,16 @@ public class AddVolunteerInstance implements Screen {
     @FXML
     Label labelTitle;
 
+    @FXML
+    Button btnDelete;
+
     @FXML HBox hboxError; @FXML Label labelError;
 
     @FXML
     public void initialize() {
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
+        btnDelete.managedProperty().bind(btnDelete.visibleProperty());
     }
 
     private void showError(@Nullable Result result) {
@@ -62,19 +66,45 @@ public class AddVolunteerInstance implements Screen {
             return;
         }
         labelTitle.setText("Bewerken activiteit");
+        btnDelete.setVisible(true);
 
         prefill((VolunteerInstanceReturn) result.getResult());
     }
 
     @FXML
     public void handleActionSave(ActionEvent actionEvent) {
-        // Save or edit the match.
+        // Save or edit the instance.
         Result result;
         if (volunteerInstanceKey.getVolunteerInstanceExtId() == null) {
             result = VolunteerInstanceAPI.getInstance().addVolunteerInstance(getReturn());
         } else {
             result = VolunteerInstanceAPI.getInstance().updateVolunteerInstance(getReturn());
         }
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Go back to the detail screen (only place we could've come from).
+        // Could just insert a transition, but there is not real need to at this point.
+        TransitionHandler.getInstance().goBack(volunteerInstanceKey.getVolunteerExtId());
+    }
+
+    @FXML
+    public void handleActionDelete(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Weet je zeker dat je deze regel wilt verwijderen?",
+                ButtonType.YES,
+                ButtonType.NO);
+        alert.setTitle("Verwijderen activiteit");
+        Optional<ButtonType> alertResult = alert.showAndWait();
+
+        if (alertResult.get() == ButtonType.NO) {
+            return;
+        }
+
+        // Delete the instance.
+        Result result = VolunteerInstanceAPI.getInstance().deleteVolunteerInstance(getReturn());
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

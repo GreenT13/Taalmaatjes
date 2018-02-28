@@ -3,6 +3,7 @@ package com.apon.taalmaatjes.backend.api;
 import com.apon.taalmaatjes.backend.api.returns.Result;
 import com.apon.taalmaatjes.backend.api.returns.VolunteerInstanceReturn;
 import com.apon.taalmaatjes.backend.api.returns.mapper.VolunteerInstanceMapper;
+import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerPojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteerinstancePojo;
 import com.apon.taalmaatjes.backend.database.generated.tables.pojos.VolunteermatchPojo;
 import com.apon.taalmaatjes.backend.database.jooq.Context;
@@ -361,5 +362,71 @@ public class VolunteerInstanceAPI {
         }
 
         return false;
+    }
+
+    private boolean isMatchCompletelyInsideInstance(VolunteermatchPojo volunteermatchPojo, VolunteerinstancePojo volunteerinstancePojo) {
+        List<VolunteerinstancePojo> volunteerInstancePojos = new ArrayList();
+        volunteerInstancePojos.add(volunteerinstancePojo);
+        return isMatchCompletelyInsideInstance(volunteermatchPojo, volunteerInstancePojos);
+    }
+
+    /**
+     * Delete instance from the database. Checks if there are no matches inside the instance.
+     * @param volunteerInstanceReturn The instance to delete.
+     * @return Nothing.
+     */
+    public Result deleteVolunteerInstance(VolunteerInstanceReturn volunteerInstanceReturn) {
+        if (volunteerInstanceReturn.getVolunteerExtId() == null) {
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillVolunteerExtId");
+        }
+
+        if (volunteerInstanceReturn.getExternalIdentifier() == null) {
+            return ResultUtil.createError("VolunteerInstanceAPI.error.fillVolunteerInstanceExtId");
+        }
+
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.deleteVolunteerInstance volunteerExtId " + volunteerInstanceReturn.getVolunteerExtId()
+                + " volunteerInstanceExtId " + volunteerInstanceReturn.getExternalIdentifier());
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerInstanceReturn.getVolunteerExtId());
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerExtIdFound");
+        }
+
+        // Get volunteerInstanceId
+        VolunteerInstanceMyDao volunteerInstanceMyDao = new VolunteerInstanceMyDao(context);
+        Integer volunteerInstanceId = volunteerInstanceMyDao.getIdFromExtId(volunteerId, volunteerInstanceReturn.getExternalIdentifier());
+        if (volunteerInstanceId == null) {
+            return ResultUtil.createError("VolunteerInstanceAPI.error.noVolunteerInstanceExtIdFound.");
+        }
+
+        VolunteerinstancePojo volunteerinstancePojo = volunteerInstanceMyDao.fetchByIds(volunteerId, volunteerInstanceId);
+
+        // Check that there are no matches contained inside the instance.
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        for (VolunteermatchPojo volunteermatchPojo : volunteerMatchMyDao.getMatchForVolunteer(volunteerId)) {
+            if (isMatchCompletelyInsideInstance(volunteermatchPojo, volunteerinstancePojo)) {
+                // This match would fall outside of activity range, hence we cannot delete the instance.
+                return ResultUtil.createError("VolunteerInstanceAPI.error.matchWithoutInstance");
+            }
+        }
+
+        // Delete the instance.
+        volunteerInstanceMyDao.delete(volunteerinstancePojo);
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.updateVolunteerInstance");
+        return ResultUtil.createOk();
     }
 }

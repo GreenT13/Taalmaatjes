@@ -16,15 +16,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class AddVolunteerMatch implements Screen {
@@ -39,12 +38,16 @@ public class AddVolunteerMatch implements Screen {
     @FXML
     ComboBox<String> comboStudents;
 
+    @FXML
+    Button btnDelete;
+
     @FXML HBox hboxError; @FXML Label labelError;
 
     @FXML
     public void initialize() {
         hboxError.managedProperty().bind(hboxError.visibleProperty());
         hideError();
+        btnDelete.managedProperty().bind(btnDelete.visibleProperty());
 
         comboStudents.getEditor().textProperty().addListener((observable, oldValue, newValue) -> changeList(oldValue, newValue));
     }
@@ -79,6 +82,7 @@ public class AddVolunteerMatch implements Screen {
         }
 
         labelTitle.setText("Bewerken koppeling");
+        btnDelete.setVisible(true);
 
         prefill((VolunteerMatchReturn) result.getResult());
     }
@@ -165,6 +169,31 @@ public class AddVolunteerMatch implements Screen {
             result = VolunteerMatchAPI.getInstance().updateVolunteerMatch(getReturn());
         }
 
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        // Go back to the detail screen (only place we could've come from).
+        // Could just insert a transition, but there is not real need to at this point.
+        TransitionHandler.getInstance().goBack(volunteerMatchKey.getVolunteerExtId());
+    }
+
+    @FXML
+    public void handleActionDelete(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                "Weet je zeker dat je deze regel wilt verwijderen?",
+                ButtonType.YES,
+                ButtonType.NO);
+        alert.setTitle("Verwijderen koppeling");
+        Optional<ButtonType> alertResult = alert.showAndWait();
+
+        if (alertResult.get() == ButtonType.NO) {
+            return;
+        }
+
+        // Delete the instance.
+        Result result = VolunteerMatchAPI.getInstance().deleteVolunteerMatch(getReturn());
         if (result == null || result.hasErrors()) {
             showError(result);
             return;

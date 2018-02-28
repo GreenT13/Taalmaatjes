@@ -345,4 +345,49 @@ public class VolunteerMatchAPI {
         return false;
     }
 
+    public Result deleteVolunteerMatch(VolunteerMatchReturn volunteerMatchReturn) {
+        if (volunteerMatchReturn.getVolunteerExtId() == null) {
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillVolunteerExtId");
+        }
+
+        if (volunteerMatchReturn.getExternalIdentifier() == null) {
+            return ResultUtil.createError("VolunteerMatchAPI.error.fillVolunteerMatchExtId");
+        }
+
+        Context context;
+        try {context = new Context();} catch (SQLException e) {
+            return ResultUtil.createError("Context.error.create", e);
+        }
+        Log.logDebug("Start VolunteerAPI.deleteVolunteerMatch volunteerExtId " + volunteerMatchReturn.getVolunteerExtId()
+                + " volunteerMatchExtId " + volunteerMatchReturn.getExternalIdentifier());
+
+        // Get volunteerId.
+        VolunteerMyDao volunteerMyDao = new VolunteerMyDao(context);
+        Integer volunteerId = volunteerMyDao.getIdFromExtId(volunteerMatchReturn.getVolunteerExtId());
+        if (volunteerId == null) {
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerExtIdFound");
+        }
+
+        // Get volunteerMatchId.
+        VolunteerMatchMyDao volunteerMatchMyDao = new VolunteerMatchMyDao(context);
+        Integer volunteerMatchId = volunteerMatchMyDao.getIdFromExtId(volunteerId, volunteerMatchReturn.getExternalIdentifier());
+        if (volunteerMatchId == null) {
+            return ResultUtil.createError("VolunteerMatchAPI.error.noVolunteerMatchExtIdFound.");
+        }
+
+        // Delete the match (no consequences)
+        VolunteermatchPojo volunteermatchPojo = volunteerMatchMyDao.fetchById(volunteerId, volunteerMatchId);
+        volunteerMatchMyDao.delete(volunteermatchPojo);
+
+        // Commit, close and return.
+        try {
+            context.getConnection().commit();
+        } catch (SQLException e) {
+            return ResultUtil.createError("Context.error.commit", e);
+        }
+        context.close();
+        Log.logDebug("End VolunteerAPI.deleteVolunteerMatch");
+        return ResultUtil.createOk();
+    }
+
 }

@@ -102,12 +102,11 @@ public class DetailTask implements Screen {
 
     @FXML
     public void deleteTask(ActionEvent actionEvent) {
-        Alert alert =
-                new Alert(Alert.AlertType.WARNING,
+        Alert alert = new Alert(Alert.AlertType.WARNING,
                         "Weet je zeker dat je deze taak wilt verwijderen?",
                         ButtonType.YES,
                         ButtonType.NO);
-        alert.setTitle("Date format warning");
+        alert.setTitle("Verwijderen taak");
         Optional<ButtonType> alertResult = alert.showAndWait();
 
         if (alertResult.get() == ButtonType.NO) {
