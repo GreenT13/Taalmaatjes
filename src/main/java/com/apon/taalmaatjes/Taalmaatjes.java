@@ -18,6 +18,7 @@ import java.util.Objects;
 
 public class Taalmaatjes extends Application {
     private static boolean hasErrors = false;
+    public static Stage primaryStage;
 
     public static void main(String[] args) {
         // First updateVolunteer the database.
@@ -37,6 +38,7 @@ public class Taalmaatjes extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Taalmaatjes.primaryStage = primaryStage;
         if (hasErrors) {
             new Alert(Alert.AlertType.ERROR,"Er is iets mis gegaan met de database. " +
                     "Verwijder de database ofn eem contact op met de ontwikkelaar.").show();

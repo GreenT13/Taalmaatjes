@@ -1,5 +1,6 @@
 package com.apon.taalmaatjes.frontend.tabs.report;
 
+import com.apon.taalmaatjes.Taalmaatjes;
 import com.apon.taalmaatjes.backend.api.ReportAPI;
 import com.apon.taalmaatjes.backend.api.TaalmaatjesAPI;
 import com.apon.taalmaatjes.backend.api.returns.ReportReturn;
@@ -10,14 +11,13 @@ import com.apon.taalmaatjes.frontend.presentation.Screen;
 import com.apon.taalmaatjes.frontend.presentation.TextUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 import javax.annotation.Nullable;
+import java.io.File;
 
 @SuppressWarnings("unused")
 public class Report implements Screen {
@@ -102,6 +102,30 @@ public class Report implements Screen {
                 "Aantal actieve cursisten: " + report.getNrOfActiveStudents() + "\n");
 
         hideError();
+    }
+
+    @FXML
+    public void handleActionExportCustomers(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV bestanden (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(Taalmaatjes.primaryStage);
+        if (file == null){
+            return;
+        }
+
+        Result result = ReportAPI.getInstance().createCSVOfAllVolunteers(file.getAbsolutePath());
+
+        if (result == null || result.hasErrors()) {
+            showError(result);
+            return;
+        }
+
+        new Alert(Alert.AlertType.INFORMATION,"Opgeslagen!").show();
     }
 
     @Override

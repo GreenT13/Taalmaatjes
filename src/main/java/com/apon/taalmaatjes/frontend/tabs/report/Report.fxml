@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <!--suppress ALL -->
+
 <HBox stylesheets="@Report.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.apon.taalmaatjes.frontend.tabs.report.Report">
    <children>
       <VBox>
@@ -19,7 +20,16 @@
                   <Label id="labelError" fx:id="labelError" text="Error" />
                </children>
             </HBox>
-            <Label styleClass="largeFont" text="Rapportage" />
+            <HBox>
+               <children>
+                  <Label styleClass="largeFont" text="Rapportage" />
+                  <Button mnemonicParsing="false" onAction="#handleActionExportCustomers" text="Export">
+                     <HBox.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
             <HBox>
                <children>
                   <VBox>
